@@ -1717,7 +1717,7 @@ if(p.low_sodium&&h('high_sodium'))w.push('high sodium');
 for(const a in p.al)if(p.al[a]&&d.al.includes(a))w.push('contains '+AL[a].toLowerCase());
 return w}
 const need=p=>BASE[p.base]+Object.keys(FL).filter(k=>p[k]).map(k=>', '+FL[k].split(' (')[0]).join('')+Object.keys(p.al||{}).filter(a=>p.al[a]).map(a=>', allergy: '+AL[a].toLowerCase()).join('');
-let db=null,orders=[],role=null,myId=null,P={base:'veg',al:{},other:[]},seat='14C',local=false,sel=[],ai=null;
+let db=null,orders=[],role=null,myId=null,myOrderIds=new Set(),P={base:'veg',al:{},other:[]},seat='14C',local=false,sel=[],ai=null;
 const chat=[{r:'b',t:'Hi, I am SkyBite, your meal assistant. Tell me about any allergies or food rules (for example "peanut and egg allergy, Jain") and I will find meals that fit.'}];
 Object.keys(FL).forEach(k=>P[k]=false);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -2230,10 +2230,66 @@ return}
 role=='p'?passenger():role=='m'?planner():role=='l'?lounge():role=='g'?gate():crew()}
 function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'} • JAL Prototype</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button><button class="b s" id="sw">Switch role</button></div></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
 const LS={new:'queued for the lounge kitchen',prep:'being prepared',box:'sealed box ready',del:'delivered to the aircraft'};
-const tkMine=()=>{const m=orders.find(o=>o.id==myId&&o.status!='cancelled');if(!m)return '';const lg=m.route=='lounge',sk=m.status=='skipped';
-return `<div class="tk"><span class="tag">${sk?'Meal skipped (+500 JAL Miles)':m.status=='new'?'Sent to crew':m.status=='ack'?'Crew has your order':'Served'}</span>${lg?` <span class="tag">Idea 1: Lounge Ghost Kitchen (${LS[m.lst]||''})</span>`:''}${m.src=='exchange'?' <span class="tag">Idea 2: From Meal Exchange</span>':''}<h3 style="margin:8px 0 2px">${m.dishes.map(x=>esc(x.n)).join('<br>')}</h3><div class="mu">Seat ${esc(m.seat)}. ${sk?'500 JAL bonus miles credited! Your meal was released to the Cabin Digital Inventory for fellow passengers.':'Status updates here automatically.'}</div>${!sk&&!lg&&m.src!='exchange'&&(m.status=='new'||m.status=='ack')?'<button class="b s" id="skip" style="margin-top:8px;background:var(--tint);border-color:var(--tu);font-weight:700">Skip my meal (+500 JAL Miles &amp; release to exchange)</button>':''}</div>`};
-const tkExtra=()=>orders.filter(o=>o.seat==seat&&o.id!=myId&&o.dishes&&o.src=='gate'&&o.status!='cancelled').sort((a,b)=>a.t-b.t).map(o=>`<div class="tk" style="margin-top:10px"><span class="tag">Last-minute meal</span> <span class="tag">${o.status=='served'?'Served':LS[o.lst]?'Lounge: '+LS[o.lst]:o.status=='ack'?'Crew has it':'Sent to crew'}</span><h3 style="margin:8px 0 2px">${o.dishes.map(x=>esc(x.n)).join('<br>')}</h3><div class="mu">Additional meal added for seat ${esc(o.seat)} by gate staff. Status updates here by itself.</div></div>`).join('');
-const tkHtml=()=>tkMine()+tkExtra();
+const tkHtml=()=>{
+  // Collect all active orders placed by this session or under the booking seats
+  const activeOrders = orders.filter(o => 
+    (myOrderIds.has(o.id) || o.id == myId || ['14C','14B','14A'].includes(o.seat)) && 
+    o.dishes && o.status != 'cancelled'
+  ).sort((a,b)=>b.t-a.t);
+
+  if(!activeOrders.length){
+    return `<div class="tk" style="border-left:3px dashed var(--bd);background:var(--cd-subtle)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:20px">🍽️</span>
+        <div>
+          <b>No passenger meals ordered yet</b>
+          <div class="mu" style="font-size:12px">Select a passenger seat above, choose dishes, and confirm. Multiple family members can order independently!</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  return `<div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+      <h3 style="margin:0;font-family:var(--font-head);font-size:16px;color:var(--ink)">
+        👥 Confirmed Passenger Meals (${activeOrders.length})
+      </h3>
+      <span class="tag" style="background:rgba(13,148,136,0.12);color:var(--jal-teal);border:1px solid var(--jal-teal);font-size:11px">
+        PNR: JAL-892K • Live Flight JL 754
+      </span>
+    </div>
+    <div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+      ${activeOrders.map(m => {
+        const fam = FAMILY_PNR.find(f => f.seat == m.seat);
+        const lg = m.route == 'lounge';
+        const sk = m.status == 'skipped';
+        const srv = m.status == 'served';
+        return `<div class="tk" style="margin-top:0;border-left:4px solid ${sk?'#64748b':srv?'var(--ok)':lg?'var(--tu)':'var(--jal-teal)'}">
+          <div class="row" style="margin-bottom:4px">
+            <div>
+              <b style="font-size:14px;color:var(--ink)">Seat ${esc(m.seat)}</b>
+              ${fam ? `<span style="font-size:12px;color:var(--mu)"> · ${fam.name} (${fam.relation})</span>` : ''}
+            </div>
+            <span>
+              <span class="tag" style="font-size:11px">${sk?'Skipped (+500 Miles)':srv?'✓ Served':m.status=='new'?'Sent to Crew':m.status=='ack'?'Crew Acknowledged':'Confirmed'}</span>
+              ${lg ? `<span class="tag" style="font-size:10.5px;background:var(--tint);color:#b45309">Lounge Box (${LS[m.lst]||'prep'})</span>` : ''}
+              ${m.src=='exchange' ? `<span class="tag" style="font-size:10.5px;background:#e6f7f5;color:#0f766e">From Exchange</span>` : ''}
+            </span>
+          </div>
+          <div style="font-weight:700;font-size:14px;margin:4px 0">${m.dishes.map(x=>esc(x.n)).join(' + ')}</div>
+          <div class="mu" style="font-size:11.5px">Dietary: ${esc(m.need||'Standard')}</div>
+          ${!sk && !lg && m.src!='exchange' && (m.status=='new'||m.status=='ack') ? `
+            <div style="margin-top:8px;display:flex;gap:6px">
+              <button class="b s" data-skip-order="${m.id}" style="padding:4px 10px;font-size:11.5px;background:var(--tint);border-color:var(--tu);color:#b45309">
+                Skip for Seat ${esc(m.seat)} (+500 JAL Miles)
+              </button>
+            </div>
+          ` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+};
 const routeMsg=()=>route(hrs)=='caterer'?'Normal catering order (>18h): meals come from the main caterer.':route(hrs)=='lounge'?'Idea 1 in Action (Lounge-to-Cabin Ghost Kitchen): SkyBite sends your order to the airport lounge kitchen, which preps a premium sealed box that ground staff take to the aircraft during boarding. Zero extra catering stock is used.':hrs<0?'Idea 2 in Action (In-Flight Wi-Fi Meal Exchange): Meals come from stock already on board, or from meals fellow passengers released in the Cabin Digital Inventory below for 500 JAL Miles.':'Too late for the lounge. Meals come from stock already on board.';
 function parseLocal(t){t=t.toLowerCase();const r={rules:[],allergens:[],other:[]},m={jain:/jain/,sattvic:/sattvic|swaminarayan|no onion|no garlic/,vrat:/vrat|fast|navratri|upvas|ekadashi/,halal:/halal/,diabetic:/diabet|sugar/,low_sodium:/low (salt|sodium)|no salt/},a={peanut:/peanut|groundnut/,tree_nut:/tree nut|cashew|almond|walnut|pistachio/,dairy:/dairy|milk|lactose/,egg:/\begg/,gluten:/gluten|wheat/,soy:/\bsoy/,sesame:/sesame|\btil\b/,fish:/\bfish/,shellfish:/shellfish|prawn|shrimp/,mustard:/mustard/};
 for(const k in m)if(m[k].test(t))r.rules.push(k);for(const k in a)if(a[k].test(t))r.allergens.push(k);
@@ -2281,9 +2337,9 @@ const c=$('chat');if(c)c.scrollTop=c.scrollHeight}
 let passengerMode = 'web'; // 'web' or 'wa'
 let selectedFamilySeat = '14C';
 const FAMILY_PNR = [
-  {seat:'14C', name:'Priya Sharma (Grandma)', diet:'jain', label:'Strict Jain (No root veg)'},
-  {seat:'14B', name:'Sunita Sharma (Mom)', diet:'sattvic', label:'Sattvik (No onion/garlic)'},
-  {seat:'14A', name:'Ramesh Sharma (Dad/Kid)', diet:'std', label:'Standard Non-Veg'}
+  {seat:'14C', name:'Priya Sharma', relation:'Grandma', diet:'jain', label:'Strict Jain (Zero Root Veg)', defaultDish:'jdl'},
+  {seat:'14B', name:'Sunita Sharma', relation:'Mom', diet:'sattvic', label:'Sattvik (Navratri Fasting)', defaultDish:'sab'},
+  {seat:'14A', name:'Aarav Sharma', relation:'Kid', diet:'halal', label:'Halal Chicken Biryani', defaultDish:'bir'}
 ];
 let crewViewMode = 'map'; // 'map' or 'list'
 let selectedSeatInfo = null;
@@ -2323,17 +2379,24 @@ ${passengerMode=='wa'?`
 <div class="pnr-box">
   <div class="pnr-header">
     <div>
-      <b style="font-size:13.5px;color:var(--ink)">Family PNR Dietary Splitting • PNR: JAL-892K</b>
-      <div class="mu" style="font-size:11.5px">Assign individual dietary requirements seat-by-seat under a single booking:</div>
+      <b style="font-size:14px;color:var(--ink)">Family PNR Multi-Passenger Booking • PNR: JAL-892K</b>
+      <div class="mu" style="font-size:11.5px">Multiple passengers can order their independent dietary meals under this single booking:</div>
     </div>
-    <span class="tag" style="background:var(--cd);color:var(--tx);border:1px solid var(--bd)">3 Passengers</span>
+    <div style="display:flex;gap:6px;align-items:center">
+      <span class="tag" style="background:var(--cd);color:var(--tx);border:1px solid var(--bd)">3 Family Seats</span>
+      <button class="b s" id="btn-batch-family" style="font-size:11.5px;padding:4px 10px;background:linear-gradient(135deg,var(--jal-teal),#059669);color:#fff;border:none;font-weight:700">⚡ 1-Click Order All 3 Meals</button>
+    </div>
   </div>
   <div class="pnr-pills">
-    ${FAMILY_PNR.map(f=>`
-      <button class="pnr-tab${f.seat==seat?' active':''}" data-pnr-seat="${f.seat}">
-        <span>${f.seat}:</span> <b>${f.name}</b> <span style="font-size:10.5px;opacity:.8">(${f.label})</span>
-      </button>
-    `).join('')}
+    ${FAMILY_PNR.map(f=>{
+      const hasOrd = orders.some(o => o.seat == f.seat && o.dishes && o.status != 'cancelled');
+      return `<button class="pnr-tab${f.seat==seat?' active':''}" data-pnr-seat="${f.seat}">
+        <span>${f.seat}:</span> <b>${f.name}</b> <span style="font-size:10.5px;opacity:.8">(${f.relation})</span>
+        <span class="tag" style="font-size:10px;margin-left:4px;background:${hasOrd?'var(--ok)':'var(--bd)'};color:${hasOrd?'#fff':'var(--mu)'}">
+          ${hasOrd ? '✓ Ordered' : 'Pending'}
+        </span>
+      </button>`;
+    }).join('')}
   </div>
 </div>
 <div class="g"><div class="c"><h2>Ask SkyBite</h2>
@@ -2421,18 +2484,145 @@ document.querySelectorAll('[data-lm]').forEach(b=>b.onclick=()=>{hrs=+b.dataset.
 $('td').onchange=e=>{tdate=okd(e.target.value)?e.target.value:iso();sel=sel.filter(id=>{const d=C.find(x=>x.id==id);return d&&avail(d,tdate)&&!check(P,d).length});passenger()};
 const go=()=>{const t=$('msg').value.trim();if(t){$('msg').value='';ask(t)}};$('send').onclick=go;$('msg').onkeydown=e=>{if(e.key=='Enter')go()};
 document.querySelectorAll('[data-o]').forEach(i=>i.onchange=()=>{const id=i.dataset.o;sel=i.checked?[...sel,id].slice(0,3):sel.filter(x=>x!=id);passenger()});
-$('go').onclick=async()=>{if(!sel.length)return;const ds=sel.map(id=>C.find(d=>d.id==id)).filter(d=>!check(P,d).length&&(left(d)>0||route(hrs)=='lounge'));if(!ds.length)return;
-const old=mine;seat=($('seat').value||'14C').toUpperCase();const id='o'+Date.now();myId=id;
-await write(id,{id,seat,date:tdate,dishes:ds.map(d=>({id:d.id,n:d.n})),need:need(P),other:P.other,prof:JSON.parse(JSON.stringify(P)),status:'new',route:route(hrs),hrs,lst:route(hrs)=='lounge'?'new':'',t:Date.now()});
-if(old&&old.status!='skipped')await patch(old.id,{status:'cancelled'});sel=[];passenger()};
+$('go').onclick=async()=>{
+  if(!sel.length)return;
+  const ds=sel.map(id=>C.find(d=>d.id==id)).filter(d=>!check(P,d).length&&(left(d)>0||route(hrs)=='lounge'));
+  if(!ds.length)return;
+  const targetSeat = ($('seat') ? $('seat').value : seat || '14C').toUpperCase();
+  seat = targetSeat;
+  // Only replace existing active order for THIS specific seat (keep other seats intact!)
+  const existingForSeat = orders.find(o => o.seat == targetSeat && o.status != 'cancelled' && o.status != 'skipped');
+  const id = 'o' + Date.now();
+  myId = id;
+  myOrderIds.add(id);
+  await write(id, {
+    id,
+    seat: targetSeat,
+    date: tdate,
+    dishes: ds.map(d=>({id:d.id,n:d.n})),
+    need: need(P),
+    other: P.other,
+    prof: JSON.parse(JSON.stringify(P)),
+    status: 'new',
+    route: route(hrs),
+    hrs,
+    lst: route(hrs)=='lounge'?'new':'',
+    t: Date.now()
+  });
+  if(existingForSeat) await patch(existingForSeat.id, {status: 'cancelled'});
+  sel = [];
+  banner('Meal confirmed for Seat ' + targetSeat + '! Switch passenger tabs above to order for other family members.');
+  passenger();
+};
+
+const bbf = $('btn-batch-family');
+if(bbf){
+  bbf.onclick = async () => {
+    // 1. Grandma Priya (Seat 14C) - Strict Jain (Lounge Ghost Box)
+    const o1 = {
+      id: 'o-fam-14C-' + Date.now(),
+      seat: '14C',
+      date: tdate,
+      dishes: [{id: 'jdl', n: 'Jain dal + steamed rice'}],
+      need: 'Vegetarian, Strict Jain (Zero Root Veg)',
+      other: [],
+      prof: {base: 'veg', jain: true, al: {}},
+      status: 'new',
+      route: 'lounge',
+      hrs: 2,
+      lst: 'new',
+      t: Date.now()
+    };
+    // 2. Mom Sunita (Seat 14B) - Sattvik Navratri Fasting
+    const o2 = {
+      id: 'o-fam-14B-' + Date.now(),
+      seat: '14B',
+      date: tdate,
+      dishes: [{id: 'sab', n: 'Sabudana khichdi (vrat)'}],
+      need: 'Vegetarian, Sattvic / Navratri Fasting',
+      other: [],
+      prof: {base: 'veg', sattvic: true, vrat: true, al: {}},
+      status: 'new',
+      route: 'caterer',
+      hrs: 24,
+      lst: '',
+      t: Date.now() + 1
+    };
+    // 3. Kid Aarav (Seat 14A) - Halal Chicken Biryani
+    const o3 = {
+      id: 'o-fam-14A-' + Date.now(),
+      seat: '14A',
+      date: tdate,
+      dishes: [{id: 'bir', n: 'Halal chicken biryani'}],
+      need: 'Non-vegetarian, Halal-certified',
+      other: [],
+      prof: {base: 'nonveg', halal: true, al: {}},
+      status: 'new',
+      route: 'caterer',
+      hrs: 24,
+      lst: '',
+      t: Date.now() + 2
+    };
+
+    myOrderIds.add(o1.id);
+    myOrderIds.add(o2.id);
+    myOrderIds.add(o3.id);
+    await write(o1.id, o1);
+    await write(o2.id, o2);
+    await write(o3.id, o3);
+    banner('Confirmed all 3 family dietary meals (Seats 14C, 14B, 14A)! Live sync to crew and lounge kitchen.');
+    passenger();
+  };
+}
+
+document.querySelectorAll('[data-skip-order]').forEach(b => {
+  b.onclick = () => skipMeal(b.dataset.skipOrder);
+});
+
+const bmWeb = $('btn-mode-web'), bmWa = $('btn-mode-wa');
+if(bmWeb) bmWeb.onclick = ()=>{ passengerMode = 'web'; passenger(); };
+if(bmWa) bmWa.onclick = ()=>{ passengerMode = 'wa'; passenger(); };
+
+document.querySelectorAll('[data-pnr-seat]').forEach(b=>{
+  b.onclick = ()=>{
+    seat = b.dataset.pnrSeat;
+    if(seat == '14C'){ P.base = 'veg'; P.jain = true; P.sattvic = false; P.halal = false; }
+    else if(seat == '14B'){ P.base = 'veg'; P.sattvic = true; P.jain = false; P.halal = false; }
+    else if(seat == '14A'){ P.base = 'nonveg'; P.halal = true; P.jain = false; P.sattvic = false; }
+    sel = [];
+    passenger();
+  };
+});
+
+document.querySelectorAll('[data-wa-pick]').forEach(b=>{
+  b.onclick = ()=>{
+    seat = b.dataset.waPick;
+    passengerMode = 'web';
+    if(seat == '14C'){ P.base = 'veg'; P.jain = true; }
+    else if(seat == '14B'){ P.base = 'veg'; P.sattvic = true; }
+    else if(seat == '14A'){ P.base = 'nonveg'; P.halal = true; }
+    passenger();
+    banner('WhatsApp response recorded: Preferences assigned for seat ' + seat);
+  };
+});
+
 const c=$('chat');if(c)c.scrollTop=c.scrollHeight}
 const spHtml=()=>sp.length?sp.map(d=>`<div class="m"><div class="row"><b>${esc(cl(d.n))}</b><button class="b s" data-del="${esc(cl(d.id))}">Remove</button></div><div class="mu">${esc(cl(d.occ))}, ${+d.q||0} portions loaded</div></div>`).join(''):'<div class="mu">None yet.</div>';
 const exHtml=()=>{const o=ex.filter(e=>e.status=='open');
 return '<div class="mu" style="margin-bottom:8px">When a passenger clicks "Skip My Meal", they instantly receive <b>500 JAL Miles</b> and the meal enters the Cabin Digital Inventory below. Passengers who forgot to book a special meal can claim it instantly.</div>'+(o.length?o.map(e=>{const d=C.find(x=>x.id==e.dishId),w=d?check(P,d):['unknown meal'];return `<div class="m" style="border-left:3px solid #0f766e"><div class="row"><b>${esc(cl(e.n))}</b><span class="tag" style="background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6">Released from seat ${esc(cl(e.seat))}</span></div>${w.length?`<div class="no">Not suitable for you: ${w.join(', ')}</div>`:P.other.length?'<div class="no">Confirm with crew: '+esc(P.other.join(', '))+'</div>':'<div class="ok">Matches your needs • Ready for claim</div>'}<button class="b" data-cl="${esc(cl(e.id))}"${w.length?' disabled':''} style="margin-top:6px;background:#0f766e;color:#fff">Claim this released meal</button></div>`}).join(''):'<div class="mu" style="margin-top:8px;padding:12px;background:var(--bg);border:1px dashed var(--bd);border-radius:8px">No meals released in the Cabin Digital Inventory right now. Place an order and click "Skip my meal (+500 JAL Miles)" above to test this flow!</div>')};
 async function ewrite(id,d){if(db){try{await db.doc('exchange/'+id).set(d)}catch(e){banner('Could not release the meal: '+(e.code||'error'))}}else ex.push(d)}
 async function epatch(id,d){if(db){try{await db.doc('exchange/'+id).update(d)}catch(e){banner('Could not update: '+(e.code||'error'))}}else Object.assign(ex.find(x=>x.id==id),d)}
-async function skipMeal(){const m=orders.find(o=>o.id==myId&&(o.status=='new'||o.status=='ack'));if(!m||m.route=='lounge'||m.src=='exchange'){banner('This meal cannot be skipped.');return}
-await patch(m.id,{status:'skipped',miles:500});for(const x of m.dishes){const id='e'+Date.now()+x.id;await ewrite(id,{id,dishId:x.id,n:x.n,seat:m.seat,status:'open',t:Date.now()})}banner('Meal skipped! 500 JAL Miles credited to your account. Your meal was released to the Cabin Digital Inventory.');if(!db)passenger()}
+async function skipMeal(oid){
+  const m = orders.find(o => o.id == oid && (o.status == 'new' || o.status == 'ack'));
+  if(!m || m.route == 'lounge' || m.src == 'exchange'){ banner('This meal cannot be skipped.'); return; }
+  await patch(m.id, {status: 'skipped', miles: 500});
+  for(const x of m.dishes){
+    const eid = 'e' + Date.now() + x.id;
+    await ewrite(eid, {id: eid, dishId: x.id, n: x.n, seat: m.seat, status: 'open', t: Date.now()});
+  }
+  banner('Meal for Seat ' + m.seat + ' skipped! 500 JAL Miles credited. Released to Cabin Digital Inventory.');
+  passenger();
+}
 async function claim(eid){const e=ex.find(x=>x.id==eid&&x.status=='open'),d=e&&C.find(x=>x.id==e.dishId);if(!e||!d){banner('That meal was just taken.');return}
 if(check(P,d).length){banner('That meal does not match your needs: '+check(P,d).join(', '));return}
 const id='o'+Date.now();myId=id;if($('seat'))seat=($('seat').value||seat).toUpperCase();
