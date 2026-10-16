@@ -1,0 +1,15 @@
+# SkyBite
+
+> Prototype for the In-Flight Hospitality and Dietary Intelligence challenge (Indian passengers). It captures dietary needs (Jain, vrat, halal, allergies, medical), checks meals against ingredients with deterministic rules, handles late requests and links passenger, cabin crew and menu planner screens. All data is synthetic.
+
+## Pages
+- [Review page: summary, rules, meal data, calendar, tests, limitations](index.html)
+- [Full app (passenger, crew, menu planner)](skybite-live.html)
+- [Late-change ladder and buffer demo](skybite-demo.html)
+- [Python rule engine, ladder, buffer and self-tests](skybite.py)
+
+## Notes for reviewers
+- Safety decisions are rule-based; the AI assistant only turns free text into structured needs.
+- Live order sync and the Claude chat only work on claude.ai; elsewhere the app runs in single-device mode with a keyword matcher.
+- Meal ingredients, allergens and nutrition are illustrative, not real airline recipes.
+- Buffer results are from a synthetic simulation, not airline data.

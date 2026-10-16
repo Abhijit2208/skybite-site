@@ -1,0 +1,143 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SkyBite: live demo</title>
+<style>
+:root{--bg:#f2f4f6;--cd:#fff;--tx:#14212e;--mu:#59697a;--bd:#d5dde4;--ink:#12263a;--tu:#e7a100;--ok:#17703f;--bad:#b3261e;--tint:#fff6dc;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1620;--cd:#15222f;--tx:#e8eef3;--mu:#93a5b4;--bd:#2a3b4a;--ink:#f0c24a;--tu:#e7a100;--ok:#5fd28f;--bad:#ff8a80;--tint:#2a2410}}
+:root[data-theme="dark"]{--bg:#0d1620;--cd:#15222f;--tx:#e8eef3;--mu:#93a5b4;--bd:#2a3b4a;--ink:#f0c24a;--tu:#e7a100;--ok:#5fd28f;--bad:#ff8a80;--tint:#2a2410}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:20px 16px 8px;max-width:960px;margin:auto}
+h1{font:700 28px/1.15 Georgia,"Times New Roman",serif;margin:0;color:var(--ink)}
+header p{margin:4px 0 0;color:var(--mu);max-width:62ch}
+nav{display:flex;gap:6px;max-width:960px;margin:12px auto 0;padding:0 16px;overflow-x:auto}
+nav button{border:1px solid var(--bd);background:var(--cd);color:var(--tx);padding:9px 14px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:root:not([data-theme="dark"]) nav button[aria-selected=true]{color:#fff}
+main{max-width:960px;margin:14px auto 40px;padding:0 16px}
+section{display:none}section.on{display:block}
+.g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:14px}
+h2{font:700 16px/1.3 system-ui,sans-serif;margin:0 0 10px}
+label{display:block;margin:6px 0;cursor:pointer}
+select,input[type=text],input[type=range]{width:100%;font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+input[type=range]{padding:0}
+.b{border:0;background:var(--tu);color:#1a1300;font:700 15px system-ui;padding:10px 14px;border-radius:8px;cursor:pointer;margin-top:8px}
+.b.s{background:transparent;border:1px solid var(--bd);color:var(--tx);font-weight:600;padding:6px 10px;margin:0}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--tu);outline-offset:2px}
+.pass{border:2px dashed var(--ink);border-radius:12px;padding:14px;background:var(--tint)}
+.pass .st{display:inline-block;background:var(--ink);color:var(--bg);font-weight:700;border-radius:6px;padding:2px 8px;font-size:13px}
+:root:not([data-theme="dark"]) .pass .st{color:#fff}
+.pass h3{font:700 20px/1.25 Georgia,serif;margin:8px 0 2px}
+.ok{color:var(--ok);font-weight:700}.no{color:var(--bad);font-weight:700}.mu{color:var(--mu);font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:6px 6px;border-bottom:1px solid var(--bd);vertical-align:top}
+.wrap{overflow-x:auto}
+tr.hot td{background:var(--tint)}
+.bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--tu)}
+ul{margin:6px 0 0;padding-left:18px}
+.big{font:700 34px/1 Georgia,serif;color:var(--ink)}
+</style></head><body>
+<header><h1>SkyBite</h1>
+<p>Live demo: change a meal request late, watch the rules pick a safe option, and see the crew and ops views update. All data is synthetic.</p></header>
+<nav role="tablist"><button role="tab" data-t="p" aria-selected="true">Passenger</button><button role="tab" data-t="c" aria-selected="false">Cabin crew</button><button role="tab" data-t="o" aria-selected="false">Ops and buffer</button></nav>
+<main>
+<section id="p" class="on"><div class="g">
+<div class="c"><h2>Your Dietary Passport</h2>
+<label>Diet base <select id="base"><option value="veg">Vegetarian</option><option value="egg">Eggetarian</option><option value="nonveg">Non-vegetarian</option></select></label>
+<div id="flags"></div>
+<h2 style="margin-top:12px">Or just type it</h2>
+<input type="text" id="free" placeholder="e.g. Jain, no peanuts, sugar-free" aria-label="Describe your food needs">
+<button class="b s" id="parse" style="margin-top:8px">Fill from text</button>
+<div class="mu" id="pmsg" style="margin-top:6px">Demo uses keyword matching. The full system uses a language model here, and always asks you to confirm.</div></div>
+<div class="c"><h2>Request a meal for seat 14C</h2>
+<label>Time left before departure <select id="hrs"><option value="24">Tomorrow (24 h)</option><option value="3" selected>At the airport (3 h)</option><option value="0.67">At the gate (40 min)</option><option value="-1">In the air</option></select></label>
+<button class="b" id="req">Find my meal</button>
+<div id="res" style="margin-top:12px"></div></div>
+</div></section>
+
+<section id="c"><div class="g">
+<div class="c" style="grid-column:1/-1"><h2>Seat needs (row 3 to 22)</h2><div class="wrap"><table id="seats"></table></div></div>
+<div class="c"><h2>Loaded stock</h2><div id="stock"></div></div>
+<div class="c"><h2>How to read this</h2><ul><li>Highlighted rows are late changes the system handled.</li><li>Stock drops as buffer and premium meals are assigned.</li><li>A strict need such as an allergy is never relaxed to find a faster option.</li></ul></div>
+</div></section>
+
+<section id="o"><div class="g">
+<div class="c" style="grid-column:1/-1"><h2>Late-request log</h2><div class="wrap"><table id="log"><tr><td class="mu">No requests yet. Use the Passenger tab.</td></tr></table></div></div>
+<div class="c"><h2>Buffer planner</h2>
+<label>Passengers: <b id="pxv">180</b><input type="range" id="px" min="100" max="300" value="180"></label>
+<label><input type="checkbox" id="fest"> Festival or fasting period (late requests up 60%)</label>
+<label>Safety level: <b id="qv">90</b>%<input type="range" id="q" min="80" max="99" value="90"></label>
+<div class="mu">Assumes 1.2% of passengers make a late special-meal request. Re-fit on real history.</div></div>
+<div class="c"><h2>Recommended buffer</h2><div class="big" id="buf">0</div><div class="mu" id="bufx"></div>
+<p class="mu">Buffer = chosen quantile of a negative-binomial distribution of late demand, the same method as the prototype and PDF.</p></div>
+</div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const C=[
+{id:'pan',n:'Paneer butter masala + jeera rice',f:['dairy','grain','onion_garlic'],g:'plan',q:60,k:[640,22,70,28,5,3,260]},
+{id:'chk',n:'Chicken curry + rice',f:['meat','grain','onion_garlic','high_sodium'],g:'plan',q:50,k:[680,34,68,28,4,3,60]},
+{id:'jdl',n:'Jain dal + steamed rice',f:['grain','pulse'],g:'buf',q:2,k:[480,17,78,9,9,4,70]},
+{id:'bir',n:'Halal chicken biryani',f:['meat','grain','onion_garlic','high_sodium'],hal:1,g:'buf',q:2,k:[720,36,82,26,4,3,70]},
+{id:'mil',n:'Millet upma with vegetables',f:['grain'],g:'buf',q:3,k:[380,11,60,8,8,3,50]},
+{id:'sab',n:'Sabudana khichdi (vrat)',f:['nuts'],g:'buf',q:1,k:[450,8,70,15,3,2,40]},
+{id:'frt',n:'Fruit and makhana bowl',f:[],g:'prem',q:2,k:[260,6,48,4,6,2,60]},
+{id:'kic',n:'Millet-moong khichdi with ghee',f:['grain','pulse','dairy'],g:'prem',q:2,k:[520,16,70,16,9,4,90]},
+{id:'poh',n:'Lounge poha, no onion or garlic',f:['grain'],g:'air',q:9,k:[390,8,70,9,3,3,30]},
+{id:'cup',n:'Lounge fresh fruit cup',f:[],g:'air',q:9,k:[120,2,28,0,4,1,30]},
+{id:'sdw',n:'Lounge chicken sandwich',f:['meat','gluten','grain','high_sodium'],g:'air',q:9,k:[450,24,42,18,3,2,60]}];
+const FL={jain:'Jain (no root vegetables, onion, garlic)',sattvic:'Sattvic or Swaminarayan (no onion, garlic)',vrat:'Fasting meal (vrat)',halal:'Halal',diabetic:'Diabetic-friendly',low_sodium:'Low sodium',gluten_free:'Gluten-free',nuts:'Allergy: peanuts and tree nuts',dairy:'Allergy: dairy'};
+const P={base:'veg'};Object.keys(FL).forEach(k=>P[k]=false);
+function check(p,d){const f=new Set(d.f),h=x=>f.has(x),w=[];
+if(p.base=='veg'&&(h('meat')||h('fish')||h('egg')))w.push('not vegetarian');
+if(p.base=='egg'&&(h('meat')||h('fish')))w.push('contains meat');
+if(p.jain&&(h('meat')||h('onion_garlic')||h('root_veg')))w.push('not Jain');
+if((p.sattvic||p.vrat)&&h('onion_garlic'))w.push('has onion or garlic');
+if(p.vrat&&(h('grain')||h('pulse')||h('meat')))w.push('not vrat-compliant');
+if(p.halal&&h('meat')&&!d.hal)w.push('not halal-certified');
+if(p.diabetic&&d.k[2]>75)w.push('high carbohydrate load');
+if(p.low_sodium&&h('high_sodium'))w.push('high sodium');
+if(p.gluten_free&&h('gluten'))w.push('contains gluten');
+if(p.nuts&&h('nuts'))w.push('allergen: nuts');
+if(p.dairy&&h('dairy'))w.push('allergen: dairy');
+return w}
+const ST=['','Planned meal','Buffer stock','Premium alternative','Lounge or airport sealed pack','Recovery'];
+function ladder(p,hrs){
+const ok=g=>C.filter(d=>d.g==g&&d.q>0&&!check(p,d).length)[0];
+if(hrs>=18){const d=C.filter(d=>d.g!='air'&&!check(p,d).length)[0];if(d)return{s:1,d,note:'Added to the catering order before the cut-off, so it is cooked fresh.'}}
+else{let d=ok('plan');if(d)return{s:1,d};d=ok('buf');if(d)return{s:2,d};d=ok('prem');if(d)return{s:3,d};
+if(hrs>=1){d=ok('air');if(d)return{s:4,d}}}
+return{s:5,d:null}}
+const seats=[['3A','Jain','Jain dal + steamed rice'],['7D','Halal','Halal chicken biryani'],['9F','Diabetic-friendly','Millet upma with vegetables'],['12B','Fasting (vrat)','Sabudana khichdi (vrat)'],['14C','You',null],['18A','Gluten-free','Paneer butter masala + jeera rice'],['21E','Vegetarian','Paneer butter masala + jeera rice'],['22C','Peanut allergy','Chicken curry + rice']].map(r=>({s:r[0],need:r[1],dish:r[2],done:false,late:false}));
+const log=[];let tick=0;
+function flags(){$('flags').innerHTML=Object.keys(FL).map(k=>`<label><input type="checkbox" data-k="${k}"${P[k]?' checked':''}> ${FL[k]}</label>`).join('');
+document.querySelectorAll('#flags input').forEach(i=>i.onchange=()=>P[i.dataset.k]=i.checked)}
+$('base').onchange=e=>P.base=e.target.value;
+$('parse').onclick=()=>{const t=$('free').value.toLowerCase(),m={jain:/jain/,sattvic:/sattvic|swaminarayan|no onion|no garlic/,vrat:/vrat|fast|navratri|upvas|ekadashi/,halal:/halal/,diabetic:/diabet|sugar/,low_sodium:/low (salt|sodium)|no salt/,gluten_free:/gluten/,nuts:/peanut|nut/,dairy:/dairy|milk|lactose/};
+const hit=[];for(const k in m)if(m[k].test(t)){P[k]=true;hit.push(FL[k])}
+if(/non.?veg/.test(t)){P.base='nonveg'}else if(/egg/.test(t)){P.base='egg'}else if(/veg/.test(t))P.base='veg';
+$('base').value=P.base;flags();$('pmsg').textContent=hit.length?'Understood: '+hit.join('; ')+'. Check the boxes above, then confirm.':'Nothing recognised. Tick the boxes manually.'};
+function needText(){const a=Object.keys(FL).filter(k=>P[k]).map(k=>FL[k].split(' (')[0]);return ({veg:'Vegetarian',egg:'Eggetarian',nonveg:'Non-vegetarian'})[P.base]+(a.length?', '+a.join(', '):'')}
+$('req').onclick=()=>{const hrs=+$('hrs').value,r=ladder(P,hrs),hl=$('hrs').selectedOptions[0].text;let h;
+if(r.d){r.d.q-=r.d.g=='air'?0:(r.s==1&&hrs>=18?0:1);const k=r.d.k;
+const rej=C.filter(d=>d.g!='air'&&check(P,d).length).slice(0,3).map(d=>`<li>${d.n}: ${check(P,d).join(', ')}</li>`).join('');
+h=`<div class="pass"><span class="st">Step ${r.s} of 5: ${ST[r.s]}</span><h3>${r.d.n}</h3><div class="ok">Matches your passport</div>${r.note?`<div class="mu">${r.note}</div>`:''}
+<table style="margin-top:8px"><tr><td>Energy</td><td>${k[0]} kcal</td><td>Protein</td><td>${k[1]} g</td></tr><tr><td>Carbs</td><td>${k[2]} g</td><td>Fat</td><td>${k[3]} g</td></tr><tr><td>Fibre</td><td>${k[4]} g</td><td>Iron</td><td>${k[5]} mg</td></tr><tr><td>Calcium</td><td>${k[6]} mg</td><td></td><td></td></tr></table>
+<div class="mu">Illustrative values per portion. A real deployment takes them from the caterer's recipes and an Indian food composition table, never from a camera guess.</div></div>
+${rej?`<div class="mu" style="margin-top:8px"><b>Why other meals were not offered:</b><ul>${rej}</ul></div>`:''}`}
+else h=`<div class="pass"><span class="st">Step 5 of 5: Recovery</span><h3>No safe option in time</h3><div class="no">We will not guess.</div><p>${hrs<1?'Too close to departure for a lounge or airport pack.':'Nothing on board or at the airport fits every rule.'} Crew offer a safe snack and an amenity, and the case is logged so the next flight is stocked.</p></div>`;
+$('res').innerHTML=h;const s=seats.find(x=>x.s=='14C');s.need=needText();s.dish=r.d?r.d.n:'Recovery: safe snack + amenity';s.late=true;s.done=false;
+log.unshift({t:++tick,n:needText(),w:hl,s:r.s,d:r.d?r.d.n:'None'});draw()};
+function draw(){$('seats').innerHTML='<tr><th>Seat</th><th>Need</th><th>Meal</th><th>Status</th></tr>'+seats.map((x,i)=>`<tr class="${x.late?'hot':''}"><td>${x.s}</td><td>${x.need}${x.late?'<div class="mu">Late change</div>':''}</td><td>${x.dish||'<span class="mu">Not requested yet</span>'}</td><td>${x.dish?(x.done?'<span class="ok">Served</span>':`<button class="b s" data-i="${i}">Mark served</button>`):''}</td></tr>`).join('');
+document.querySelectorAll('#seats button').forEach(b=>b.onclick=()=>{seats[b.dataset.i].done=true;draw()});
+const gl={plan:'Planned',buf:'Buffer',prem:'Premium',air:'Airport packs'};
+$('stock').innerHTML=['plan','buf','prem'].map(g=>`<div style="margin:8px 0 2px"><b>${gl[g]}</b></div>`+C.filter(d=>d.g==g).map(d=>`<div style="display:flex;justify-content:space-between;gap:8px"><span>${d.n}</span><b>${d.q}</b></div>`).join('')).join('');
+$('log').innerHTML=log.length?'<tr><th>#</th><th>Passenger need</th><th>When</th><th>Step</th><th>Meal</th></tr>'+log.map(l=>`<tr><td>${l.t}</td><td>${l.n}</td><td>${l.w}</td><td>${l.s}: ${ST[l.s]}</td><td>${l.d}</td></tr>`).join(''):'<tr><td class="mu">No requests yet. Use the Passenger tab.</td></tr>'}
+function nbq(m,q,r=3){const p=r/(r+m);let pm=Math.pow(p,r),c=pm,k=0;while(c<q){pm*=(k+r)/(k+1)*(1-p);k++;c+=pm}return k}
+function buf(){const px=+$('px').value,q=+$('q').value/100,m=px*0.012*($('fest').checked?1.6:1);$('pxv').textContent=px;$('qv').textContent=$('q').value;$('buf').textContent=nbq(m,q)+' meals';$('bufx').textContent='Expected late special-meal requests: '+m.toFixed(1)}
+['px','q','fest'].forEach(i=>$(i).oninput=buf);
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x==b));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id==b.dataset.t));draw()});
+flags();draw();buf();
+</script></body></html>

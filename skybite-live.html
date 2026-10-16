@@ -1,0 +1,229 @@
+<!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SkyBite: passenger and crew</title>
+<style>
+:root{--bg:#fbfcfd;--cd:#fff;--tx:#14212e;--mu:#59697a;--bd:#d5dde4;--ink:#12263a;--tu:#e7a100;--ok:#17703f;--bad:#b3261e;--tint:#fff6dc;--onink:#fff;--a1:rgba(231,161,0,.60);--a2:rgba(27,138,143,.55);--a3:rgba(98,112,255,.55);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0f14;--cd:#15222f;--tx:#e8eef3;--mu:#93a5b4;--bd:#2a3b4a;--ink:#f0c24a;--ok:#5fd28f;--bad:#ff8a80;--tint:#2a2410;--onink:#1a1300;--a1:rgba(231,161,0,.65);--a2:rgba(27,138,143,.70);--a3:rgba(98,112,255,.65)}}
+:root[data-theme="dark"]{--bg:#0b0f14;--cd:#15222f;--tx:#e8eef3;--mu:#93a5b4;--bd:#2a3b4a;--ink:#f0c24a;--ok:#5fd28f;--bad:#ff8a80;--tint:#2a2410;--onink:#1a1300;--a1:rgba(231,161,0,.65);--a2:rgba(27,138,143,.70);--a3:rgba(98,112,255,.65)}
+html{color-scheme:light;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body::before{content:"";position:fixed;left:-5%;right:-5%;bottom:-64px;height:120px;z-index:-1;pointer-events:none;background:linear-gradient(90deg,var(--a2),var(--a3),var(--a1),var(--a2),var(--a3));background-size:200% 100%;filter:blur(34px);animation:slide 20s linear infinite}
+@keyframes slide{to{background-position:200% 0}}
+@media (prefers-reduced-motion:reduce){body::before{animation:none}}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:960px;margin:auto;padding:16px}
+h1{font:700 28px/1.15 Georgia,"Times New Roman",serif;margin:0;color:var(--ink)}
+h2{font:700 16px/1.3 system-ui,sans-serif;margin:0 0 10px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.mu{color:var(--mu);font-size:13px}
+.g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:14px}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:14px}
+label{display:block;margin:6px 0;cursor:pointer}
+select,input[type=text]{width:100%;font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+.b{border:0;background:var(--tu);color:#1a1300;font:700 14px system-ui;padding:9px 13px;border-radius:8px;cursor:pointer}
+.b.s{background:transparent;border:1px solid var(--bd);color:var(--tx);font-weight:600;padding:6px 10px}
+.b[disabled]{opacity:.45;cursor:not-allowed}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--tu);outline-offset:2px}
+.roles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:20px}
+.roles button{text-align:left;background:var(--cd);color:var(--tx);border:2px solid var(--ink);border-radius:12px;padding:18px;font:inherit;cursor:pointer}
+.roles b{display:block;font:700 20px Georgia,serif;color:var(--ink);margin-bottom:4px}
+.m{border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--cd)}
+.m.x{opacity:.65}
+.m h3{margin:0 0 2px;font-size:15px}
+.ok{color:var(--ok);font-weight:700}.no{color:var(--bad);font-weight:700}
+.tk{border:2px dashed var(--ink);border-radius:12px;padding:12px;background:var(--tint);margin-top:10px}
+.tag{display:inline-block;background:var(--ink);color:var(--onink);font-weight:700;font-size:13px;border-radius:6px;padding:2px 8px}
+.o{border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--cd)}
+.o.n{border:2px solid var(--tu);background:var(--tint)}
+.row{display:flex;justify-content:space-between;gap:8px}
+.ban{background:var(--tint);border:1px solid var(--tu);border-radius:8px;padding:8px 12px;margin-top:10px;font-size:13px}
+.ch{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;max-height:240px;overflow-y:auto;margin-bottom:8px}
+.bb{margin:6px 0;padding:8px 10px;border-radius:10px;max-width:92%;font-size:14px}
+.bb.b{background:var(--tint);border:1px solid var(--tu)}.bb.u{background:var(--ink);color:var(--onink);margin-left:auto}
+.chip{border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:999px;padding:4px 10px;margin:3px 3px 0 0;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+.bar{position:sticky;bottom:0;background:var(--cd);border:2px solid var(--ink);border-radius:10px;padding:10px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px;border-bottom:1px solid var(--bd);vertical-align:top}.wrap{overflow-x:auto}td input{min-width:170px}
+details{margin-top:4px}summary{cursor:pointer;color:var(--mu);font-size:13px}
+</style></head><body><div class="w" id="app"></div>
+<script>
+const $=id=>document.getElementById(id),app=$('app');
+const C=[
+{id:'pan',n:'Paneer butter masala + jeera rice',f:['grain','onion_garlic'],al:['dairy','tree_nut'],q:40,k:[640,22,70],i:'Paneer, butter, cream, tomato, onion, garlic, cashew paste, spices, basmati rice, cumin'},
+{id:'chk',n:'Chicken curry + rice',f:['meat','grain','onion_garlic','high_sodium'],al:[],q:40,k:[680,34,68],i:'Chicken, onion, garlic, ginger, tomato, coriander, garam masala, basmati rice, salt'},
+{id:'jdl',n:'Jain dal + steamed rice',f:['grain','pulse'],al:['dairy'],q:4,k:[480,17,78],i:'Toor dal, ghee, cumin, asafoetida, tomato, turmeric, steamed rice (no onion, garlic or root vegetables)'},
+{id:'bir',n:'Halal chicken biryani',f:['meat','grain','onion_garlic','high_sodium'],hal:1,al:['dairy'],q:4,k:[720,36,82],i:'Halal chicken, basmati rice, yogurt, onion, garlic, ginger, mint, saffron, ghee, spices, salt'},
+{id:'mil',n:'Millet upma with vegetables',f:['grain'],al:['mustard'],q:5,k:[380,11,60],i:'Foxtail millet, carrot, beans, peas, mustard seeds, curry leaves, ginger, green chilli, sunflower oil, salt'},
+{id:'sab',n:'Sabudana khichdi (vrat)',f:['root_veg'],al:['peanut','dairy'],q:3,k:[450,8,70],i:'Sabudana (tapioca pearls), roasted peanuts, potato, cumin, green chilli, ghee, rock salt'},
+{id:'frt',n:'Fruit and makhana bowl (premium)',f:[],al:[],q:3,k:[260,6,48],i:'Papaya, pomegranate, apple, roasted makhana (fox nuts), lemon, rock salt'},
+{id:'kic',n:'Millet-moong khichdi with ghee (premium)',f:['grain','pulse'],al:['dairy'],q:3,k:[520,16,70],i:'Millet, split moong dal, ghee, cumin, ginger, turmeric, carrot'}];
+const FL={jain:'Jain',sattvic:'Sattvic or Swaminarayan (no onion, garlic)',vrat:'Fasting meal (vrat)',halal:'Halal',diabetic:'Diabetic-friendly',low_sodium:'Low sodium'};
+const AL={peanut:'Peanut',tree_nut:'Tree nuts',dairy:'Dairy',egg:'Egg',gluten:'Gluten',soy:'Soy',sesame:'Sesame',fish:'Fish',shellfish:'Shellfish',mustard:'Mustard'};
+const BASE={veg:'Vegetarian',egg:'Eggetarian',nonveg:'Non-vegetarian'};
+const OCC=['Navratri','Diwali','Eid','Christmas','Birthday','Anniversary','Other'];
+const S0=[
+{id:'x1',n:'Navratri vrat thali',occ:'Navratri',f:['root_veg'],al:['dairy','peanut'],q:6,k:[520,12,78],i:'Sabudana khichdi, kuttu (buckwheat) puri, potato sabzi, samak rice, curd, rock salt'},
+{id:'x2',n:'Diwali mithai and snack box',occ:'Diwali',f:['grain','added_sugar'],al:['dairy','tree_nut','gluten'],q:6,k:[480,9,62],i:'Kaju katli, besan ladoo, soan papdi, baked namkeen, raisins, almonds'},
+{id:'x3',n:'Eid biryani with sheer khurma',occ:'Eid',f:['meat','grain','onion_garlic','added_sugar','high_sodium'],hal:1,al:['dairy','tree_nut'],q:6,k:[820,34,98],i:'Halal mutton biryani, raita, sheer khurma (vermicelli, milk, dates, almonds, sugar)'},
+{id:'x4',n:'Christmas roast chicken and plum cake',occ:'Christmas',f:['meat','egg','grain','added_sugar','root_veg'],al:['egg','gluten','tree_nut','dairy'],q:6,k:[760,38,80],i:'Herb roast chicken, roast carrot and potato, plum cake (flour, eggs, butter, dried fruit, cashew, sugar)'},
+{id:'x5',n:'Birthday cake slice',occ:'Birthday',f:['egg','grain','added_sugar'],al:['egg','gluten','dairy'],q:8,k:[380,5,52],i:'Sponge cake (flour, eggs, sugar, butter), cream frosting, strawberry'},
+{id:'x6',n:'Eggless birthday cake slice',occ:'Birthday',f:['grain','added_sugar'],al:['gluten','dairy'],q:8,k:[360,5,54],i:'Eggless sponge (flour, yogurt, sugar, butter), cream frosting, strawberry'},
+{id:'x7',n:'Anniversary rasmalai plate',occ:'Anniversary',f:['added_sugar'],al:['dairy','tree_nut'],q:4,k:[340,6,44],i:'Rasmalai (milk, paneer, sugar, cardamom, pistachio), fresh strawberries'}];
+C.push(...S0);
+let occ='All',sp=[],rs={},rq=[],seen=null,note=null;
+const iso=d=>{d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const CAL0={Navratri:[['2026-10-11','2026-10-19']],Diwali:[['2026-11-06','2026-11-10']],Eid:[['2027-03-08','2027-03-11'],['2027-05-15','2027-05-18']],Christmas:[['2026-12-23','2026-12-26'],['2027-12-23','2027-12-26']]};
+let cal=JSON.parse(JSON.stringify(CAL0)),tdate=iso(),ed=null;
+const ALW=['Birthday','Anniversary','Other'];
+const okd=s=>/^\d{4}-\d{2}-\d{2}$/.test(s)&&!isNaN(new Date(s+'T00:00:00'));
+const shift=(s,n)=>{const t=new Date(s+'T00:00:00');t.setDate(t.getDate()+n);return iso(t)};
+const inSeason=(o,dt)=>(cal[o]||[]).some(w=>dt>=shift(w[0],-1)&&dt<=w[1]);
+const avail=(d,dt)=>!d.occ||ALW.includes(d.occ)||inSeason(d.occ,dt);
+const nextOpen=(o,t)=>(cal[o]||[]).map(w=>shift(w[0],-1)).filter(s=>s>t).sort()[0];
+const wText=o=>(cal[o]||[]).map(w=>w[0]+'..'+w[1]).join('; ');
+function parseW(t){return String(t).split(';').map(x=>x.trim().split('..').map(y=>y.trim())).filter(w=>w.length==2&&okd(w[0])&&okd(w[1])&&w[0]<=w[1])}
+const fmt=s=>new Date(s+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const occRows=edit=>{const src=edit?ed:cal;let r='';
+for(const o of [...Object.keys(CAL0),...ALW]){const ms=C.filter(d=>d.occ==o).map(d=>esc(d.n)).join('<br>')||'<span class="mu">None yet</span>';
+if(ALW.includes(o)){r+=`<tr><td><b>${o}</b></td><td colspan="2">Always available</td><td>${ms}</td><td class="ok">Available</td></tr>`;continue}
+const w=src[o]||[];
+(w.length?w:[null]).forEach((x,i)=>{const act=x&&tdate>=shift(x[0],-1)&&tdate<=x[1];
+r+=`<tr>${i==0?`<td rowspan="${w.length||1}"><b>${o}</b>${edit?`<br><button class="b s" data-add="${o}">Add period</button>`:''}</td>`:''}<td>${!x?'<span class="mu">Not set</span>':edit?`<input type="date" data-o="${o}" data-i="${i}" data-k="0" value="${x[0]}">`:fmt(x[0])}</td><td>${!x?'':edit?`<input type="date" data-o="${o}" data-i="${i}" data-k="1" value="${x[1]}">`:fmt(x[1])}</td>${i==0?`<td rowspan="${w.length||1}">${ms}</td>`:''}<td class="${act?'ok':'mu'}">${!x?'':act?'Available':'Not on this date'}${edit&&x?` <button class="b s" data-rm="${o}:${i}">Remove</button>`:''}</td></tr>`})}
+return '<div class="wrap"><table><tr><th>Occasion</th><th>Start date</th><th>End date</th><th>Meals</th><th>On '+tdate+'</th></tr>'+r+'</table></div>'};
+const seasonMsg=()=>{const a=Object.keys(cal).filter(o=>inSeason(o,tdate)),n=Object.keys(cal).map(o=>[o,nextOpen(o,tdate)]).filter(x=>x[1]).sort((p,q)=>p[1]<q[1]?-1:1)[0];
+return (a.length?'Festival meals on your travel date: '+a.join(', ')+'.':'No festival meals on this date.')+(n?' Next: '+n[0]+' meals open on '+n[1]+'.':'')+' Birthday and anniversary meals are always available.'};
+const cl=s=>String(s==null?'':s).replace(/[<>&"]/g,'');
+function setSpecials(l){for(let i=C.length-1;i>=0;i--)if(C[i].sp)C.splice(i,1);
+l.forEach(d=>{if(d&&d.id&&Array.isArray(d.f)&&Array.isArray(d.al)&&Array.isArray(d.k))C.push({id:cl(d.id),n:cl(d.n).slice(0,60),occ:OCC.includes(d.occ)?d.occ:'Other',f:d.f.map(cl),al:d.al.filter(a=>AL[a]),hal:d.hal?1:0,q:Math.max(0,Math.min(500,+d.q||0)),k:[+d.k[0]||0,+d.k[1]||0,+d.k[2]||0],i:cl(d.i).slice(0,300),sp:1})})}
+function check(p,d){const f=new Set(d.f),h=x=>f.has(x),w=[];
+if(p.base=='veg'&&(h('meat')||h('fish')||h('egg')))w.push('not vegetarian');
+if(p.base=='egg'&&(h('meat')||h('fish')))w.push('contains meat');
+if(p.jain&&(h('meat')||h('onion_garlic')||h('root_veg')))w.push('not Jain');
+if((p.sattvic||p.vrat)&&h('onion_garlic'))w.push('has onion or garlic');
+if(p.vrat&&(h('grain')||h('pulse')||h('meat')))w.push('not vrat-compliant');
+if(p.halal&&h('meat')&&!d.hal)w.push('not halal-certified');
+if(p.diabetic&&d.k[2]>75)w.push('high carbohydrate load');
+if(p.diabetic&&h('added_sugar'))w.push('added sugar');
+if(p.low_sodium&&h('high_sodium'))w.push('high sodium');
+for(const a in p.al)if(p.al[a]&&d.al.includes(a))w.push('contains '+AL[a].toLowerCase());
+return w}
+const need=p=>BASE[p.base]+Object.keys(FL).filter(k=>p[k]).map(k=>', '+FL[k].split(' (')[0]).join('')+Object.keys(p.al||{}).filter(a=>p.al[a]).map(a=>', allergy: '+AL[a].toLowerCase()).join('');
+let db=null,orders=[],role=null,myId=null,P={base:'veg',al:{},other:[]},seat='14C',local=false,sel=[],ai=null;
+const chat=[{r:'b',t:'Hi, I am SkyBite, your meal assistant. Tell me about any allergies or food rules (for example "peanut and egg allergy, Jain") and I will find meals that fit.'}];
+Object.keys(FL).forEach(k=>P[k]=false);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const live=()=>orders.filter(o=>o.status!='cancelled');
+const left=d=>d.q+(rs[d.id]||0)-live().filter(o=>(o.dishes||[]).some(x=>x.id==d.id)).length;
+const fits=()=>C.filter(d=>!check(P,d).length&&left(d)>0);
+async function write(id,data){if(db){try{await db.doc('orders/'+id).set(data)}catch(e){banner('Could not send: '+(e.code||'error')+'. You may need Contributor access.')}}else{const i=orders.findIndex(o=>o.id==id);i<0?orders.push(data):orders[i]=data}}
+async function patch(id,data){if(db){try{await db.doc('orders/'+id).update(data)}catch(e){banner('Could not update: '+(e.code||'error'))}}else{Object.assign(orders.find(o=>o.id==id),data);render()}}
+function banner(t){const b=$('ban');if(b){b.style.display='block';b.textContent=t}}
+function render(){
+if(!role){app.innerHTML=`<h1>SkyBite</h1><p class="mu" style="max-width:60ch">Two separate screens that share live data. Open the passenger screen on one device and the crew screen on another: when a passenger orders meals they appear on the crew screen straight away. Orders here are demo data.</p>
+<div class="roles"><button id="rp"><b>Passenger</b>Chat with SkyBite about allergies, read ingredients and order one or more meals.</button><button id="rc"><b>Cabin crew</b>See incoming orders, check them and mark them served.</button><button id="rm"><b>Menu planner</b>Add special meals for occasions such as Navratri, Diwali, Eid, Christmas or birthdays.</button></div><div class="ban">${db?'Live sync is on.':local?'Live sync is not available here, so orders stay on this page only. Switch roles to see them.':'Connecting...'}</div>`;
+$('rp').onclick=()=>{role='p';render()};$('rc').onclick=()=>{role='c';render()};$('rm').onclick=()=>{role='m';render()};return}
+role=='p'?passenger():role=='m'?planner():crew()}
+function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'}</div></div><button class="b s" id="sw">Switch role</button></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
+const tkHtml=()=>{const m=orders.find(o=>o.id==myId&&o.status!='cancelled');return m?`<div class="tk"><span class="tag">${m.status=='new'?'Sent to crew':m.status=='ack'?'Crew has your order':'Served'}</span><h3 style="margin:8px 0 2px">${m.dishes.map(x=>esc(x.n)).join('<br>')}</h3><div class="mu">Seat ${esc(m.seat)}. Status updates here by itself.</div></div>`:''};
+function parseLocal(t){t=t.toLowerCase();const r={rules:[],allergens:[],other:[]},m={jain:/jain/,sattvic:/sattvic|swaminarayan|no onion|no garlic/,vrat:/vrat|fast|navratri|upvas|ekadashi/,halal:/halal/,diabetic:/diabet|sugar/,low_sodium:/low (salt|sodium)|no salt/},a={peanut:/peanut|groundnut/,tree_nut:/tree nut|cashew|almond|walnut|pistachio/,dairy:/dairy|milk|lactose/,egg:/\begg/,gluten:/gluten|wheat/,soy:/\bsoy/,sesame:/sesame|\btil\b/,fish:/\bfish/,shellfish:/shellfish|prawn|shrimp/,mustard:/mustard/};
+for(const k in m)if(m[k].test(t))r.rules.push(k);for(const k in a)if(a[k].test(t))r.allergens.push(k);
+r.base=/non.?veg/.test(t)?'nonveg':/\begg(etarian|s only)/.test(t)?'egg':/veg/.test(t)?'veg':null;
+r.reply=(r.rules.length+r.allergens.length)?'Thanks, I have noted that.':'I did not pick up a specific allergy or rule. You can also tap the chips below.';return r}
+async function ask(text){chat.push({r:'u',t:text},{r:'b',t:'Thinking...'});passenger();let x;
+try{if(!ai){const s=window.claude&&claude.use?await claude.use('sample'):null;ai=s||false}
+if(!ai)throw 0;
+x=await ai.json('You read a passenger message for an airline meal system. Reply ONLY with JSON: {"base":"veg|egg|nonveg|null","rules":[any of "jain","sattvic","vrat","halal","diabetic","low_sodium"],"allergens":[any of "peanut","tree_nut","dairy","egg","gluten","soy","sesame","fish","shellfish","mustard"],"other":[allergies or intolerances not in that list, short strings],"reply":"one or two friendly sentences confirming what you understood, in the passenger\'s language. Never name meals and never say any meal is safe."}\nPassenger message: '+JSON.stringify(text))}
+catch(e){x=parseLocal(text)}
+if(!x||typeof x!='object')x=parseLocal(text);
+if(BASE[x.base])P.base=x.base;(x.rules||[]).forEach(k=>{if(k in FL)P[k]=true});(x.allergens||[]).forEach(a=>{if(AL[a])P.al[a]=true});
+P.other=[...new Set([...P.other,...(x.other||[]).map(s=>String(s).slice(0,30)).slice(0,5)])];
+sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);
+const f=fits(),o=P.other.length?` I cannot check "${P.other.join(', ')}" against the ingredient lists, so please confirm with the crew before eating.`:'';
+chat[chat.length-1].t=String(x.reply||'Thanks, I have noted that.').slice(0,400)+' '+(f.length?'Meals that fit: '+f.map(d=>d.n).join('; ')+'.':'No meal on this flight fits all of that. Send an order anyway or tell the crew and they will arrange something.')+o;
+passenger();const c=$('chat');if(c)c.scrollTop=c.scrollHeight}
+function passenger(){
+const mine=orders.find(o=>o.id==myId&&o.status!='cancelled'),ordered=[...C.filter(d=>avail(d,tdate))].sort((a,b)=>!check(P,a).length-!check(P,b).length).reverse().sort((a,b)=>(check(P,a).length>0)-(check(P,b).length>0));
+app.innerHTML=head('Passenger: order your meals')+`<div class="g"><div class="c"><h2>Ask SkyBite</h2>
+<div class="ch" id="chat">${chat.map(m=>`<div class="bb ${m.r}">${esc(m.t)}</div>`).join('')}</div>
+<input type="text" id="msg" placeholder="Tell me your allergies or food rules" maxlength="300"><button class="b" id="send" style="margin-top:6px">Send</button>
+<div class="mu" style="margin-top:6px">SkyBite only understands what you write. The rules below decide which meals are suitable.</div>
+<h2 style="margin-top:12px">Your needs</h2>
+<label>Seat <input type="text" id="seat" value="${esc(seat)}" maxlength="4"></label>
+<label>Diet <select id="base">${Object.keys(BASE).map(k=>`<option value="${k}"${P.base==k?' selected':''}>${BASE[k]}</option>`).join('')}</select></label>
+<div class="mu">Food rules</div>${Object.keys(FL).map(k=>`<button class="chip" data-k="${k}" aria-pressed="${P[k]}">${FL[k].split(' (')[0]}</button>`).join('')}
+<div class="mu" style="margin-top:8px">Allergies</div>${Object.keys(AL).map(a=>`<button class="chip" data-a="${a}" aria-pressed="${!!P.al[a]}">${AL[a]}</button>`).join('')}
+${P.other.length?`<div class="ban">Not covered by the ingredient lists: ${esc(P.other.join(', '))}. Tell the crew.</div>`:''}</div>
+<div><h2>Choose your meals (up to 3)</h2><label>Travel date <input type="date" id="td" value="${tdate}"></label><div class="mu" style="margin-bottom:8px">${seasonMsg()}</div><div class="bar"><span id="cnt">${sel.length} selected</span><button class="b" id="go"${sel.length?'':' disabled'}>${mine?'Replace my order':'Send order to crew'}</button></div>
+${ordered.length?'':'<div class="c mu">No special meals for this occasion yet. The airline can add them in the menu planner.</div>'}${ordered.map(d=>{const w=check(P,d),l=left(d),ok=!w.length&&l>0,on=sel.includes(d.id);
+return `<div class="m${ok?'':' x'}"><label class="row" style="margin:0"><span><input type="checkbox" data-o="${d.id}"${on?' checked':''}${ok&&(on||sel.length<3)?'':' disabled'}> <b>${d.n}</b>${d.occ?` <span class="tag">${d.occ}</span>`:''}</span><span class="mu">${l} left</span></label>
+${w.length?`<div class="no">Not suitable: ${w.join(', ')}</div>`:l<1?'<div class="no">Sold out</div>':P.other.length?'<div class="no">Confirm with crew: '+esc(P.other.join(', '))+'</div>':'<div class="ok">Suggested: matches your needs</div>'}
+<div class="mu">${d.k[0]} kcal, ${d.k[1]} g protein, ${d.k[2]} g carbs (illustrative). Contains: ${d.al.length?d.al.map(a=>AL[a].toLowerCase()).join(', '):'none of the listed allergens'}</div>
+<details><summary>Ingredients</summary><div style="font-size:14px">${d.i}</div></details></div>`}).join('')}</div></div><div id="tkbox">${tkHtml()}</div><div class="c" style="margin-top:14px"><h2>Occasion meals calendar</h2>${occRows(false)}<div class="mu" style="margin-top:6px">Meals open one day before the start date. Change the travel date above to see which occasions apply.</div></div>`;
+$('sw').onclick=()=>{role=null;render()};$('seat').onchange=e=>seat=e.target.value.toUpperCase().replace(/[^0-9A-Z]/g,'')||'14C';
+$('base').onchange=e=>{P.base=e.target.value;sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()};
+document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{P[b.dataset.k]=!P[b.dataset.k];sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()});
+document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{P.al[b.dataset.a]=!P.al[b.dataset.a];sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()});
+$('td').onchange=e=>{tdate=okd(e.target.value)?e.target.value:iso();sel=sel.filter(id=>{const d=C.find(x=>x.id==id);return d&&avail(d,tdate)&&!check(P,d).length});passenger()};
+const go=()=>{const t=$('msg').value.trim();if(t){$('msg').value='';ask(t)}};$('send').onclick=go;$('msg').onkeydown=e=>{if(e.key=='Enter')go()};
+document.querySelectorAll('[data-o]').forEach(i=>i.onchange=()=>{const id=i.dataset.o;sel=i.checked?[...sel,id].slice(0,3):sel.filter(x=>x!=id);passenger()});
+$('go').onclick=async()=>{if(!sel.length)return;const ds=sel.map(id=>C.find(d=>d.id==id)).filter(d=>!check(P,d).length&&left(d)>0);if(!ds.length)return;
+const old=mine;seat=($('seat').value||'14C').toUpperCase();const id='o'+Date.now();myId=id;
+await write(id,{id,seat,date:tdate,dishes:ds.map(d=>({id:d.id,n:d.n})),need:need(P),other:P.other,prof:JSON.parse(JSON.stringify(P)),status:'new',t:Date.now()});
+if(old)await patch(old.id,{status:'cancelled'});sel=[];passenger()};
+const c=$('chat');if(c)c.scrollTop=c.scrollHeight}
+const spHtml=()=>sp.length?sp.map(d=>`<div class="m"><div class="row"><b>${esc(cl(d.n))}</b><button class="b s" data-del="${esc(cl(d.id))}">Remove</button></div><div class="mu">${esc(cl(d.occ))}, ${+d.q||0} portions loaded</div></div>`).join(''):'<div class="mu">None yet.</div>';
+const demHtml=()=>C.map(d=>{const l=left(d),r=rq.some(x=>x.id==d.id);return `<div class="row" style="padding:3px 0"><span>${d.n}</span><span>${d.q+(rs[d.id]||0)-l} ordered, <b class="${l<=1?'no':''}">${l} left</b> ${r?`<button class="b" data-rs="${d.id}">Add 5 (crew asked)</button>`:l<=2?`<button class="b s" data-rs="${d.id}">Add 5</button>`:''}</span></div>`}).join('');
+function plUpdate(){const l=$('mlist'),d=$('dem');if(l)l.innerHTML=spHtml();if(d)d.innerHTML=demHtml()}
+async function reqMore(id){const d=C.find(x=>x.id==id);if(!d)return;const r={id,n:d.n,t:Date.now()};
+if(db){try{await db.doc('requests/'+id).set(r)}catch(e){banner('Could not send request: '+(e.code||'error'))}}else{rq.push(r);crew()}}
+function refresh(){const a=document.activeElement,ty=a&&/INPUT|SELECT/.test(a.tagName);
+if(role=='c')crew();else if(role=='m')plUpdate();else if(role=='p'){const m=$('msg'),s=$('seat'),v=m?m.value:'',sv=s?s.value:'',id=ty?a.id:'';passenger();if(m&&$('msg')){$('msg').value=v;$('seat').value=sv;if(id&&$(id))$(id).focus()}}}
+function planner(){
+app.innerHTML=head('Menu planner: special meals')+`<div class="g"><div class="c"><h2>Add a special meal</h2>
+<label>Meal name <input type="text" id="mn" maxlength="60"></label>
+<label>Occasion <select id="mo">${OCC.map(o=>`<option>${o}</option>`).join('')}</select></label>
+<label>Type <select id="mt"><option value="veg">Vegetarian</option><option value="egg">Contains egg</option><option value="meat">Contains meat or fish</option></select></label>
+<label>Ingredients, comma separated <input type="text" id="mi" maxlength="300"></label>
+<div class="mu">Contains these allergens</div>${Object.keys(AL).map(a=>`<button class="chip" data-pa="${a}" aria-pressed="false">${AL[a]}</button>`).join('')}
+<div class="mu" style="margin-top:8px">Also tick what applies</div>${[['onion_garlic','Onion or garlic'],['root_veg','Root vegetables'],['grain','Grain'],['pulse','Pulses'],['added_sugar','Added sugar'],['high_sodium','High sodium'],['hal','Halal-certified']].map(x=>`<button class="chip" data-pf="${x[0]}" aria-pressed="false">${x[1]}</button>`).join('')}
+<label>Portions loaded <input type="text" id="mq" value="10" inputmode="numeric"></label>
+<label>kcal, protein g, carbs g <input type="text" id="mk" value="500,15,60"></label>
+<button class="b" id="madd" style="margin-top:8px">Add to menu</button>
+<div class="mu" style="margin-top:6px">Suggestions and rule checks rely on the allergens and flags you tick. Copy them from the caterer's recipe sheet.</div></div>
+<div><div class="c"><h2>Live demand and restock</h2><div id="dem">${demHtml()}</div><div class="mu" style="margin-top:6px">Updates as passengers order and crew request more.</div></div><div class="c" style="margin-top:14px"><h2>Meals you added</h2><div id="mlist">${spHtml()}</div></div>
+<div class="c" style="margin-top:14px"><h2>Occasion calendar</h2><div class="mu">Locked: these dates are fixed and cannot be edited here. Festival meals show to passengers from one day before the start date until the end date. Birthday and anniversary meals are always available.</div>${occRows(false)}</div></div></div>`;
+$('sw').onclick=()=>{role=null;render()};
+document.querySelectorAll('[data-pa],[data-pf]').forEach(b=>b.onclick=()=>b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!='true'));
+$('mlist').onclick=async e=>{const id=e.target.dataset&&e.target.dataset.del;if(!id)return;
+if(db){try{await db.doc('specials/'+id).delete()}catch(x){banner('Could not remove: '+(x.code||'error'))}}else{sp=sp.filter(x=>x.id!=id);setSpecials(sp);$('mlist').innerHTML=spHtml()}};
+$('dem').onclick=async e=>{const id=e.target.dataset&&e.target.dataset.rs;if(!id)return;const add=(rs[id]||0)+5;
+if(db){try{await db.doc('restock/'+id).set({id,add});await db.doc('requests/'+id).delete()}catch(x){banner('Could not update: '+(x.code||'error'))}}else{rs[id]=add;rq=rq.filter(r=>r.id!=id);plUpdate()}};
+$('madd').onclick=async()=>{const n=cl($('mn').value).trim();if(!n){banner('Enter a meal name.');return}
+const on=s=>[...document.querySelectorAll(s)].filter(b=>b.getAttribute('aria-pressed')=='true'),t=$('mt').value,fl=on('[data-pf]').map(b=>b.dataset.pf),kk=$('mk').value.split(',').map(x=>+x.trim()||0);
+const d={id:'s'+Date.now(),n:n.slice(0,60),occ:$('mo').value,f:[...fl.filter(x=>x!='hal'),...(t=='meat'?['meat']:t=='egg'?['egg']:[])],al:on('[data-pa]').map(b=>b.dataset.pa),q:Math.max(1,Math.min(500,+$('mq').value||10)),k:[kk[0]||0,kk[1]||0,kk[2]||0],i:cl($('mi').value).trim().slice(0,300)||'Not listed',hal:fl.includes('hal')?1:0};
+if(db){try{await db.doc('specials/'+d.id).set(d)}catch(x){banner('Could not save: '+(x.code||'error')+'. You may need Contributor access.');return}}else{sp.push(d);setSpecials(sp)}
+planner();banner('Added "'+d.n+'". Passengers can now order it under '+d.occ+'.')};}
+function crew(){
+const L=live().filter(o=>o.dishes).sort((a,b)=>b.t-a.t),nw=L.filter(o=>o.status=='new').length;
+app.innerHTML=head('Cabin crew: meal orders')+`<div class="g"><div><h2>Orders (${nw} new)</h2>${L.length?L.map(o=>{const rs=o.dishes.map(x=>{const d=C.find(y=>y.id==x.id),w=d?check(o.prof,d):['unknown dish'];return{n:x.n,w,al:d?d.al:[]}}),bad=rs.some(r=>r.w.length);
+return `<div class="o${o.status=='new'?' n':''}"><div class="row"><b>Seat ${esc(o.seat)}</b>${o.date&&o.date!=iso()?` <span class="mu">for ${esc(cl(o.date))}</span>`:''}<span class="tag">${o.status=='new'?'New':o.status=='ack'?'Acknowledged':'Served'}</span></div>
+<div class="mu">Needs: ${esc(o.need)}</div>${(o.other||[]).length?`<div class="no">Unverified allergy: ${esc(o.other.join(', '))}. Confirm with passenger.</div>`:''}
+${rs.map(r=>`<div style="margin-top:4px">${esc(r.n)}<div class="${r.w.length?'no':'ok'}">${r.w.length?'Rule check failed: '+r.w.join(', ')+'. Do not serve.':'Rule check passed'}</div></div>`).join('')}
+<div style="margin-top:8px">${o.status=='new'?`<button class="b" data-a="${o.id}">Acknowledge</button>`:o.status=='ack'?`<button class="b" data-s="${o.id}"${bad?' disabled':''}>Mark served</button>`:''}</div></div>`}).join(''):'<div class="c mu">No orders yet. They appear here as soon as a passenger orders.</div>'}</div>
+<div class="c"><h2>Stock left</h2>${C.filter(d=>avail(d,iso())||live().some(o=>(o.dishes||[]).some(x=>x.id==d.id))).map(d=>{const l=left(d),r=rq.some(x=>x.id==d.id);return `<div class="row" style="padding:3px 0"><span>${d.n}${d.sp?' <span class="tag">New</span>':''}</span><span><b>${l}</b> ${l<=2?`<button class="b s" data-rq="${d.id}"${r?' disabled':''}>${r?'Requested':'Request more'}</button>`:''}</span></div>`}).join('')}<div class="mu" style="margin-top:6px">Requests go straight to the menu planner.</div></div></div>`;
+$('sw').onclick=()=>{role=null;render()};
+document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>patch(b.dataset.a,{status:'ack'}));
+document.querySelectorAll('[data-rq]').forEach(b=>b.onclick=()=>reqMore(b.dataset.rq));
+document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>patch(b.dataset.s,{status:'served'}))}
+function start(){render();
+if(!window.claude||!claude.use){local=true;render();return}
+claude.use('db').then(d=>{if(!d){local=true;render();return}db=d;
+db.collection('specials').onSnapshot(s=>{sp=s.docs.map(x=>x.data());setSpecials(sp);const ids=new Set(sp.map(x=>x.id));
+if(seen){const nw=sp.filter(x=>!seen.has(x.id));if(nw.length){note={m:'New special meal added by the airline: '+cl(nw[0].n)+' ('+cl(nw[0].occ)+')'};setTimeout(()=>{note=null},90000)}}seen=ids;refresh()},()=>{});
+db.collection('restock').onSnapshot(s=>{rs={};s.docs.forEach(x=>{const v=x.data();if(v&&v.id)rs[cl(v.id)]=Math.max(0,Math.min(500,+v.add||0))});refresh()},()=>{});
+db.collection('requests').onSnapshot(s=>{rq=s.docs.map(x=>x.data()).filter(v=>v&&v.id);refresh()},()=>{});
+
+db.collection('orders').onSnapshot(s=>{orders=s.docs.map(x=>x.data());const a=document.activeElement,typing=a&&/INPUT|SELECT/.test(a.tagName);
+if(!role)render();else refresh()},e=>{local=true;db=null;render()});render()}).catch(()=>{local=true;render()})}
+start();
+</script></body></html>

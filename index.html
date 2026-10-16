@@ -1,0 +1,367 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkyBite: review page for people and AI reviewers</title>
+<meta name="description" content="Plain-HTML review page for SkyBite, an in-flight dietary intelligence prototype for Indian passengers. Includes rules, data, tests and honest limitations.">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "SkyBite", "applicationCategory": "TravelApplication", "description": "Dietary intelligence for in-flight hospitality: captures Indian passengers' dietary needs, checks meals against ingredients and rules, handles late changes and links passengers, crew and the menu planner.", "operatingSystem": "Web"}</script>
+<style>:root{--tx:#14212e;--mu:#59697a;--bd:#d5dde4;--ac:#0f6f74}body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tx);background:#fff}
+main{max-width:980px;margin:auto;padding:20px 16px 60px}h1{font:700 30px/1.2 Georgia,serif;margin:.2em 0}h2{font-size:20px;margin:1.8em 0 .4em;border-bottom:2px solid var(--bd);padding-bottom:4px}
+.mu{color:var(--mu);font-size:14px}.w{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:14px;margin:8px 0}th,td{text-align:left;padding:6px 8px;border:1px solid var(--bd);vertical-align:top}th{background:#eef3f5}
+pre{background:#f4f7f8;border:1px solid var(--bd);padding:12px;overflow:auto;font-size:13px;max-height:340px}a{color:var(--ac)}nav a{margin-right:12px}</style></head><body><main>
+<h1>SkyBite</h1><p class="mu">Review page for people and AI reviewers. Everything here is plain HTML, so it can be read without running scripts. Challenge: In-Flight Hospitality and Dietary Intelligence (Indian passengers).</p>
+<nav class="mu"><a href="#summary">Summary</a><a href="#how">How it works</a><a href="#data">Meal data</a><a href="#cal">Calendar</a><a href="#tests">Tests</a><a href="#limits">Limitations</a><a href="#json">Machine-readable data</a></nav>
+<h2 id="summary">1. Summary</h2>
+<p>SkyBite is a prototype that links a passenger's dietary needs to the meals an airline can actually serve, from booking to the seat tray. Indian dietary needs combine religion (Jain, sattvic, fasting, halal), region, health and personal choice, and they often change late. SkyBite treats a late request as a normal event with a defined path to a safe meal.</p>
+<ul><li><b>Passenger screen:</b> set food needs and allergies, chat with the SkyBite assistant, read the ingredients of every meal, and order up to three meals.</li>
+<li><b>Cabin crew screen:</b> receives orders live, re-checks each meal against the passenger's rules ("Do not serve" if a check fails), shows stock, and can request more.</li>
+<li><b>Menu planner:</b> the airline adds special meals; demand and crew restock requests appear live; the occasion calendar is shown as a locked table.</li>
+<li><b>Occasion meals:</b> festival meals (Navratri, Diwali, Eid, Christmas) appear by calendar date; birthday and anniversary meals are always available.</li></ul>
+<h2 id="how">2. How it works</h2>
+<h3>Safety design</h3>
+<ul><li>A deterministic rule engine decides whether a meal suits a passenger. It checks ingredient flags and a listed-allergen vocabulary (peanut, tree nut, dairy, egg, gluten, soy, sesame, fish, shellfish, mustard).</li>
+<li>The AI assistant only converts free text into structured needs (diet, rules, allergens). It never decides safety, never names meals as safe, and the passenger can edit everything it fills in.</li>
+<li>An allergy the vocabulary does not cover is shown as unverified, and the crew screen flags it for confirmation.</li>
+<li>Allergen and religious rules are never relaxed to find a faster option.</li></ul>
+<h3>Substitution ladder for late requests</h3>
+<div class="w"><table><thead><tr><th>Step</th><th>Option</th></tr></thead><tbody><tr><td>1</td><td>Planned meal that fits the profile</td></tr><tr><td>2</td><td>Compatible meal from buffer stock</td></tr><tr><td>3</td><td>Premium alternative that satisfies every rule</td></tr><tr><td>4</td><td>Hot meal from the lounge or a sealed airport pack, only if there is time</td></tr><tr><td>5</td><td>Recovery: safe snack, apology, and a record for the next flight</td></tr></tbody></table></div>
+<p class="mu">The ladder is implemented in the Python prototype (skybite.py) and the earlier demo page. The live ordering app uses the rule engine and stock counts; it does not run the full ladder.</p>
+<h3>Demand buffer</h3>
+<p>Spare special meals per flight = a chosen quantile of a negative-binomial distribution of late requests (passengers x late-request rate x festival uplift). Synthetic simulation of 20,000 flights (assumed 1.2% late-request rate, +60% in festival periods): on large festival-period flights the dynamic buffer cut the share of flights with a shortfall from 20.1% to 9.9% against a fixed buffer of 6 (8 vs 6 meals loaded). Averaged over all flights a well-tuned fixed buffer performed about the same (6.1% vs 7.0% shortfall). <b>These numbers come from synthetic data and are not airline results.</b></p>
+<h3>Technology</h3>
+<p>Single-file web pages (HTML, CSS, JavaScript). Live sync uses claude.ai's shared storage; the assistant uses Claude through the page runtime with a keyword fallback. A Python file (skybite.py) holds the rule engine, ladder, buffer calculation and self-tests.</p>
+<h2 id="data">3. Meal data (all 15 meals)</h2>
+<p class="mu">Illustrative demo data written for this prototype, not real airline recipes. Nutrition values are rough estimates.</p><div class="w"><table><thead><tr><th>ID</th><th>Meal</th><th>Occasion</th><th>Ingredients</th><th>Allergens</th><th>Rule flags</th><th>kcal / protein g / carbs g</th></tr></thead><tbody><tr><td>pan</td><td>Paneer butter masala + jeera rice</td><td>Everyday</td><td>Paneer, butter, cream, tomato, onion, garlic, cashew paste, spices, basmati rice, cumin</td><td>Dairy, Tree nuts</td><td>grain, onion_garlic</td><td>640/22/70</td></tr><tr><td>chk</td><td>Chicken curry + rice</td><td>Everyday</td><td>Chicken, onion, garlic, ginger, tomato, coriander, garam masala, basmati rice, salt</td><td>none listed</td><td>meat, grain, onion_garlic, high_sodium</td><td>680/34/68</td></tr><tr><td>jdl</td><td>Jain dal + steamed rice</td><td>Everyday</td><td>Toor dal, ghee, cumin, asafoetida, tomato, turmeric, steamed rice (no onion, garlic or root vegetables)</td><td>Dairy</td><td>grain, pulse</td><td>480/17/78</td></tr><tr><td>bir</td><td>Halal chicken biryani</td><td>Everyday</td><td>Halal chicken, basmati rice, yogurt, onion, garlic, ginger, mint, saffron, ghee, spices, salt</td><td>Dairy</td><td>meat, grain, onion_garlic, high_sodium, halal-certified</td><td>720/36/82</td></tr><tr><td>mil</td><td>Millet upma with vegetables</td><td>Everyday</td><td>Foxtail millet, carrot, beans, peas, mustard seeds, curry leaves, ginger, green chilli, sunflower oil, salt</td><td>Mustard</td><td>grain</td><td>380/11/60</td></tr><tr><td>sab</td><td>Sabudana khichdi (vrat)</td><td>Everyday</td><td>Sabudana (tapioca pearls), roasted peanuts, potato, cumin, green chilli, ghee, rock salt</td><td>Peanut, Dairy</td><td>root_veg</td><td>450/8/70</td></tr><tr><td>frt</td><td>Fruit and makhana bowl (premium)</td><td>Everyday</td><td>Papaya, pomegranate, apple, roasted makhana (fox nuts), lemon, rock salt</td><td>none listed</td><td>none</td><td>260/6/48</td></tr><tr><td>kic</td><td>Millet-moong khichdi with ghee (premium)</td><td>Everyday</td><td>Millet, split moong dal, ghee, cumin, ginger, turmeric, carrot</td><td>Dairy</td><td>grain, pulse</td><td>520/16/70</td></tr><tr><td>x1</td><td>Navratri vrat thali</td><td>Navratri</td><td>Sabudana khichdi, kuttu (buckwheat) puri, potato sabzi, samak rice, curd, rock salt</td><td>Dairy, Peanut</td><td>root_veg</td><td>520/12/78</td></tr><tr><td>x2</td><td>Diwali mithai and snack box</td><td>Diwali</td><td>Kaju katli, besan ladoo, soan papdi, baked namkeen, raisins, almonds</td><td>Dairy, Tree nuts, Gluten</td><td>grain, added_sugar</td><td>480/9/62</td></tr><tr><td>x3</td><td>Eid biryani with sheer khurma</td><td>Eid</td><td>Halal mutton biryani, raita, sheer khurma (vermicelli, milk, dates, almonds, sugar)</td><td>Dairy, Tree nuts</td><td>meat, grain, onion_garlic, added_sugar, high_sodium, halal-certified</td><td>820/34/98</td></tr><tr><td>x4</td><td>Christmas roast chicken and plum cake</td><td>Christmas</td><td>Herb roast chicken, roast carrot and potato, plum cake (flour, eggs, butter, dried fruit, cashew, sugar)</td><td>Egg, Gluten, Tree nuts, Dairy</td><td>meat, egg, grain, added_sugar, root_veg</td><td>760/38/80</td></tr><tr><td>x5</td><td>Birthday cake slice</td><td>Birthday</td><td>Sponge cake (flour, eggs, sugar, butter), cream frosting, strawberry</td><td>Egg, Gluten, Dairy</td><td>egg, grain, added_sugar</td><td>380/5/52</td></tr><tr><td>x6</td><td>Eggless birthday cake slice</td><td>Birthday</td><td>Eggless sponge (flour, yogurt, sugar, butter), cream frosting, strawberry</td><td>Gluten, Dairy</td><td>grain, added_sugar</td><td>360/5/54</td></tr><tr><td>x7</td><td>Anniversary rasmalai plate</td><td>Anniversary</td><td>Rasmalai (milk, paneer, sugar, cardamom, pistachio), fresh strawberries</td><td>Dairy, Tree nuts</td><td>added_sugar</td><td>340/6/44</td></tr></tbody></table></div>
+<h2 id="cal">4. Occasion calendar</h2><div class="w"><table><thead><tr><th>Occasion</th><th>Start date</th><th>End date</th><th>Availability rule</th></tr></thead><tbody><tr><td>Navratri</td><td>2026-10-11</td><td>2026-10-19</td><td>Shown from 1 day before start until end date</td></tr><tr><td>Diwali</td><td>2026-11-06</td><td>2026-11-10</td><td>Shown from 1 day before start until end date</td></tr><tr><td>Eid</td><td>2027-03-08</td><td>2027-03-11</td><td>Shown from 1 day before start until end date</td></tr><tr><td>Eid</td><td>2027-05-15</td><td>2027-05-18</td><td>Shown from 1 day before start until end date</td></tr><tr><td>Christmas</td><td>2026-12-23</td><td>2026-12-26</td><td>Shown from 1 day before start until end date</td></tr><tr><td>Christmas</td><td>2027-12-23</td><td>2027-12-26</td><td>Shown from 1 day before start until end date</td></tr><tr><td>Birthday</td><td>-</td><td>-</td><td>Always available</td></tr><tr><td>Anniversary</td><td>-</td><td>-</td><td>Always available</td></tr><tr><td>Other</td><td>-</td><td>-</td><td>Always available</td></tr></tbody></table></div>
+<p class="mu">Dates come from published festival calendars. Diwali sources disagreed; the majority date (Lakshmi Puja on 8 Nov 2026) was used. Eid depends on moon sighting and is expected, not confirmed. Dates are fixed in the page and must be reviewed every year.</p>
+<h2 id="tests">5. Rule tests</h2>
+<p>Generated by running the live app's own rule function over all 15 meals for sample profiles. Reviewers can re-run the equivalent checks with <code>python3 skybite.py</code>.</p><div class="w"><table><thead><tr><th>Passenger profile</th><th>Meals offered (out of 15)</th><th>Meals rejected</th></tr></thead><tbody><tr><td>Vegetarian, Jain</td><td>Jain dal + steamed rice; Millet upma with vegetables; Fruit and makhana bowl (premium); Millet-moong khichdi with ghee (premium); Diwali mithai and snack box; Eggless birthday cake slice; Anniversary rasmalai plate</td><td>8</td></tr><tr><td>Fasting (vrat) with peanut allergy</td><td>Fruit and makhana bowl (premium); Anniversary rasmalai plate</td><td>13</td></tr><tr><td>Non-vegetarian, halal</td><td>Paneer butter masala + jeera rice; Jain dal + steamed rice; Halal chicken biryani; Millet upma with vegetables; Sabudana khichdi (vrat); Fruit and makhana bowl (premium); Millet-moong khichdi with ghee (premium); Navratri vrat thali; Diwali mithai and snack box; Eid biryani with sheer khurma; Birthday cake slice; Eggless birthday cake slice; Anniversary rasmalai plate</td><td>2</td></tr><tr><td>Vegetarian, diabetic-friendly</td><td>Paneer butter masala + jeera rice; Millet upma with vegetables; Sabudana khichdi (vrat); Fruit and makhana bowl (premium); Millet-moong khichdi with ghee (premium)</td><td>10</td></tr><tr><td>Vegetarian, dairy allergy</td><td>Millet upma with vegetables; Fruit and makhana bowl (premium)</td><td>13</td></tr><tr><td>Non-vegetarian, low sodium</td><td>Paneer butter masala + jeera rice; Jain dal + steamed rice; Millet upma with vegetables; Sabudana khichdi (vrat); Fruit and makhana bowl (premium); Millet-moong khichdi with ghee (premium); Navratri vrat thali; Diwali mithai and snack box; Christmas roast chicken and plum cake; Birthday cake slice; Eggless birthday cake slice; Anniversary rasmalai plate</td><td>3</td></tr><tr><td>Vegetarian, egg allergy</td><td>Paneer butter masala + jeera rice; Jain dal + steamed rice; Millet upma with vegetables; Sabudana khichdi (vrat); Fruit and makhana bowl (premium); Millet-moong khichdi with ghee (premium); Navratri vrat thali; Diwali mithai and snack box; Eggless birthday cake slice; Anniversary rasmalai plate</td><td>5</td></tr></tbody></table></div>
+<h2 id="limits">6. Limitations and assumptions</h2>
+<ul><li>Prototype only: no airline systems, real recipes or real passengers are connected; all data is synthetic.</li>
+<li>Ingredient flags and allergen lists were entered by hand. A wrong flag gives a wrong suggestion, so real use needs caterer recipe data and supplier verification.</li>
+<li>Nutrition values are illustrative; a real system would take them from recipes and an Indian food composition table.</li>
+<li>Jain, vrat and sattvic practices vary by community; the rules use common definitions.</li>
+<li>Buffer results are from a simulation with assumed rates and must be re-fitted on real history.</li>
+<li>The live app has no sign-in of its own: anyone with edit access to the shared link can place or change orders.</li>
+<li>Live sync and the Claude-powered chat work only on claude.ai; elsewhere the page runs in single-device mode with a keyword matcher.</li>
+<li>Camera-based nutrition scanning is not built; it was judged unreliable for safety decisions.</li></ul>
+<h2 id="json">7. Machine-readable data</h2><p class="mu">The same data as JSON, for automated checks.</p>
+<pre id="skybite-data">{
+ &quot;product&quot;: &quot;SkyBite&quot;,
+ &quot;meals&quot;: [
+  {
+   &quot;id&quot;: &quot;pan&quot;,
+   &quot;name&quot;: &quot;Paneer butter masala + jeera rice&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Paneer, butter, cream, tomato, onion, garlic, cashew paste, spices, basmati rice, cumin&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;,
+    &quot;tree_nut&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;grain&quot;,
+    &quot;onion_garlic&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 640,
+   &quot;protein_g&quot;: 22,
+   &quot;carbs_g&quot;: 70
+  },
+  {
+   &quot;id&quot;: &quot;chk&quot;,
+   &quot;name&quot;: &quot;Chicken curry + rice&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Chicken, onion, garlic, ginger, tomato, coriander, garam masala, basmati rice, salt&quot;,
+   &quot;allergens&quot;: [],
+   &quot;flags&quot;: [
+    &quot;meat&quot;,
+    &quot;grain&quot;,
+    &quot;onion_garlic&quot;,
+    &quot;high_sodium&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 680,
+   &quot;protein_g&quot;: 34,
+   &quot;carbs_g&quot;: 68
+  },
+  {
+   &quot;id&quot;: &quot;jdl&quot;,
+   &quot;name&quot;: &quot;Jain dal + steamed rice&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Toor dal, ghee, cumin, asafoetida, tomato, turmeric, steamed rice (no onion, garlic or root vegetables)&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;grain&quot;,
+    &quot;pulse&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 480,
+   &quot;protein_g&quot;: 17,
+   &quot;carbs_g&quot;: 78
+  },
+  {
+   &quot;id&quot;: &quot;bir&quot;,
+   &quot;name&quot;: &quot;Halal chicken biryani&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Halal chicken, basmati rice, yogurt, onion, garlic, ginger, mint, saffron, ghee, spices, salt&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;meat&quot;,
+    &quot;grain&quot;,
+    &quot;onion_garlic&quot;,
+    &quot;high_sodium&quot;
+   ],
+   &quot;halal_certified&quot;: true,
+   &quot;kcal&quot;: 720,
+   &quot;protein_g&quot;: 36,
+   &quot;carbs_g&quot;: 82
+  },
+  {
+   &quot;id&quot;: &quot;mil&quot;,
+   &quot;name&quot;: &quot;Millet upma with vegetables&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Foxtail millet, carrot, beans, peas, mustard seeds, curry leaves, ginger, green chilli, sunflower oil, salt&quot;,
+   &quot;allergens&quot;: [
+    &quot;mustard&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;grain&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 380,
+   &quot;protein_g&quot;: 11,
+   &quot;carbs_g&quot;: 60
+  },
+  {
+   &quot;id&quot;: &quot;sab&quot;,
+   &quot;name&quot;: &quot;Sabudana khichdi (vrat)&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Sabudana (tapioca pearls), roasted peanuts, potato, cumin, green chilli, ghee, rock salt&quot;,
+   &quot;allergens&quot;: [
+    &quot;peanut&quot;,
+    &quot;dairy&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;root_veg&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 450,
+   &quot;protein_g&quot;: 8,
+   &quot;carbs_g&quot;: 70
+  },
+  {
+   &quot;id&quot;: &quot;frt&quot;,
+   &quot;name&quot;: &quot;Fruit and makhana bowl (premium)&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Papaya, pomegranate, apple, roasted makhana (fox nuts), lemon, rock salt&quot;,
+   &quot;allergens&quot;: [],
+   &quot;flags&quot;: [],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 260,
+   &quot;protein_g&quot;: 6,
+   &quot;carbs_g&quot;: 48
+  },
+  {
+   &quot;id&quot;: &quot;kic&quot;,
+   &quot;name&quot;: &quot;Millet-moong khichdi with ghee (premium)&quot;,
+   &quot;occasion&quot;: &quot;Everyday&quot;,
+   &quot;ingredients&quot;: &quot;Millet, split moong dal, ghee, cumin, ginger, turmeric, carrot&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;grain&quot;,
+    &quot;pulse&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 520,
+   &quot;protein_g&quot;: 16,
+   &quot;carbs_g&quot;: 70
+  },
+  {
+   &quot;id&quot;: &quot;x1&quot;,
+   &quot;name&quot;: &quot;Navratri vrat thali&quot;,
+   &quot;occasion&quot;: &quot;Navratri&quot;,
+   &quot;ingredients&quot;: &quot;Sabudana khichdi, kuttu (buckwheat) puri, potato sabzi, samak rice, curd, rock salt&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;,
+    &quot;peanut&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;root_veg&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 520,
+   &quot;protein_g&quot;: 12,
+   &quot;carbs_g&quot;: 78
+  },
+  {
+   &quot;id&quot;: &quot;x2&quot;,
+   &quot;name&quot;: &quot;Diwali mithai and snack box&quot;,
+   &quot;occasion&quot;: &quot;Diwali&quot;,
+   &quot;ingredients&quot;: &quot;Kaju katli, besan ladoo, soan papdi, baked namkeen, raisins, almonds&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;,
+    &quot;tree_nut&quot;,
+    &quot;gluten&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;grain&quot;,
+    &quot;added_sugar&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 480,
+   &quot;protein_g&quot;: 9,
+   &quot;carbs_g&quot;: 62
+  },
+  {
+   &quot;id&quot;: &quot;x3&quot;,
+   &quot;name&quot;: &quot;Eid biryani with sheer khurma&quot;,
+   &quot;occasion&quot;: &quot;Eid&quot;,
+   &quot;ingredients&quot;: &quot;Halal mutton biryani, raita, sheer khurma (vermicelli, milk, dates, almonds, sugar)&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;,
+    &quot;tree_nut&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;meat&quot;,
+    &quot;grain&quot;,
+    &quot;onion_garlic&quot;,
+    &quot;added_sugar&quot;,
+    &quot;high_sodium&quot;
+   ],
+   &quot;halal_certified&quot;: true,
+   &quot;kcal&quot;: 820,
+   &quot;protein_g&quot;: 34,
+   &quot;carbs_g&quot;: 98
+  },
+  {
+   &quot;id&quot;: &quot;x4&quot;,
+   &quot;name&quot;: &quot;Christmas roast chicken and plum cake&quot;,
+   &quot;occasion&quot;: &quot;Christmas&quot;,
+   &quot;ingredients&quot;: &quot;Herb roast chicken, roast carrot and potato, plum cake (flour, eggs, butter, dried fruit, cashew, sugar)&quot;,
+   &quot;allergens&quot;: [
+    &quot;egg&quot;,
+    &quot;gluten&quot;,
+    &quot;tree_nut&quot;,
+    &quot;dairy&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;meat&quot;,
+    &quot;egg&quot;,
+    &quot;grain&quot;,
+    &quot;added_sugar&quot;,
+    &quot;root_veg&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 760,
+   &quot;protein_g&quot;: 38,
+   &quot;carbs_g&quot;: 80
+  },
+  {
+   &quot;id&quot;: &quot;x5&quot;,
+   &quot;name&quot;: &quot;Birthday cake slice&quot;,
+   &quot;occasion&quot;: &quot;Birthday&quot;,
+   &quot;ingredients&quot;: &quot;Sponge cake (flour, eggs, sugar, butter), cream frosting, strawberry&quot;,
+   &quot;allergens&quot;: [
+    &quot;egg&quot;,
+    &quot;gluten&quot;,
+    &quot;dairy&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;egg&quot;,
+    &quot;grain&quot;,
+    &quot;added_sugar&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 380,
+   &quot;protein_g&quot;: 5,
+   &quot;carbs_g&quot;: 52
+  },
+  {
+   &quot;id&quot;: &quot;x6&quot;,
+   &quot;name&quot;: &quot;Eggless birthday cake slice&quot;,
+   &quot;occasion&quot;: &quot;Birthday&quot;,
+   &quot;ingredients&quot;: &quot;Eggless sponge (flour, yogurt, sugar, butter), cream frosting, strawberry&quot;,
+   &quot;allergens&quot;: [
+    &quot;gluten&quot;,
+    &quot;dairy&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;grain&quot;,
+    &quot;added_sugar&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 360,
+   &quot;protein_g&quot;: 5,
+   &quot;carbs_g&quot;: 54
+  },
+  {
+   &quot;id&quot;: &quot;x7&quot;,
+   &quot;name&quot;: &quot;Anniversary rasmalai plate&quot;,
+   &quot;occasion&quot;: &quot;Anniversary&quot;,
+   &quot;ingredients&quot;: &quot;Rasmalai (milk, paneer, sugar, cardamom, pistachio), fresh strawberries&quot;,
+   &quot;allergens&quot;: [
+    &quot;dairy&quot;,
+    &quot;tree_nut&quot;
+   ],
+   &quot;flags&quot;: [
+    &quot;added_sugar&quot;
+   ],
+   &quot;halal_certified&quot;: false,
+   &quot;kcal&quot;: 340,
+   &quot;protein_g&quot;: 6,
+   &quot;carbs_g&quot;: 44
+  }
+ ],
+ &quot;occasion_calendar&quot;: {
+  &quot;Navratri&quot;: [
+   [
+    &quot;2026-10-11&quot;,
+    &quot;2026-10-19&quot;
+   ]
+  ],
+  &quot;Diwali&quot;: [
+   [
+    &quot;2026-11-06&quot;,
+    &quot;2026-11-10&quot;
+   ]
+  ],
+  &quot;Eid&quot;: [
+   [
+    &quot;2027-03-08&quot;,
+    &quot;2027-03-11&quot;
+   ],
+   [
+    &quot;2027-05-15&quot;,
+    &quot;2027-05-18&quot;
+   ]
+  ],
+  &quot;Christmas&quot;: [
+   [
+    &quot;2026-12-23&quot;,
+    &quot;2026-12-26&quot;
+   ],
+   [
+    &quot;2027-12-23&quot;,
+    &quot;2027-12-26&quot;
+   ]
+  ]
+ },
+ &quot;always_available_occasions&quot;: [
+  &quot;Birthday&quot;,
+  &quot;Anniversary&quot;,
+  &quot;Other&quot;
+ ],
+ &quot;substitution_ladder&quot;: [
+  &quot;planned meal&quot;,
+  &quot;buffer stock&quot;,
+  &quot;premium alternative&quot;,
+  &quot;lounge or airport sealed pack&quot;,
+  &quot;recovery&quot;
+ ],
+ &quot;rule_priority&quot;: &quot;allergen and religious or medical rules are deterministic and never relaxed; unknown ingredient data is treated as unsafe&quot;
+}</pre>
+<p class="mu">Related files: <a href="skybite-live.html">skybite-live.html</a> (full app), <a href="skybite-demo.html">skybite-demo.html</a> (ladder and buffer demo), <a href="skybite.py">skybite.py</a> (rule engine and tests), <a href="llms.txt">llms.txt</a> (short summary for AI tools).</p>
+</main></body></html>
