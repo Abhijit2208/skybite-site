@@ -1,87 +1,942 @@
 <!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SkyBite: passenger and crew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fbfcfd;--cd:#fff;--tx:#14212e;--mu:#59697a;--bd:#d5dde4;--ink:#12263a;--tu:#e7a100;--ok:#17703f;--bad:#b3261e;--tint:#fff6dc;--onink:#fff;--a1:rgba(231,161,0,.60);--a2:rgba(27,138,143,.55);--a3:rgba(98,112,255,.55);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0f14;--cd:#15222f;--tx:#e8eef3;--mu:#93a5b4;--bd:#2a3b4a;--ink:#f0c24a;--ok:#5fd28f;--bad:#ff8a80;--tint:#2a2410;--onink:#1a1300;--a1:rgba(231,161,0,.65);--a2:rgba(27,138,143,.70);--a3:rgba(98,112,255,.65)}}
-:root[data-theme="dark"]{--bg:#0b0f14;--cd:#15222f;--tx:#e8eef3;--mu:#93a5b4;--bd:#2a3b4a;--ink:#f0c24a;--ok:#5fd28f;--bad:#ff8a80;--tint:#2a2410;--onink:#1a1300;--a1:rgba(231,161,0,.65);--a2:rgba(27,138,143,.70);--a3:rgba(98,112,255,.65)}
-html{color-scheme:light;scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body::before{content:"";position:fixed;left:-5%;right:-5%;bottom:-64px;height:120px;z-index:-1;pointer-events:none;background:linear-gradient(90deg,var(--a2),var(--a3),var(--a1),var(--a2),var(--a3));background-size:200% 100%;filter:blur(34px);animation:slide 20s linear infinite}
-@keyframes slide{to{background-position:200% 0}}
-@media (prefers-reduced-motion:reduce){body::before{animation:none}}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.w{max-width:960px;margin:auto;padding:16px}
-h1{font:700 28px/1.15 Georgia,"Times New Roman",serif;margin:0;color:var(--ink)}
-h2{font:700 16px/1.3 system-ui,sans-serif;margin:0 0 10px}
-.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
-.mu{color:var(--mu);font-size:13px}
-.g{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:14px}
-.c{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:14px}
-label{display:block;margin:6px 0;cursor:pointer}
-select,input[type=text]{width:100%;font:inherit;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
-.b{border:0;background:var(--tu);color:#1a1300;font:700 14px system-ui;padding:9px 13px;border-radius:8px;cursor:pointer}
-.b.s{background:transparent;border:1px solid var(--bd);color:var(--tx);font-weight:600;padding:6px 10px}
-.b[disabled]{opacity:.45;cursor:not-allowed}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--tu);outline-offset:2px}
-.roles{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:20px}
-.roles button{text-align:left;background:var(--cd);color:var(--tx);border:2px solid var(--ink);border-radius:12px;padding:18px;font:inherit;cursor:pointer}
-.roles b{display:block;font:700 20px Georgia,serif;color:var(--ink);margin-bottom:4px}
-.m{border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--cd)}
-.m.x{opacity:.65}
-.m h3{margin:0 0 2px;font-size:15px}
-.ok{color:var(--ok);font-weight:700}.no{color:var(--bad);font-weight:700}
-.tk{border:2px dashed var(--ink);border-radius:12px;padding:12px;background:var(--tint);margin-top:10px}
-.tag{display:inline-block;background:var(--ink);color:var(--onink);font-weight:700;font-size:13px;border-radius:6px;padding:2px 8px}
-.o{border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--cd)}
-.o.n{border:2px solid var(--tu);background:var(--tint)}
-.row{display:flex;justify-content:space-between;gap:8px}
-.ban{background:var(--tint);border:1px solid var(--tu);border-radius:8px;padding:8px 12px;margin-top:10px;font-size:13px}
-.ch{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:10px;max-height:240px;overflow-y:auto;margin-bottom:8px}
-.bb{margin:6px 0;padding:8px 10px;border-radius:10px;max-width:92%;font-size:14px}
-.bb.b{background:var(--tint);border:1px solid var(--tu)}.bb.u{background:var(--ink);color:var(--onink);margin-left:auto}
-.chip{border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:999px;padding:4px 10px;margin:3px 3px 0 0;font:inherit;font-size:13px;cursor:pointer}
-.chip[aria-pressed=true]{background:var(--ink);color:var(--onink);border-color:var(--ink)}
-.bar{position:sticky;bottom:0;background:var(--cd);border:2px solid var(--ink);border-radius:10px;padding:10px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px;border-bottom:1px solid var(--bd);vertical-align:top}.wrap{overflow-x:auto}td input{min-width:170px}
-details{margin-top:4px}summary{cursor:pointer;color:var(--mu);font-size:13px}
-/* JAL Breakthrough Ideas Spotlight */
-.ideas-hero{margin:20px 0 24px;padding:22px;border-radius:14px;background:var(--cd);border:1px solid var(--bd);box-shadow:0 6px 24px rgba(0,0,0,0.04);position:relative;overflow:hidden}
-.ideas-hero::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#e7a100,#0f766e,#6270ff)}
-.ideas-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink);background:var(--tint);border:1px solid var(--tu);padding:3px 10px;border-radius:999px;margin-bottom:8px}
-.ideas-title{font:700 24px/1.2 Georgia,serif;color:var(--ink);margin:0 0 6px}
-.ideas-sub{color:var(--mu);font-size:14px;margin:0 0 16px;max-width:72ch;line-height:1.5}
-.ideas-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
-.idea-card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px;position:relative;transition:transform .15s ease,box-shadow .15s ease}
-.idea-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
-.idea-card.c1{border-top:3.5px solid #e7a100;background:linear-gradient(180deg,rgba(231,161,0,0.05) 0%,var(--cd) 100%)}
-.idea-card.c2{border-top:3.5px solid #0f766e;background:linear-gradient(180deg,rgba(15,118,110,0.05) 0%,var(--cd) 100%)}
-.idea-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.idea-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.03em}
-.idea-card.c1 .idea-tag{background:var(--tint);color:#8a5800;border:1px solid var(--tu)}
-.idea-card.c2 .idea-tag{background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6}
-:root[data-theme="dark"] .idea-card.c2 .idea-tag{background:#0e2826;color:#5eead4;border-color:#0f766e}
-.idea-h{font:700 17px/1.25 Georgia,serif;color:var(--ink);margin:0}
-.idea-sec{font-size:13.5px;line-height:1.5}
-.idea-lbl{font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:5px;margin-bottom:3px}
-.idea-card.c1 .idea-lbl{color:#b45309}
-.idea-card.c2 .idea-lbl{color:#0f766e}
-:root[data-theme="dark"] .idea-card.c1 .idea-lbl{color:#f59e0b}
-:root[data-theme="dark"] .idea-card.c2 .idea-lbl{color:#2dd4bf}
-.idea-box{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font-size:13.5px;line-height:1.5}
-.idea-win{border-left:3px solid var(--ok);background:rgba(23,112,63,0.06);border-radius:0 8px 8px 0;padding:9px 12px;font-size:13px;line-height:1.5}
-.idea-card.c1 .idea-win{border-left-color:#e7a100;background:rgba(231,161,0,0.08)}
-.idea-card.c2 .idea-win{border-left-color:#0f766e;background:rgba(15,118,110,0.08)}
-.idea-steps{display:grid;gap:6px;margin-top:4px}
-.idea-step{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.45}
-.idea-num{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
-.idea-card.c1 .idea-num{background:#e7a100;color:#1a1300}
-.idea-card.c2 .idea-num{background:#0f766e;color:#fff}
-.idea-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
-/* Modal for viewing ideas anywhere */
-.modal-wrap{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,15,20,0.65);backdrop-filter:blur(5px);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
-.modal-wrap.open{display:flex}
-.modal-body{background:var(--bg);color:var(--tx);border:2px solid var(--ink);border-radius:14px;max-width:880px;width:100%;max-height:90vh;overflow-y:auto;padding:22px;box-shadow:0 16px 48px rgba(0,0,0,0.25)}
+
+/* Google Fonts Imported in Head */
+:root {
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-head: 'Outfit', 'Plus Jakarta Sans', Georgia, serif;
+  
+  /* Brand accents */
+  --jal-red: #d92d20;
+  --jal-red-hover: #b42318;
+  --jal-red-tint: rgba(217, 45, 32, 0.08);
+  --jal-gold: #e59a00;
+  --jal-gold-dark: #b45309;
+  --jal-gold-tint: rgba(229, 154, 0, 0.09);
+  --jal-teal: #0d9488;
+  --jal-teal-tint: rgba(13, 148, 136, 0.09);
+  --jal-indigo: #4f46e5;
+
+  /* Theme tokens - Light */
+  --bg: #f8fafc;
+  --bg-gradient: radial-gradient(120% 120% at 50% -10%, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%);
+  --cd: #ffffff;
+  --cd-subtle: #f8fafc;
+  --cd-hover: #fcfdfe;
+  --tx: #0f172a;
+  --mu: #64748b;
+  --bd: #e2e8f0;
+  --bd-light: #f1f5f9;
+  --ink: #09131f;
+  --tu: #e59a00;
+  --ok: #059669;
+  --ok-tint: rgba(5, 150, 105, 0.08);
+  --bad: #dc2626;
+  --bad-tint: rgba(220, 38, 38, 0.08);
+  --tint: #fffbeb;
+  --onink: #ffffff;
+  
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 14px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+  --shadow-glow: 0 0 24px rgba(229, 154, 0, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bd: rgba(226, 232, 240, 0.8);
+  
+  box-sizing: border-box;
+}
+
+:root[data-theme="dark"] {
+  --bg: #090d16;
+  --bg-gradient: radial-gradient(120% 120% at 50% -10%, #131c2b 0%, #090d16 60%, #04060a 100%);
+  --cd: #121927;
+  --cd-subtle: #0d1420;
+  --cd-hover: #172132;
+  --tx: #f1f5f9;
+  --mu: #94a3b8;
+  --bd: #1e293b;
+  --bd-light: #162030;
+  --ink: #f8fafc;
+  --tu: #f59e0b;
+  --ok: #10b981;
+  --ok-tint: rgba(16, 185, 129, 0.12);
+  --bad: #ef4444;
+  --bad-tint: rgba(239, 68, 68, 0.12);
+  --tint: #241c0a;
+  --onink: #090d16;
+  
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 16px 36px -4px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 28px rgba(245, 158, 11, 0.22);
+  --glass-bg: rgba(18, 25, 39, 0.85);
+  --glass-bd: rgba(30, 41, 59, 0.8);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--tx);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background .25s ease, color .25s ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 460px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(circle at 18% 12%, rgba(217, 45, 32, 0.08) 0%, transparent 45%),
+              radial-gradient(circle at 82% 16%, rgba(229, 154, 0, 0.09) 0%, transparent 45%),
+              radial-gradient(circle at 50% 60%, rgba(13, 148, 136, 0.07) 0%, transparent 60%);
+  filter: blur(48px);
+}
+
+.w { max-width: 1020px; margin: auto; padding: 20px 18px 48px; }
+
+/* Top Navigation Bar */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 18px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-bd);
+  border-radius: 14px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #d92d20, #e59a00);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 20px;
+  box-shadow: 0 4px 12px rgba(217, 45, 32, 0.25);
+}
+
+.brand-title {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--tx) 30%, var(--mu) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-sub {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--mu);
+  letter-spacing: 0.02em;
+}
+
+.screen-pill {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: var(--tint);
+  border: 1px solid var(--tu);
+  color: var(--jal-gold-dark);
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+:root[data-theme="dark"] .screen-pill { color: #f59e0b; }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ok);
+  background: var(--ok-tint);
+  border: 1px solid rgba(5, 150, 105, 0.25);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.status-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--ok);
+  border-radius: 50%;
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.2)} }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 9px;
+  border: 1px solid var(--bd);
+  background: var(--cd);
+  color: var(--tx);
+  cursor: pointer;
+  transition: all .15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-btn:hover {
+  background: var(--cd-hover);
+  border-color: var(--tu);
+  transform: translateY(-1px);
+}
+.nav-btn-glow {
+  background: linear-gradient(135deg, var(--tint), var(--cd));
+  border-color: var(--tu);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(229, 154, 0, 0.12);
+}
+.nav-btn-primary {
+  background: linear-gradient(135deg, #d92d20, #c02015);
+  color: #fff !important;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(217, 45, 32, 0.28);
+}
+.nav-btn-primary:hover {
+  background: #b42318;
+  transform: translateY(-1px);
+}
+
+/* Hero Section */
+.hero-banner {
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  border-radius: 18px;
+  padding: 26px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #d92d20 0%, #e59a00 50%, #0d9488 100%);
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #b42318;
+  background: var(--jal-red-tint);
+  border: 1px solid rgba(217, 45, 32, 0.2);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+:root[data-theme="dark"] .hero-badge { color: #f87171; border-color: rgba(248, 113, 113, 0.3); }
+
+.hero-headline {
+  font-family: var(--font-head);
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+.hero-sub {
+  color: var(--mu);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+  max-width: 78ch;
+}
+
+/* 4-Step Touchpoints Bar */
+.touchpoints-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  padding: 12px;
+}
+.tp-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--cd);
+  border: 1px solid var(--bd-light);
+}
+.tp-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--jal-red), var(--jal-gold));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tp-text b { display: block; font-size: 12.5px; color: var(--ink); line-height: 1.25; }
+.tp-text span { font-size: 11.5px; color: var(--mu); }
+
+/* Quick Demo Bar */
+.quick-demo-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 10px 16px;
+  margin: 18px 0 24px;
+  box-shadow: var(--shadow-sm);
+}
+.qd-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--mu);
+}
+.qd-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.qd-chip {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--bd);
+  background: var(--bg);
+  color: var(--tx);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.qd-chip:hover {
+  background: var(--tint);
+  border-color: var(--tu);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+/* Roles Grid */
+.section-title {
+  font-family: var(--font-head);
+  font-size: 21px;
+  font-weight: 700;
+  margin: 28px 0 14px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.roles-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+}
+
+.role-card {
+  text-align: left;
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: transform .2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .2s ease, border-color .2s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.role-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--tu);
+}
+.role-card.rc-featured {
+  border-color: #e59a00;
+  background: linear-gradient(180deg, var(--tint) 0%, var(--cd) 100%);
+  box-shadow: 0 4px 18px rgba(229, 154, 0, 0.08);
+}
+.rc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.rc-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.rc-tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  color: var(--mu);
+}
+.rc-tag-gold {
+  background: #fff8e6;
+  border-color: #e59a00;
+  color: #b45309;
+}
+:root[data-theme="dark"] .rc-tag-gold { background: #241c0a; color: #f59e0b; }
+
+.rc-title {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.rc-desc {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--mu);
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+.rc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--bd-light);
+  padding-top: 12px;
+}
+.rc-pills {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.rc-pills span {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--mu);
+  border: 1px solid var(--bd);
+}
+.rc-arrow {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--tu);
+  transition: transform .2s ease;
+}
+.role-card:hover .rc-arrow {
+  transform: translateX(4px);
+}
+
+/* Strategic Innovations Hero Card */
+.ideas-hero {
+  margin: 22px 0 24px;
+  padding: 24px;
+  border-radius: 18px;
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+.ideas-hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #e59a00, #0d9488, #4f46e5);
+}
+.ideas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #b45309;
+  background: var(--tint);
+  border: 1px solid var(--tu);
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+:root[data-theme="dark"] .ideas-badge { color: #f59e0b; }
+.ideas-title {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.ideas-sub {
+  color: var(--mu);
+  font-size: 14px;
+  margin: 0 0 18px;
+  max-width: 74ch;
+}
+.ideas-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+}
+.idea-card {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.idea-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.idea-card.c1 {
+  border-top: 3.5px solid #e59a00;
+  background: linear-gradient(180deg, var(--tint) 0%, var(--cd) 100%);
+}
+.idea-card.c2 {
+  border-top: 3.5px solid #0d9488;
+  background: linear-gradient(180deg, var(--jal-teal-tint) 0%, var(--cd) 100%);
+}
+.idea-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.idea-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.idea-card.c1 .idea-tag { background: #fff8e6; color: #b45309; border: 1px solid #e59a00; }
+.idea-card.c2 .idea-tag { background: #e6f7f5; color: #0d9488; border: 1px solid #14b8a6; }
+:root[data-theme="dark"] .idea-card.c1 .idea-tag { background: #241c0a; color: #f59e0b; }
+:root[data-theme="dark"] .idea-card.c2 .idea-tag { background: #072724; color: #2dd4bf; }
+
+.idea-h {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+  margin: 0;
+}
+.idea-sec { font-size: 13.5px; line-height: 1.5; }
+.idea-lbl {
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+.idea-card.c1 .idea-lbl { color: #b45309; }
+.idea-card.c2 .idea-lbl { color: #0d9488; }
+:root[data-theme="dark"] .idea-card.c1 .idea-lbl { color: #f59e0b; }
+:root[data-theme="dark"] .idea-card.c2 .idea-lbl { color: #2dd4bf; }
+
+.idea-box {
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.idea-win {
+  border-left: 3.5px solid var(--ok);
+  background: var(--ok-tint);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.idea-card.c1 .idea-win { border-left-color: #e59a00; background: var(--tint); }
+.idea-card.c2 .idea-win { border-left-color: #0d9488; background: var(--jal-teal-tint); }
+
+.idea-steps { display: grid; gap: 7px; margin-top: 5px; }
+.idea-step { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; line-height: 1.45; }
+.idea-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.idea-card.c1 .idea-num { background: #e59a00; color: #1a1300; }
+.idea-card.c2 .idea-num { background: #0d9488; color: #fff; }
+.idea-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: auto; padding-top: 8px; }
+
+/* Modal */
+.modal-wrap {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(10, 15, 24, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.modal-wrap.open { display: flex; }
+.modal-body {
+  background: var(--cd);
+  color: var(--tx);
+  border: 1px solid var(--bd);
+  border-radius: 20px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* Common Layout Elements */
+.g {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-top: 16px;
+}
+.c {
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.mu { color: var(--mu); font-size: 13.5px; }
+
+label { display: block; margin: 8px 0; font-weight: 500; font-size: 13.5px; }
+select, input[type=text], input[type=date] {
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  padding: 9px 12px;
+  border: 1px solid var(--bd);
+  border-radius: 9px;
+  background: var(--bg);
+  color: var(--tx);
+  transition: border-color .15s ease, box-shadow .15s ease;
+  margin-top: 4px;
+}
+select:focus, input[type=text]:focus, input[type=date]:focus {
+  outline: none;
+  border-color: var(--tu);
+  box-shadow: 0 0 0 3px rgba(229, 154, 0, 0.18);
+}
+
+.b {
+  border: 0;
+  background: linear-gradient(135deg, #e59a00, #d97706);
+  color: #1a1300;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 9px 16px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all .15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.b:hover:not([disabled]) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(229, 154, 0, 0.28);
+}
+.b.s {
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  color: var(--tx);
+  font-weight: 600;
+  padding: 7px 12px;
+}
+.b.s:hover:not([disabled]) {
+  background: var(--cd-hover);
+  border-color: var(--tu);
+  box-shadow: none;
+}
+.b[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* Chips */
+.chip {
+  border: 1px solid var(--bd);
+  background: var(--cd-subtle);
+  color: var(--tx);
+  border-radius: 999px;
+  padding: 5px 12px;
+  margin: 3px 4px 3px 0;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.chip:hover {
+  border-color: var(--tu);
+  background: var(--cd);
+}
+.chip[aria-pressed=true] {
+  background: var(--ink);
+  color: var(--onink);
+  border-color: var(--ink);
+  font-weight: 700;
+}
+
+/* Chat Component */
+.ch {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 14px;
+  max-height: 270px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bb {
+  padding: 9px 13px;
+  border-radius: 12px;
+  max-width: 90%;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.bb.b {
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  color: var(--tx);
+  box-shadow: var(--shadow-sm);
+  align-self: flex-start;
+}
+.bb.u {
+  background: linear-gradient(135deg, var(--ink), #1e293b);
+  color: var(--onink);
+  align-self: flex-end;
+  box-shadow: var(--shadow-sm);
+}
+
+.chat-suggestions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 6px 0 10px;
+}
+.cs-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mu);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.cs-chip {
+  font-size: 12px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--tint);
+  border: 1px solid var(--tu);
+  color: var(--jal-gold-dark);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+}
+:root[data-theme="dark"] .cs-chip { color: #f59e0b; }
+
+/* Meal Item Card */
+.m {
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: var(--cd);
+  box-shadow: var(--shadow-sm);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.m:hover {
+  border-color: var(--tu);
+  box-shadow: var(--shadow-md);
+}
+.m.x { opacity: .6; }
+.m h3 { margin: 0 0 4px; font-size: 15.5px; }
+
+.nutri-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 6px 0 8px;
+}
+.nutri-pill {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  color: var(--mu);
+}
+
+.ok { color: var(--ok); font-weight: 700; font-size: 13.5px; }
+.no { color: var(--bad); font-weight: 700; font-size: 13.5px; }
+
+.tk {
+  border: 2px dashed var(--tu);
+  border-radius: 14px;
+  padding: 14px;
+  background: var(--tint);
+  margin-top: 14px;
+}
+.tag {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--onink);
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+.o {
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: var(--cd);
+  box-shadow: var(--shadow-sm);
+}
+.o.n {
+  border: 2px solid var(--tu);
+  background: var(--tint);
+}
+
+.row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ban {
+  background: var(--tint);
+  border: 1px solid var(--tu);
+  border-radius: 10px;
+  padding: 9px 14px;
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.bar {
+  position: sticky;
+  bottom: 12px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 8px 0; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--bd); vertical-align: top; }
+th { background: var(--cd-subtle); font-weight: 700; color: var(--mu); }
+.wrap { overflow-x: auto; border: 1px solid var(--bd); border-radius: 10px; }
+
+details { margin-top: 6px; }
+summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; }
+
 </style></head><body><div class="w" id="app"></div><div id="modal-host"></div>
 <script>
 const $=id=>document.getElementById(id),app=$('app');
@@ -284,34 +1139,168 @@ function bindTryButtons(){
     }
   });
 }
+function toggleTheme(){
+  const html = document.documentElement;
+  const cur = html.getAttribute('data-theme') || 'light';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  try { localStorage.setItem('skybite_theme', next); } catch(e){}
+  updateThemeIcon();
+}
+function updateThemeIcon(){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.querySelectorAll('#theme-toggle, .theme-btn').forEach(b => {
+    b.innerHTML = isDark ? '☀️ Light' : '🌙 Dark';
+  });
+}
+try {
+  const saved = localStorage.getItem('skybite_theme');
+  if(saved) document.documentElement.setAttribute('data-theme', saved);
+} catch(e){}
+
 function bindHead(){
-  const sw=$('sw'),bi=$('btn-ideas');
+  const sw=$('sw'),bi=$('btn-ideas'),tt=$('theme-toggle');
   if(sw)sw.onclick=()=>{role=null;render();window.scrollTo({top:0,behavior:'smooth'})};
   if(bi)bi.onclick=openModal;
+  if(tt)tt.onclick=toggleTheme;
+  updateThemeIcon();
 }
 
 function render(){
-if(!role){app.innerHTML=`<div class="top">
-  <div>
-    <h1>SkyBite</h1>
-    <div class="mu">JAL In-Flight Hospitality &amp; Dietary Intelligence Prototype</div>
+if(!role){app.innerHTML=`<header class="top-nav">
+  <div class="brand-group">
+    <div class="brand-logo">
+      <span class="brand-icon">✈️</span>
+      <div>
+        <div class="brand-title">SkyBite</div>
+        <div class="brand-sub">JAL In-Flight Dietary Intelligence Platform</div>
+      </div>
+    </div>
+    <span class="status-badge"><span class="status-dot"></span> Live Multi-Screen Sync</span>
   </div>
-  <button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button>
+  <div class="nav-actions">
+    <button class="nav-btn nav-btn-glow" id="btn-ideas">💡 JAL Innovations</button>
+    <a href="docs" class="nav-btn" target="_blank" style="text-decoration:none">📄 Tech Docs</a>
+    <button class="nav-btn theme-btn" id="theme-toggle">🌙 Dark</button>
+  </div>
+</header>
+
+<div class="hero-banner">
+  <div class="hero-content">
+    <div class="hero-badge">✈️ Japan Airlines In-Flight Challenge • Multi-Touchpoint Solution</div>
+    <h1 class="hero-headline">Dynamic Dietary Intelligence for Indian Passengers</h1>
+    <p class="hero-sub">Accommodating diverse cultural, religious, regional, and health preferences throughout the flight lifecycle. Engineered around two breakthrough innovations: <b>JAL Lounge Ghost Kitchens</b> for late requests and <b>In-Flight Meal Exchange</b> to eliminate cabin food waste.</p>
+    
+    <div class="touchpoints-strip">
+      <div class="tp-item">
+        <span class="tp-num">1</span>
+        <div class="tp-text"><b>Before Flight (&gt;18h)</b><span>AI Dietary Profiling</span></div>
+      </div>
+      <div class="tp-item">
+        <span class="tp-num">2</span>
+        <div class="tp-text"><b>Airport (3h)</b><span>Lounge Ghost Kitchen</span></div>
+      </div>
+      <div class="tp-item">
+        <span class="tp-num">3</span>
+        <div class="tp-text"><b>Boarding (40m)</b><span>Gate Sealed Box Delivery</span></div>
+      </div>
+      <div class="tp-item">
+        <span class="tp-num">4</span>
+        <div class="tp-text"><b>In-Flight (Wi-Fi)</b><span>Meal Exchange (+500 Miles)</span></div>
+      </div>
+    </div>
+  </div>
 </div>
-<p class="mu" style="max-width:70ch;margin:6px 0 14px">Live multi-screen synchronization across passenger, crew, lounge kitchen, and ops. Engineered around two core strategic innovations for JAL: converting airport lounges into ghost kitchens for late dietary changes, and gamified in-flight meal exchange to eliminate cabin food waste.</p>
+
+<div class="quick-demo-bar">
+  <span class="qd-title">⚡ Quick Scenario Demos:</span>
+  <div class="qd-chips">
+    <button class="qd-chip" data-try="pass-late">📱 WhatsApp 2h Late Order</button>
+    <button class="qd-chip" data-try="lounge">🍳 Lounge Ghost Kitchen Prep</button>
+    <button class="qd-chip" data-try="exchange">🎁 In-Flight Meal Exchange</button>
+    <button class="qd-chip" data-try="crew">🧑‍✈️ Cabin Crew Safety Check</button>
+  </div>
+</div>
+
 ${ideasHtml(false)}
-<h2 style="margin:22px 0 8px;font:700 18px Georgia,serif;color:var(--ink)">Select a Screen to Experience the Live System:</h2>
-<div class="roles">
-  <button id="rp"><b>Passenger Screen</b>Chat with SkyBite, filter 15 dietary profiles, simulate WhatsApp 2h late requests, or test in-flight meal exchange.</button>
-  <button id="rc"><b>Cabin Crew Screen</b>See orders arrive in real time, run safety &amp; allergen rule checks, and verify Meal Exchange items.</button>
-  <button id="rl" style="border-color:#e7a100;background:linear-gradient(180deg,rgba(231,161,0,0.06),var(--cd))"><b style="color:#b45309">Lounge Kitchen (Idea 1)</b>JAL "Lounge-to-Cabin" Sync: prep sealed premium boxes for late changes hand-delivered at boarding.</button>
-  <button id="rg"><b>Gate Staff Screen</b>Add urgent last-minute meals for passengers at the airport or gate, automatically routed to the lounge.</button>
-  <button id="rm"><b>Menu Planner Screen</b>Add festival/occasion meals (Navratri, Diwali, Eid) and monitor live inventory &amp; restock demand.</button>
+
+<h2 class="section-title">Select a Live Role Screen:</h2>
+<div class="roles-grid">
+  <button class="role-card" id="rp">
+    <div class="rc-header">
+      <span class="rc-icon">👤</span>
+      <span class="rc-tag">Passenger Portal</span>
+    </div>
+    <div class="rc-title">Passenger Screen</div>
+    <div class="rc-desc">AI assistant chat, 15 cultural/religious diets, WhatsApp 2-hour late requests, and in-flight Wi-Fi meal exchange.</div>
+    <div class="rc-footer">
+      <div class="rc-pills"><span>Ask SkyBite</span><span>15 Diets</span><span>Wi-Fi Portal</span></div>
+      <span class="rc-arrow">→</span>
+    </div>
+  </button>
+
+  <button class="role-card" id="rc">
+    <div class="rc-header">
+      <span class="rc-icon">🧑‍✈️</span>
+      <span class="rc-tag">Cabin Operations</span>
+    </div>
+    <div class="rc-title">Cabin Crew Screen</div>
+    <div class="rc-desc">Live order feed, deterministic allergen safety engine, DO NOT SERVE alerts, and onboard stock monitor.</div>
+    <div class="rc-footer">
+      <div class="rc-pills"><span>Safety Checks</span><span>Live Alerts</span><span>Restock Requests</span></div>
+      <span class="rc-arrow">→</span>
+    </div>
+  </button>
+
+  <button class="role-card rc-featured" id="rl">
+    <div class="rc-header">
+      <span class="rc-icon">🍳</span>
+      <span class="rc-tag rc-tag-gold">Idea 1: Ghost Kitchen</span>
+    </div>
+    <div class="rc-title">Lounge Kitchen Screen</div>
+    <div class="rc-desc">JAL "Lounge-to-Cabin" Sync: prep sealed premium boxes for late dietary changes with boarding hand-off. Zero new food stock.</div>
+    <div class="rc-footer">
+      <div class="rc-pills"><span>Sealed Box Prep</span><span>Boarding Handoff</span><span>Late Orders</span></div>
+      <span class="rc-arrow">→</span>
+    </div>
+  </button>
+
+  <button class="role-card" id="rg">
+    <div class="rc-header">
+      <span class="rc-icon">🚪</span>
+      <span class="rc-tag">Airport Terminal</span>
+    </div>
+    <div class="rc-title">Gate Staff Screen</div>
+    <div class="rc-desc">Urgent last-minute meal additions for passengers at the airport or boarding gate, auto-routed to the lounge.</div>
+    <div class="rc-footer">
+      <div class="rc-pills"><span>Gate Additions</span><span>Urgent Timer</span><span>Safe Snacks</span></div>
+      <span class="rc-arrow">→</span>
+    </div>
+  </button>
+
+  <button class="role-card" id="rm">
+    <div class="rc-header">
+      <span class="rc-icon">📋</span>
+      <span class="rc-tag">Catering &amp; Ops</span>
+    </div>
+    <div class="rc-title">Menu Planner Screen</div>
+    <div class="rc-desc">Add occasion &amp; festival specials (Navratri, Diwali, Eid), manage calendar windows, and monitor real-time consumption.</div>
+    <div class="rc-footer">
+      <div class="rc-pills"><span>Festival Cal</span><span>Real-time Restock</span><span>Custom Specials</span></div>
+      <span class="rc-arrow">→</span>
+    </div>
+  </button>
 </div>
-<div class="ban" style="margin-top:14px">${db?'Live sync is on.':local?'Live sync is not available here, so orders stay on this page only. Switch roles to see them.':'Connecting...'}</div>`;
+
+<div class="ban" style="margin-top:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+  <span>${db?'🟢 Live sync active across multiple devices.':local?'Order updates remain local in single-device mode. Switch screens above to inspect.':'Connecting to real-time service...'}</span>
+  <span class="mu">Japan Airlines Hackathon Prototype</span>
+</div>`;
+
 $('rp').onclick=()=>{role='p';render()};$('rc').onclick=()=>{role='c';render()};$('rm').onclick=()=>{role='m';render()};$('rl').onclick=()=>{role='l';render()};$('rg').onclick=()=>{role='g';render()};
 const bi=$('btn-ideas');if(bi)bi.onclick=openModal;
 bindTryButtons();
+bindHead();
 return}
 role=='p'?passenger():role=='m'?planner():role=='l'?lounge():role=='g'?gate():crew()}
 function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'} • JAL Prototype</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button><button class="b s" id="sw">Switch role</button></div></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
@@ -341,7 +1330,14 @@ function passenger(){
 const mine=orders.find(o=>o.id==myId&&o.status!='cancelled'),ordered=[...C.filter(d=>avail(d,tdate))].sort((a,b)=>!check(P,a).length-!check(P,b).length).reverse().sort((a,b)=>(check(P,a).length>0)-(check(P,b).length>0));
 app.innerHTML=head('Passenger: order your meals')+`<div class="g"><div class="c"><h2>Ask SkyBite</h2>
 <div class="ch" id="chat">${chat.map(m=>`<div class="bb ${m.r}">${esc(m.t)}</div>`).join('')}</div>
-<input type="text" id="msg" placeholder="Tell me your allergies or food rules" maxlength="300"><button class="b" id="send" style="margin-top:6px">Send</button>
+<div class="chat-suggestions">
+  <span class="cs-label">Try:</span>
+  <button type="button" class="cs-chip" data-sg="Strict Jain food with no onion, garlic or root vegetables">Strict Jain</button>
+  <button type="button" class="cs-chip" data-sg="Halal chicken biryani with low sodium">Halal Low-Sodium</button>
+  <button type="button" class="cs-chip" data-sg="Navratri vrat thali, peanut allergy">Navratri + Nut Allergy</button>
+  <button type="button" class="cs-chip" data-sg="Diabetic-friendly vegetarian meal">Diabetic Vegetarian</button>
+</div>
+<div style="display:flex;gap:6px"><input type="text" id="msg" placeholder="Tell me your allergies or food rules" maxlength="300"><button class="b" id="send">Send</button></div>
 <div class="mu" style="margin-top:6px">SkyBite only understands what you write. The rules below decide which meals are suitable.</div>
 <h2 style="margin-top:12px">Your needs</h2>
 <label>Seat ${seatSel('seat',seat)}</label>
@@ -353,9 +1349,16 @@ ${P.other.length?`<div class="ban">Not covered by the ingredient lists: ${esc(P.
 ${ordered.length?'':'<div class="c mu">No special meals for this occasion yet. The airline can add them in the menu planner.</div>'}${ordered.map(d=>{const w=check(P,d),l=left(d),lg=route(hrs)=='lounge',ok=!w.length&&(l>0||lg),on=sel.includes(d.id);
 return `<div class="m${ok?'':' x'}"><label class="row" style="margin:0"><span><input type="checkbox" data-o="${d.id}"${on?' checked':''}${ok&&(on||sel.length<3)?'':' disabled'}> <b>${d.n}</b>${d.occ?` <span class="tag">${d.occ}</span>`:''}</span><span class="mu">${lg?'made in lounge':l+' left'}</span></label>
 ${w.length?`<div class="no">Not suitable: ${w.join(', ')}</div>`:l<1&&!lg?'<div class="no">Sold out</div>':P.other.length?'<div class="no">Confirm with crew: '+esc(P.other.join(', '))+'</div>':'<div class="ok">Suggested: matches your needs</div>'}
-<div class="mu">${d.k[0]} kcal, ${d.k[1]} g protein, ${d.k[2]} g carbs (illustrative). Contains: ${d.al.length?d.al.map(a=>AL[a].toLowerCase()).join(', '):'none of the listed allergens'}</div>
+<div class="nutri-pills">
+  <span class="nutri-pill">🔥 ${d.k[0]} kcal</span>
+  <span class="nutri-pill">💪 ${d.k[1]}g protein</span>
+  <span class="nutri-pill">🌾 ${d.k[2]}g carbs</span>
+  ${d.hal?'<span class="nutri-pill" style="border-color:#14b8a6;color:#0d9488">✓ Halal Certified</span>':''}
+  <span class="nutri-pill" style="color:var(--mu)">Allergens: ${d.al.length?d.al.map(a=>AL[a].toLowerCase()).join(', '):'None listed'}</span>
+</div>
 <details><summary>Ingredients</summary><div style="font-size:14px">${d.i}</div></details></div>`}).join('')}</div></div><div id="tkbox">${tkHtml()}</div><div class="c" style="margin-top:14px" id="exchange-sec"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><h2 style="margin:0">Idea 2: In-Flight "Meal Exchange" (Gamified Reallocation)</h2><span class="idea-tag" style="background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6">+500 JAL Miles Reward</span></div><div class="idea-sec" style="margin:8px 0 12px"><div class="idea-box"><b>The Idea:</b> A massive source of airline waste is passengers sleeping through meals or deciding they aren't hungry, while other passengers are denied special meals because they forgot to book them.<br><b>How it Works:</b> On the in-flight Wi-Fi portal, a passenger can click <b>"Skip My Meal."</b> As a reward, they instantly get <b>500 JAL Miles</b>. The moment they skip, that meal (e.g., a Vegetarian Thali) is released into the <b>Cabin Digital Inventory</b> below. Another passenger who forgot to book a Veg meal can now claim it on their screen.<br><div class="idea-win" style="margin-top:6px"><b>Why it Wins:</b> Highly economically viable. It uses behavioral economics to reduce food waste and perfectly solves the dynamic mid-flight inventory problem without needing extra buffer food.</div></div></div>${exHtml()}</div><div class="c" style="margin-top:14px"><h2>Occasion meals calendar</h2>${occRows(false)}<div class="mu" style="margin-top:6px">Meals open one day before the start date. Change the travel date above to see which occasions apply.</div></div>`;
 bindHead();
+document.querySelectorAll('[data-sg]').forEach(b=>{b.onclick=()=>{const t=b.dataset.sg,inp=$('msg');if(inp){inp.value=t;ask(t)}}});
 $('seat').onchange=e=>{seat=e.target.value.toUpperCase().replace(/[^0-9A-Z]/g,'')||'14C';passenger()};
 $('base').onchange=e=>{P.base=e.target.value;sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()};
 document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{P[b.dataset.k]=!P[b.dataset.k];sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()});
