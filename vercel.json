@@ -1,0 +1,8 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/skybite-live.html" },
+    { "source": "/live", "destination": "/skybite-live.html" },
+    { "source": "/docs", "destination": "/index.html" }
+  ]
+}
