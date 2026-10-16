@@ -1,5 +1,5 @@
 """SkyBite prototype: dietary constraint engine, substitution ladder, dynamic buffer.
-Run: python3 aaharsetu.py   (runs self-tests and the buffer simulation; synthetic data only)"""
+Run: python3 skybite.py   (runs self-tests and the buffer simulation; synthetic data only)"""
 import math, random
 from dataclasses import dataclass, field
 

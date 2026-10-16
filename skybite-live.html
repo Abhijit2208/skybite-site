@@ -45,7 +45,44 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 .bar{position:sticky;bottom:0;background:var(--cd);border:2px solid var(--ink);border-radius:10px;padding:10px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:6px;border-bottom:1px solid var(--bd);vertical-align:top}.wrap{overflow-x:auto}td input{min-width:170px}
 details{margin-top:4px}summary{cursor:pointer;color:var(--mu);font-size:13px}
-</style></head><body><div class="w" id="app"></div>
+/* JAL Breakthrough Ideas Spotlight */
+.ideas-hero{margin:20px 0 24px;padding:22px;border-radius:14px;background:var(--cd);border:1px solid var(--bd);box-shadow:0 6px 24px rgba(0,0,0,0.04);position:relative;overflow:hidden}
+.ideas-hero::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#e7a100,#0f766e,#6270ff)}
+.ideas-badge{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink);background:var(--tint);border:1px solid var(--tu);padding:3px 10px;border-radius:999px;margin-bottom:8px}
+.ideas-title{font:700 24px/1.2 Georgia,serif;color:var(--ink);margin:0 0 6px}
+.ideas-sub{color:var(--mu);font-size:14px;margin:0 0 16px;max-width:72ch;line-height:1.5}
+.ideas-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.idea-card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px;position:relative;transition:transform .15s ease,box-shadow .15s ease}
+.idea-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+.idea-card.c1{border-top:3.5px solid #e7a100;background:linear-gradient(180deg,rgba(231,161,0,0.05) 0%,var(--cd) 100%)}
+.idea-card.c2{border-top:3.5px solid #0f766e;background:linear-gradient(180deg,rgba(15,118,110,0.05) 0%,var(--cd) 100%)}
+.idea-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.idea-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.03em}
+.idea-card.c1 .idea-tag{background:var(--tint);color:#8a5800;border:1px solid var(--tu)}
+.idea-card.c2 .idea-tag{background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6}
+:root[data-theme="dark"] .idea-card.c2 .idea-tag{background:#0e2826;color:#5eead4;border-color:#0f766e}
+.idea-h{font:700 17px/1.25 Georgia,serif;color:var(--ink);margin:0}
+.idea-sec{font-size:13.5px;line-height:1.5}
+.idea-lbl{font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.idea-card.c1 .idea-lbl{color:#b45309}
+.idea-card.c2 .idea-lbl{color:#0f766e}
+:root[data-theme="dark"] .idea-card.c1 .idea-lbl{color:#f59e0b}
+:root[data-theme="dark"] .idea-card.c2 .idea-lbl{color:#2dd4bf}
+.idea-box{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font-size:13.5px;line-height:1.5}
+.idea-win{border-left:3px solid var(--ok);background:rgba(23,112,63,0.06);border-radius:0 8px 8px 0;padding:9px 12px;font-size:13px;line-height:1.5}
+.idea-card.c1 .idea-win{border-left-color:#e7a100;background:rgba(231,161,0,0.08)}
+.idea-card.c2 .idea-win{border-left-color:#0f766e;background:rgba(15,118,110,0.08)}
+.idea-steps{display:grid;gap:6px;margin-top:4px}
+.idea-step{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.45}
+.idea-num{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.idea-card.c1 .idea-num{background:#e7a100;color:#1a1300}
+.idea-card.c2 .idea-num{background:#0f766e;color:#fff}
+.idea-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+/* Modal for viewing ideas anywhere */
+.modal-wrap{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,15,20,0.65);backdrop-filter:blur(5px);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-wrap.open{display:flex}
+.modal-body{background:var(--bg);color:var(--tx);border:2px solid var(--ink);border-radius:14px;max-width:880px;width:100%;max-height:90vh;overflow-y:auto;padding:22px;box-shadow:0 16px 48px rgba(0,0,0,0.25)}
+</style></head><body><div class="w" id="app"></div><div id="modal-host"></div>
 <script>
 const $=id=>document.getElementById(id),app=$('app');
 const C=[
@@ -70,7 +107,8 @@ const S0=[
 {id:'x6',n:'Eggless birthday cake slice',occ:'Birthday',f:['grain','added_sugar'],al:['gluten','dairy'],q:8,k:[360,5,54],i:'Eggless sponge (flour, yogurt, sugar, butter), cream frosting, strawberry'},
 {id:'x7',n:'Anniversary rasmalai plate',occ:'Anniversary',f:['added_sugar'],al:['dairy','tree_nut'],q:4,k:[340,6,44],i:'Rasmalai (milk, paneer, sugar, cardamom, pistachio), fresh strawberries'}];
 C.push(...S0);
-let occ='All',sp=[],rs={},rq=[],seen=null,note=null;
+let occ='All',sp=[],rs={},rq=[],seen=null,note=null,hrs=24,ex=[];
+const route=x=>x>=18?'caterer':x>=1?'lounge':'cabin';
 const iso=d=>{d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const CAL0={Navratri:[['2026-10-11','2026-10-19']],Diwali:[['2026-11-06','2026-11-10']],Eid:[['2027-03-08','2027-03-11'],['2027-05-15','2027-05-18']],Christmas:[['2026-12-23','2026-12-26'],['2027-12-23','2027-12-26']]};
 let cal=JSON.parse(JSON.stringify(CAL0)),tdate=iso(),ed=null;
@@ -113,18 +151,176 @@ const chat=[{r:'b',t:'Hi, I am SkyBite, your meal assistant. Tell me about any a
 Object.keys(FL).forEach(k=>P[k]=false);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const live=()=>orders.filter(o=>o.status!='cancelled');
-const left=d=>d.q+(rs[d.id]||0)-live().filter(o=>(o.dishes||[]).some(x=>x.id==d.id)).length;
-const fits=()=>C.filter(d=>!check(P,d).length&&left(d)>0);
+const left=d=>d.q+(rs[d.id]||0)-live().filter(o=>o.route!='lounge'&&o.src!='exchange'&&(o.dishes||[]).some(x=>x.id==d.id)).length;
+const fits=()=>C.filter(d=>!check(P,d).length&&(left(d)>0||route(hrs)=='lounge'));
 async function write(id,data){if(db){try{await db.doc('orders/'+id).set(data)}catch(e){banner('Could not send: '+(e.code||'error')+'. You may need Contributor access.')}}else{const i=orders.findIndex(o=>o.id==id);i<0?orders.push(data):orders[i]=data}}
 async function patch(id,data){if(db){try{await db.doc('orders/'+id).update(data)}catch(e){banner('Could not update: '+(e.code||'error'))}}else{Object.assign(orders.find(o=>o.id==id),data);render()}}
 function banner(t){const b=$('ban');if(b){b.style.display='block';b.textContent=t}}
+const ideasHtml=(isModal=false)=>`
+<div class="ideas-hero"${isModal?' style="margin:0;box-shadow:none;border:none;padding:0"':''}>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+    <div>
+      <div class="ideas-badge">Strategic Innovations • JAL Dietary Intelligence</div>
+      <h2 class="ideas-title" style="font-size:${isModal?'22px':'24px'}">Dynamic In-Flight Hospitality &amp; Waste Reduction</h2>
+      <p class="ideas-sub">Solving the two biggest bottlenecks in airline catering: rigid last-minute dietary fulfillment and cabin food waste, without requiring additional food buffers.</p>
+    </div>
+    ${isModal?'<button class="b s" id="close-modal" style="font-size:16px;padding:4px 12px;cursor:pointer">✕ Close</button>':''}
+  </div>
+
+  <div class="ideas-grid">
+    <!-- Idea 1 Card -->
+    <div class="idea-card c1">
+      <div class="idea-header">
+        <h3 class="idea-h">Idea 1: JAL "Lounge-to-Cabin" Sync</h3>
+        <span class="idea-tag">The Ghost Kitchen Concept</span>
+      </div>
+
+      <div class="idea-sec">
+        <div class="idea-lbl">💡 The Idea</div>
+        <div class="idea-box">Currently, airline food is catered by massive third-party kitchens hours in advance, which is why last-minute changes fail. This idea turns JAL’s airport lounges into dynamic "ghost kitchens" for the flight.</div>
+      </div>
+
+      <div class="idea-sec">
+        <div class="idea-lbl">⚙️ How it Works</div>
+        <div class="idea-steps">
+          <div class="idea-step">
+            <span class="idea-num">1</span>
+            <span><b>Passenger WhatsApp Update:</b> If a passenger updates their dietary need (e.g., Jain or Halal) via WhatsApp just 2 hours before departure,</span>
+          </div>
+          <div class="idea-step">
+            <span class="idea-num">2</span>
+            <span><b>AI Kitchen Ping:</b> the AI pings the airport lounge kitchen rather than the main caterer.</span>
+          </div>
+          <div class="idea-step">
+            <span class="idea-num">3</span>
+            <span><b>Hand-Delivery at Boarding:</b> The lounge preps a premium sealed box, and ground staff hand-deliver it to the aircraft during boarding.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-sec">
+        <div class="idea-lbl">🏆 Why it Wins</div>
+        <div class="idea-win"><b>Zero New Food Stock:</b> It requires zero new food stock. It simply reroutes existing lounge resources to solve the "last-minute fulfillment" challenge highlighted in the brief.</div>
+      </div>
+
+      <div class="idea-actions">
+        <button class="b" data-try="lounge" style="padding:7px 12px;font-size:13px">Open Lounge Kitchen →</button>
+        <button class="b s" data-try="pass-late" style="padding:6px 10px;font-size:13px">Simulate WhatsApp / 2h Order →</button>
+      </div>
+    </div>
+
+    <!-- Idea 2 Card -->
+    <div class="idea-card c2">
+      <div class="idea-header">
+        <h3 class="idea-h">Idea 2: In-Flight "Meal Exchange"</h3>
+        <span class="idea-tag">Gamified Reallocation</span>
+      </div>
+
+      <div class="idea-sec">
+        <div class="idea-lbl">💡 The Idea</div>
+        <div class="idea-box">A massive source of airline waste is passengers sleeping through meals or deciding they aren't hungry, while other passengers are denied special meals because they forgot to book them.</div>
+      </div>
+
+      <div class="idea-sec">
+        <div class="idea-lbl">⚙️ How it Works</div>
+        <div class="idea-steps">
+          <div class="idea-step">
+            <span class="idea-num">1</span>
+            <span><b>Wi-Fi Portal Skip:</b> On the in-flight Wi-Fi portal, a passenger can click "Skip My Meal."</span>
+          </div>
+          <div class="idea-step">
+            <span class="idea-num">2</span>
+            <span><b>Instant 500 Miles:</b> As a reward, they instantly get <b>500 JAL Miles</b>.</span>
+          </div>
+          <div class="idea-step">
+            <span class="idea-num">3</span>
+            <span><b>Cabin Digital Inventory:</b> The moment they skip, that meal (e.g., a Vegetarian Thali) is released into the "Cabin Digital Inventory."</span>
+          </div>
+          <div class="idea-step">
+            <span class="idea-num">4</span>
+            <span><b>Instant Screen Claim:</b> Another passenger who forgot to book a Veg meal can now claim it on their screen.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-sec">
+        <div class="idea-lbl">🏆 Why it Wins</div>
+        <div class="idea-win"><b>Economically Viable &amp; Zero Waste:</b> Highly economically viable. It uses behavioral economics to reduce food waste and perfectly solves the dynamic mid-flight inventory problem without needing extra buffer food.</div>
+      </div>
+
+      <div class="idea-actions">
+        <button class="b" data-try="exchange" style="padding:7px 12px;font-size:13px;background:#0f766e;color:#fff">Try In-Flight Wi-Fi Portal →</button>
+        <button class="b s" data-try="crew" style="padding:6px 10px;font-size:13px">View Cabin Crew View →</button>
+      </div>
+    </div>
+  </div>
+</div>`;
+
+function openModal(){
+  const h=$('modal-host');
+  if(!h)return;
+  h.innerHTML=`<div class="modal-wrap open" id="ideas-modal" role="dialog" aria-modal="true" aria-label="JAL Innovation Ideas">
+    <div class="modal-body">${ideasHtml(true)}</div>
+  </div>`;
+  const m=$('ideas-modal'),cb=$('close-modal');
+  if(cb)cb.onclick=closeModal;
+  if(m)m.onclick=e=>{if(e.target===m)closeModal()};
+  bindTryButtons();
+}
+function closeModal(){
+  const h=$('modal-host');
+  if(h)h.innerHTML='';
+}
+window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+function bindTryButtons(){
+  document.querySelectorAll('[data-try]').forEach(b=>{
+    b.onclick=()=>{
+      const a=b.dataset.try;
+      closeModal();
+      if(a=='lounge'){role='l';render();window.scrollTo({top:0,behavior:'smooth'})}
+      else if(a=='pass-late'){role='p';hrs=3;render();window.scrollTo({top:0,behavior:'smooth'})}
+      else if(a=='exchange'){role='p';hrs=-1;render();setTimeout(()=>{const el=$('exchange-sec');if(el)el.scrollIntoView({behavior:'smooth'})},100)}
+      else if(a=='crew'){role='c';render();window.scrollTo({top:0,behavior:'smooth'})}
+    }
+  });
+}
+function bindHead(){
+  const sw=$('sw'),bi=$('btn-ideas');
+  if(sw)sw.onclick=()=>{role=null;render();window.scrollTo({top:0,behavior:'smooth'})};
+  if(bi)bi.onclick=openModal;
+}
+
 function render(){
-if(!role){app.innerHTML=`<h1>SkyBite</h1><p class="mu" style="max-width:60ch">Two separate screens that share live data. Open the passenger screen on one device and the crew screen on another: when a passenger orders meals they appear on the crew screen straight away. Orders here are demo data.</p>
-<div class="roles"><button id="rp"><b>Passenger</b>Chat with SkyBite about allergies, read ingredients and order one or more meals.</button><button id="rc"><b>Cabin crew</b>See incoming orders, check them and mark them served.</button><button id="rm"><b>Menu planner</b>Add special meals for occasions such as Navratri, Diwali, Eid, Christmas or birthdays.</button></div><div class="ban">${db?'Live sync is on.':local?'Live sync is not available here, so orders stay on this page only. Switch roles to see them.':'Connecting...'}</div>`;
-$('rp').onclick=()=>{role='p';render()};$('rc').onclick=()=>{role='c';render()};$('rm').onclick=()=>{role='m';render()};return}
-role=='p'?passenger():role=='m'?planner():crew()}
-function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'}</div></div><button class="b s" id="sw">Switch role</button></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
-const tkHtml=()=>{const m=orders.find(o=>o.id==myId&&o.status!='cancelled');return m?`<div class="tk"><span class="tag">${m.status=='new'?'Sent to crew':m.status=='ack'?'Crew has your order':'Served'}</span><h3 style="margin:8px 0 2px">${m.dishes.map(x=>esc(x.n)).join('<br>')}</h3><div class="mu">Seat ${esc(m.seat)}. Status updates here by itself.</div></div>`:''};
+if(!role){app.innerHTML=`<div class="top">
+  <div>
+    <h1>SkyBite</h1>
+    <div class="mu">JAL In-Flight Hospitality &amp; Dietary Intelligence Prototype</div>
+  </div>
+  <button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button>
+</div>
+<p class="mu" style="max-width:70ch;margin:6px 0 14px">Live multi-screen synchronization across passenger, crew, lounge kitchen, and ops. Engineered around two core strategic innovations for JAL: converting airport lounges into ghost kitchens for late dietary changes, and gamified in-flight meal exchange to eliminate cabin food waste.</p>
+${ideasHtml(false)}
+<h2 style="margin:22px 0 8px;font:700 18px Georgia,serif;color:var(--ink)">Select a Screen to Experience the Live System:</h2>
+<div class="roles">
+  <button id="rp"><b>Passenger Screen</b>Chat with SkyBite, filter 15 dietary profiles, simulate WhatsApp 2h late requests, or test in-flight meal exchange.</button>
+  <button id="rc"><b>Cabin Crew Screen</b>See orders arrive in real time, run safety &amp; allergen rule checks, and verify Meal Exchange items.</button>
+  <button id="rl" style="border-color:#e7a100;background:linear-gradient(180deg,rgba(231,161,0,0.06),var(--cd))"><b style="color:#b45309">Lounge Kitchen (Idea 1)</b>JAL "Lounge-to-Cabin" Sync: prep sealed premium boxes for late changes hand-delivered at boarding.</button>
+  <button id="rg"><b>Gate Staff Screen</b>Add urgent last-minute meals for passengers at the airport or gate, automatically routed to the lounge.</button>
+  <button id="rm"><b>Menu Planner Screen</b>Add festival/occasion meals (Navratri, Diwali, Eid) and monitor live inventory &amp; restock demand.</button>
+</div>
+<div class="ban" style="margin-top:14px">${db?'Live sync is on.':local?'Live sync is not available here, so orders stay on this page only. Switch roles to see them.':'Connecting...'}</div>`;
+$('rp').onclick=()=>{role='p';render()};$('rc').onclick=()=>{role='c';render()};$('rm').onclick=()=>{role='m';render()};$('rl').onclick=()=>{role='l';render()};$('rg').onclick=()=>{role='g';render()};
+const bi=$('btn-ideas');if(bi)bi.onclick=openModal;
+bindTryButtons();
+return}
+role=='p'?passenger():role=='m'?planner():role=='l'?lounge():role=='g'?gate():crew()}
+function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'} • JAL Prototype</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button><button class="b s" id="sw">Switch role</button></div></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
+const LS={new:'queued for the lounge kitchen',prep:'being prepared',box:'sealed box ready',del:'delivered to the aircraft'};
+const tkMine=()=>{const m=orders.find(o=>o.id==myId&&o.status!='cancelled');if(!m)return '';const lg=m.route=='lounge',sk=m.status=='skipped';
+return `<div class="tk"><span class="tag">${sk?'Meal skipped (+500 JAL Miles)':m.status=='new'?'Sent to crew':m.status=='ack'?'Crew has your order':'Served'}</span>${lg?` <span class="tag">Idea 1: Lounge Ghost Kitchen (${LS[m.lst]||''})</span>`:''}${m.src=='exchange'?' <span class="tag">Idea 2: From Meal Exchange</span>`:''}<h3 style="margin:8px 0 2px">${m.dishes.map(x=>esc(x.n)).join('<br>')}</h3><div class="mu">Seat ${esc(m.seat)}. ${sk?'500 JAL bonus miles credited! Your meal was released to the Cabin Digital Inventory for fellow passengers.':'Status updates here automatically.'}</div>${!sk&&!lg&&m.src!='exchange'&&(m.status=='new'||m.status=='ack')?'<button class="b s" id="skip" style="margin-top:8px;background:var(--tint);border-color:var(--tu);font-weight:700">Skip my meal (+500 JAL Miles &amp; release to exchange)</button>':''}</div>`};
+const tkExtra=()=>orders.filter(o=>o.seat==seat&&o.id!=myId&&o.dishes&&o.src=='gate'&&o.status!='cancelled').sort((a,b)=>a.t-b.t).map(o=>`<div class="tk" style="margin-top:10px"><span class="tag">Last-minute meal</span> <span class="tag">${o.status=='served'?'Served':LS[o.lst]?'Lounge: '+LS[o.lst]:o.status=='ack'?'Crew has it':'Sent to crew'}</span><h3 style="margin:8px 0 2px">${o.dishes.map(x=>esc(x.n)).join('<br>')}</h3><div class="mu">Additional meal added for seat ${esc(o.seat)} by gate staff. Status updates here by itself.</div></div>`).join('');
+const tkHtml=()=>tkMine()+tkExtra();
+const routeMsg=()=>route(hrs)=='caterer'?'Normal catering order (>18h): meals come from the main caterer.':route(hrs)=='lounge'?'Idea 1 in Action (Lounge-to-Cabin Ghost Kitchen): SkyBite sends your order to the airport lounge kitchen, which preps a premium sealed box that ground staff take to the aircraft during boarding. Zero extra catering stock is used.':hrs<0?'Idea 2 in Action (In-Flight Wi-Fi Meal Exchange): Meals come from stock already on board, or from meals fellow passengers released in the Cabin Digital Inventory below for 500 JAL Miles.':'Too late for the lounge. Meals come from stock already on board.';
 function parseLocal(t){t=t.toLowerCase();const r={rules:[],allergens:[],other:[]},m={jain:/jain/,sattvic:/sattvic|swaminarayan|no onion|no garlic/,vrat:/vrat|fast|navratri|upvas|ekadashi/,halal:/halal/,diabetic:/diabet|sugar/,low_sodium:/low (salt|sodium)|no salt/},a={peanut:/peanut|groundnut/,tree_nut:/tree nut|cashew|almond|walnut|pistachio/,dairy:/dairy|milk|lactose/,egg:/\begg/,gluten:/gluten|wheat/,soy:/\bsoy/,sesame:/sesame|\btil\b/,fish:/\bfish/,shellfish:/shellfish|prawn|shrimp/,mustard:/mustard/};
 for(const k in m)if(m[k].test(t))r.rules.push(k);for(const k in a)if(a[k].test(t))r.allergens.push(k);
 r.base=/non.?veg/.test(t)?'nonveg':/\begg(etarian|s only)/.test(t)?'egg':/veg/.test(t)?'veg':null;
@@ -148,36 +344,85 @@ app.innerHTML=head('Passenger: order your meals')+`<div class="g"><div class="c"
 <input type="text" id="msg" placeholder="Tell me your allergies or food rules" maxlength="300"><button class="b" id="send" style="margin-top:6px">Send</button>
 <div class="mu" style="margin-top:6px">SkyBite only understands what you write. The rules below decide which meals are suitable.</div>
 <h2 style="margin-top:12px">Your needs</h2>
-<label>Seat <input type="text" id="seat" value="${esc(seat)}" maxlength="4"></label>
+<label>Seat ${seatSel('seat',seat)}</label>
 <label>Diet <select id="base">${Object.keys(BASE).map(k=>`<option value="${k}"${P.base==k?' selected':''}>${BASE[k]}</option>`).join('')}</select></label>
 <div class="mu">Food rules</div>${Object.keys(FL).map(k=>`<button class="chip" data-k="${k}" aria-pressed="${P[k]}">${FL[k].split(' (')[0]}</button>`).join('')}
 <div class="mu" style="margin-top:8px">Allergies</div>${Object.keys(AL).map(a=>`<button class="chip" data-a="${a}" aria-pressed="${!!P.al[a]}">${AL[a]}</button>`).join('')}
 ${P.other.length?`<div class="ban">Not covered by the ingredient lists: ${esc(P.other.join(', '))}. Tell the crew.</div>`:''}</div>
-<div><h2>Choose your meals (up to 3)</h2><label>Travel date <input type="date" id="td" value="${tdate}"></label><div class="mu" style="margin-bottom:8px">${seasonMsg()}</div><div class="bar"><span id="cnt">${sel.length} selected</span><button class="b" id="go"${sel.length?'':' disabled'}>${mine?'Replace my order':'Send order to crew'}</button></div>
-${ordered.length?'':'<div class="c mu">No special meals for this occasion yet. The airline can add them in the menu planner.</div>'}${ordered.map(d=>{const w=check(P,d),l=left(d),ok=!w.length&&l>0,on=sel.includes(d.id);
-return `<div class="m${ok?'':' x'}"><label class="row" style="margin:0"><span><input type="checkbox" data-o="${d.id}"${on?' checked':''}${ok&&(on||sel.length<3)?'':' disabled'}> <b>${d.n}</b>${d.occ?` <span class="tag">${d.occ}</span>`:''}</span><span class="mu">${l} left</span></label>
-${w.length?`<div class="no">Not suitable: ${w.join(', ')}</div>`:l<1?'<div class="no">Sold out</div>':P.other.length?'<div class="no">Confirm with crew: '+esc(P.other.join(', '))+'</div>':'<div class="ok">Suggested: matches your needs</div>'}
+<div><div class="c" style="border:2px solid var(--tu);margin-bottom:12px"><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap"><h2 style="margin:0">Need a meal at the last minute?</h2><span class="tag" style="background:var(--tint);color:#8a5800;border:1px solid var(--tu)">Idea 1: Lounge Ghost Kitchen</span></div><div class="mu" style="margin:4px 0 6px">Updating via WhatsApp or app within 18h of departure routes here to JAL's lounge kitchen rather than third-party caterers. Prepares a sealed box delivered during boarding.</div><div style="margin-top:6px"><button class="chip" data-lm="3" aria-pressed="${hrs==3}">I am at the airport (3h)</button><button class="chip" data-lm="0.67" aria-pressed="${hrs==0.67}">I am at the gate (40m)</button><button class="chip" data-lm="-1" aria-pressed="${hrs==-1}">I am on board (Wi-Fi)</button></div></div><h2>Choose your meals (up to 3)</h2><label>Travel date <input type="date" id="td" value="${tdate}"></label><label>Time left before departure <select id="hr">${[[24,'More than 18 hours'],[3,'At the airport (about 3 hours)'],[0.67,'At the gate (about 40 minutes)'],[-1,'In the air']].map(x=>`<option value="${x[0]}"${hrs==x[0]?' selected':''}>${x[1]}</option>`).join('')}</select></label><div class="ban" style="margin:0 0 8px">${routeMsg()}</div><div class="mu" style="margin-bottom:8px">${seasonMsg()}</div><div class="bar"><span id="cnt">${sel.length} selected</span><button class="b" id="go"${sel.length?'':' disabled'}>${mine?'Replace my order':'Send order to crew'}</button></div>
+${ordered.length?'':'<div class="c mu">No special meals for this occasion yet. The airline can add them in the menu planner.</div>'}${ordered.map(d=>{const w=check(P,d),l=left(d),lg=route(hrs)=='lounge',ok=!w.length&&(l>0||lg),on=sel.includes(d.id);
+return `<div class="m${ok?'':' x'}"><label class="row" style="margin:0"><span><input type="checkbox" data-o="${d.id}"${on?' checked':''}${ok&&(on||sel.length<3)?'':' disabled'}> <b>${d.n}</b>${d.occ?` <span class="tag">${d.occ}</span>`:''}</span><span class="mu">${lg?'made in lounge':l+' left'}</span></label>
+${w.length?`<div class="no">Not suitable: ${w.join(', ')}</div>`:l<1&&!lg?'<div class="no">Sold out</div>':P.other.length?'<div class="no">Confirm with crew: '+esc(P.other.join(', '))+'</div>':'<div class="ok">Suggested: matches your needs</div>'}
 <div class="mu">${d.k[0]} kcal, ${d.k[1]} g protein, ${d.k[2]} g carbs (illustrative). Contains: ${d.al.length?d.al.map(a=>AL[a].toLowerCase()).join(', '):'none of the listed allergens'}</div>
-<details><summary>Ingredients</summary><div style="font-size:14px">${d.i}</div></details></div>`}).join('')}</div></div><div id="tkbox">${tkHtml()}</div><div class="c" style="margin-top:14px"><h2>Occasion meals calendar</h2>${occRows(false)}<div class="mu" style="margin-top:6px">Meals open one day before the start date. Change the travel date above to see which occasions apply.</div></div>`;
-$('sw').onclick=()=>{role=null;render()};$('seat').onchange=e=>seat=e.target.value.toUpperCase().replace(/[^0-9A-Z]/g,'')||'14C';
+<details><summary>Ingredients</summary><div style="font-size:14px">${d.i}</div></details></div>`}).join('')}</div></div><div id="tkbox">${tkHtml()}</div><div class="c" style="margin-top:14px" id="exchange-sec"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><h2 style="margin:0">Idea 2: In-Flight "Meal Exchange" (Gamified Reallocation)</h2><span class="idea-tag" style="background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6">+500 JAL Miles Reward</span></div><div class="idea-sec" style="margin:8px 0 12px"><div class="idea-box"><b>The Idea:</b> A massive source of airline waste is passengers sleeping through meals or deciding they aren't hungry, while other passengers are denied special meals because they forgot to book them.<br><b>How it Works:</b> On the in-flight Wi-Fi portal, a passenger can click <b>"Skip My Meal."</b> As a reward, they instantly get <b>500 JAL Miles</b>. The moment they skip, that meal (e.g., a Vegetarian Thali) is released into the <b>Cabin Digital Inventory</b> below. Another passenger who forgot to book a Veg meal can now claim it on their screen.<br><div class="idea-win" style="margin-top:6px"><b>Why it Wins:</b> Highly economically viable. It uses behavioral economics to reduce food waste and perfectly solves the dynamic mid-flight inventory problem without needing extra buffer food.</div></div></div>${exHtml()}</div><div class="c" style="margin-top:14px"><h2>Occasion meals calendar</h2>${occRows(false)}<div class="mu" style="margin-top:6px">Meals open one day before the start date. Change the travel date above to see which occasions apply.</div></div>`;
+bindHead();
+$('seat').onchange=e=>{seat=e.target.value.toUpperCase().replace(/[^0-9A-Z]/g,'')||'14C';passenger()};
 $('base').onchange=e=>{P.base=e.target.value;sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()};
 document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{P[b.dataset.k]=!P[b.dataset.k];sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()});
 document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{P.al[b.dataset.a]=!P.al[b.dataset.a];sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);passenger()});
+$('hr').onchange=e=>{hrs=+e.target.value;sel=sel.filter(id=>{const d=C.find(x=>x.id==id);return d&&(left(d)>0||route(hrs)=='lounge')});passenger()};
+const sk=$('skip');if(sk)sk.onclick=skipMeal;
+document.querySelectorAll('[data-lm]').forEach(b=>b.onclick=()=>{hrs=+b.dataset.lm;sel=sel.filter(id=>{const d=C.find(x=>x.id==id);return d&&(left(d)>0||route(hrs)=='lounge')});passenger();const m=$('hr');if(m&&m.scrollIntoView)m.scrollIntoView({behavior:'smooth',block:'center'})});document.querySelectorAll('[data-cl]').forEach(b=>b.onclick=()=>claim(b.dataset.cl));
 $('td').onchange=e=>{tdate=okd(e.target.value)?e.target.value:iso();sel=sel.filter(id=>{const d=C.find(x=>x.id==id);return d&&avail(d,tdate)&&!check(P,d).length});passenger()};
 const go=()=>{const t=$('msg').value.trim();if(t){$('msg').value='';ask(t)}};$('send').onclick=go;$('msg').onkeydown=e=>{if(e.key=='Enter')go()};
 document.querySelectorAll('[data-o]').forEach(i=>i.onchange=()=>{const id=i.dataset.o;sel=i.checked?[...sel,id].slice(0,3):sel.filter(x=>x!=id);passenger()});
-$('go').onclick=async()=>{if(!sel.length)return;const ds=sel.map(id=>C.find(d=>d.id==id)).filter(d=>!check(P,d).length&&left(d)>0);if(!ds.length)return;
+$('go').onclick=async()=>{if(!sel.length)return;const ds=sel.map(id=>C.find(d=>d.id==id)).filter(d=>!check(P,d).length&&(left(d)>0||route(hrs)=='lounge'));if(!ds.length)return;
 const old=mine;seat=($('seat').value||'14C').toUpperCase();const id='o'+Date.now();myId=id;
-await write(id,{id,seat,date:tdate,dishes:ds.map(d=>({id:d.id,n:d.n})),need:need(P),other:P.other,prof:JSON.parse(JSON.stringify(P)),status:'new',t:Date.now()});
-if(old)await patch(old.id,{status:'cancelled'});sel=[];passenger()};
+await write(id,{id,seat,date:tdate,dishes:ds.map(d=>({id:d.id,n:d.n})),need:need(P),other:P.other,prof:JSON.parse(JSON.stringify(P)),status:'new',route:route(hrs),hrs,lst:route(hrs)=='lounge'?'new':'',t:Date.now()});
+if(old&&old.status!='skipped')await patch(old.id,{status:'cancelled'});sel=[];passenger()};
 const c=$('chat');if(c)c.scrollTop=c.scrollHeight}
 const spHtml=()=>sp.length?sp.map(d=>`<div class="m"><div class="row"><b>${esc(cl(d.n))}</b><button class="b s" data-del="${esc(cl(d.id))}">Remove</button></div><div class="mu">${esc(cl(d.occ))}, ${+d.q||0} portions loaded</div></div>`).join(''):'<div class="mu">None yet.</div>';
+const exHtml=()=>{const o=ex.filter(e=>e.status=='open');
+return '<div class="mu" style="margin-bottom:8px">When a passenger clicks "Skip My Meal", they instantly receive <b>500 JAL Miles</b> and the meal enters the Cabin Digital Inventory below. Passengers who forgot to book a special meal can claim it instantly.</div>'+(o.length?o.map(e=>{const d=C.find(x=>x.id==e.dishId),w=d?check(P,d):['unknown meal'];return `<div class="m" style="border-left:3px solid #0f766e"><div class="row"><b>${esc(cl(e.n))}</b><span class="tag" style="background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6">Released from seat ${esc(cl(e.seat))}</span></div>${w.length?`<div class="no">Not suitable for you: ${w.join(', ')}</div>`:P.other.length?'<div class="no">Confirm with crew: '+esc(P.other.join(', '))+'</div>':'<div class="ok">Matches your needs • Ready for claim</div>'}<button class="b" data-cl="${esc(cl(e.id))}"${w.length?' disabled':''} style="margin-top:6px;background:#0f766e;color:#fff">Claim this released meal</button></div>`}).join(''):'<div class="mu" style="margin-top:8px;padding:12px;background:var(--bg);border:1px dashed var(--bd);border-radius:8px">No meals released in the Cabin Digital Inventory right now. Place an order and click "Skip my meal (+500 JAL Miles)" above to test this flow!</div>')};
+async function ewrite(id,d){if(db){try{await db.doc('exchange/'+id).set(d)}catch(e){banner('Could not release the meal: '+(e.code||'error'))}}else ex.push(d)}
+async function epatch(id,d){if(db){try{await db.doc('exchange/'+id).update(d)}catch(e){banner('Could not update: '+(e.code||'error'))}}else Object.assign(ex.find(x=>x.id==id),d)}
+async function skipMeal(){const m=orders.find(o=>o.id==myId&&(o.status=='new'||o.status=='ack'));if(!m||m.route=='lounge'||m.src=='exchange'){banner('This meal cannot be skipped.');return}
+await patch(m.id,{status:'skipped',miles:500});for(const x of m.dishes){const id='e'+Date.now()+x.id;await ewrite(id,{id,dishId:x.id,n:x.n,seat:m.seat,status:'open',t:Date.now()})}banner('Meal skipped! 500 JAL Miles credited to your account. Your meal was released to the Cabin Digital Inventory.');if(!db)passenger()}
+async function claim(eid){const e=ex.find(x=>x.id==eid&&x.status=='open'),d=e&&C.find(x=>x.id==e.dishId);if(!e||!d){banner('That meal was just taken.');return}
+if(check(P,d).length){banner('That meal does not match your needs: '+check(P,d).join(', '));return}
+const id='o'+Date.now();myId=id;if($('seat'))seat=($('seat').value||seat).toUpperCase();
+await write(id,{id,seat,date:tdate,dishes:[{id:d.id,n:d.n}],need:need(P),other:P.other,prof:JSON.parse(JSON.stringify(P)),status:'new',route:'cabin',src:'exchange',hrs:-1,t:Date.now()});
+await epatch(eid,{status:'claimed',by:seat});banner('Claimed "'+d.n+'" from Cabin Digital Inventory for seat '+seat+'. Updated in crew view!');if(!db)passenger()}
+function lounge(){const L=live().filter(o=>o.route=='lounge').sort((a,b)=>(b.urgent?1:0)-(a.urgent?1:0)||a.t-b.t),nx={new:['prep','Start preparing'],prep:['box','Sealed box ready'],box:['del','Handed to ground staff for the aircraft']};
+app.innerHTML=head('Lounge kitchen: late-change meals')+`
+<div class="idea-box" style="border-left:4px solid var(--tu);margin:14px 0;background:var(--tint)">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+    <b style="font-size:15px;color:var(--ink)">Idea 1: JAL "Lounge-to-Cabin" Sync (The Ghost Kitchen Concept)</b>
+    <span class="tag" style="background:var(--tu);color:#1a1300">Live Ghost Kitchen</span>
+  </div>
+  <p style="margin:6px 0;font-size:13.5px"><b>The Idea:</b> Currently, airline food is catered by massive third-party kitchens hours in advance, which is why last-minute changes fail. This idea turns JAL’s airport lounges into dynamic "ghost kitchens" for the flight.</p>
+  <p style="margin:6px 0;font-size:13.5px"><b>How it Works:</b> If a passenger updates their dietary need (e.g., Jain or Halal) via WhatsApp just 2 hours before departure, the AI pings the airport lounge kitchen rather than the main caterer. The lounge preps a premium sealed box, and ground staff hand-deliver it to the aircraft during boarding.</p>
+  <div class="idea-win" style="border-left:3px solid var(--tu);background:rgba(231,161,0,0.08);padding:6px 10px;margin-top:6px;font-size:13px"><b>Why it Wins:</b> It requires zero new food stock. It simply reroutes existing lounge resources to solve the "last-minute fulfillment" challenge highlighted in the brief.</div>
+</div>
+<div class="mu" style="margin-top:8px">Requests made 1 to 18 hours before departure come here instead of the main caterer. Prepare a sealed premium box, label it with the seat and needs, and ground staff take it to the aircraft during boarding.</div><div style="margin-top:12px">${L.length?L.map(o=>`<div class="o${o.lst=='new'?' n':''}"><div class="row"><b>Seat ${esc(o.seat)}</b><span><span class="tag">${esc(LS[o.lst]||'')}</span>${o.src=='gate'?' <span class="tag">Last-minute (gate)</span>':''}${o.urgent?' <span class="tag">URGENT</span>':''}</span></div><div class="mu">Needs: ${esc(o.need)}</div>${(o.other||[]).length?`<div class="no">Unverified allergy: ${esc(o.other.join(', '))}. Confirm with passenger.</div>`:''}${o.dishes.map(x=>{const d=C.find(y=>y.id==x.id);return `<div style="margin-top:4px"><b>${esc(x.n)}</b><div class="mu">${d?esc(d.i):''}</div></div>`}).join('')}<div class="tk" style="margin-top:8px">SEALED BOX LABEL: Seat ${esc(o.seat)} | ${esc(o.need)}</div>${nx[o.lst]?`<button class="b" style="margin-top:8px" data-l="${esc(o.id)}:${nx[o.lst][0]}">${nx[o.lst][1]}</button>`:''}</div>`).join(''):'<div class="c mu">No late-change requests yet. They appear here when a passenger orders 1 to 18 hours before departure.</div>'}</div>`;
+bindHead();
+$('sw').onclick=()=>{role=null;render()};document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{const q=b.dataset.l.split(':');patch(q[0],{lst:q[1]})})}
+let G={base:'veg',al:{}},gs='',gh=0.67;Object.keys(FL).forEach(k=>G[k]=false);
+function gate(){const lg=true,ok=C.filter(d=>avail(d,iso())&&!check(G,d).length);
+app.innerHTML=head('Gate staff: add a last-minute meal')+`<div class="g"><div class="c"><h2>Passenger</h2><label>Seat ${seatSel('gs',gs,1)}</label>
+<label>Time left before departure <select id="gh">${[[3,'At the airport (about 3 hours)'],[0.67,'At the gate (about 40 minutes)'],[0.3,'Boarding now (under 20 minutes)']].map(x=>`<option value="${x[0]}"${gh==x[0]?' selected':''}>${x[1]}</option>`).join('')}</select></label>
+<div class="ban" style="margin:0 0 8px"><b>Idea 1 in Action:</b> Goes to the lounge kitchen as a last-minute sealed box. ${gh<1?'Under 1 hour left, so it is marked URGENT. ':''}No extra catering stock is used.</div>
+<label>Diet <select id="gb">${Object.keys(BASE).map(k=>`<option value="${k}"${G.base==k?' selected':''}>${BASE[k]}</option>`).join('')}</select></label>
+<div class="mu">Food rules</div>${Object.keys(FL).map(k=>`<button class="chip" data-gk="${k}" aria-pressed="${G[k]}">${FL[k].split(' (')[0]}</button>`).join('')}
+<div class="mu" style="margin-top:8px">Allergies</div>${Object.keys(AL).map(a=>`<button class="chip" data-ga="${a}" aria-pressed="${!!G.al[a]}">${AL[a]}</button>`).join('')}</div>
+<div><h2>Meals that fit</h2>${ok.length?ok.map(d=>`<div class="m"><div class="row"><b>${d.n}</b><span class="mu">${lg?'made in lounge':left(d)+' left'}</span></div><div class="mu">Contains: ${d.al.length?d.al.map(a=>AL[a].toLowerCase()).join(', '):'none of the listed allergens'}</div><details><summary>Ingredients</summary><div style="font-size:14px">${d.i}</div></details><button class="b" style="margin-top:6px" data-gm="${d.id}"${gs?'':' disabled'}>${gs?'Add to seat '+esc(gs):'Enter a seat first'}</button></div>`).join(''):'<div class="c mu">No meal fits. Offer the safe-snack recovery option and note it so the next flight is stocked.</div>'}</div></div>`;
+bindHead();
+$('gs').onchange=e=>{gs=e.target.value.toUpperCase().replace(/[^0-9A-Z]/g,'');gate()};$('gh').onchange=e=>{gh=+e.target.value;gate()};$('gb').onchange=e=>{G.base=e.target.value;gate()};
+document.querySelectorAll('[data-gk]').forEach(b=>b.onclick=()=>{G[b.dataset.gk]=!G[b.dataset.gk];gate()});
+document.querySelectorAll('[data-ga]').forEach(b=>b.onclick=()=>{G.al[b.dataset.ga]=!G.al[b.dataset.ga];gate()});
+document.querySelectorAll('[data-gm]').forEach(b=>b.onclick=()=>gAdd(b.dataset.gm))}
+async function gAdd(id){const d=C.find(x=>x.id==id);if(!d||!gs||check(G,d).length)return;const oid='o'+Date.now(),r='lounge';
+await write(oid,{id:oid,seat:gs,date:iso(),dishes:[{id:d.id,n:d.n}],need:need(G),other:[],prof:JSON.parse(JSON.stringify(G)),status:'new',route:r,hrs:gh,lst:r=='lounge'?'new':'',src:'gate',urgent:gh<1,t:Date.now()});
+gate();banner('Added "'+d.n+'" for seat '+gs+(r=='lounge'?'. Sent to the lounge kitchen.':'. Crew have been told.'))}
+const SEATS=[];for(let r=1;r<=30;r++)for(const c of 'ABCDEF')SEATS.push(r+c);
+const taken=s=>live().some(o=>o.seat==s&&o.dishes&&o.status!='skipped');
+const seatSel=(id,v,ph)=>`<select id="${id}">${ph?'<option value="">Choose a seat</option>':''}${SEATS.map(s=>`<option value="${s}"${s==v?' selected':''}>${s}${taken(s)?' (has an order)':''}</option>`).join('')}</select>`;
 const demHtml=()=>C.map(d=>{const l=left(d),r=rq.some(x=>x.id==d.id);return `<div class="row" style="padding:3px 0"><span>${d.n}</span><span>${d.q+(rs[d.id]||0)-l} ordered, <b class="${l<=1?'no':''}">${l} left</b> ${r?`<button class="b" data-rs="${d.id}">Add 5 (crew asked)</button>`:l<=2?`<button class="b s" data-rs="${d.id}">Add 5</button>`:''}</span></div>`}).join('');
 function plUpdate(){const l=$('mlist'),d=$('dem');if(l)l.innerHTML=spHtml();if(d)d.innerHTML=demHtml()}
 async function reqMore(id){const d=C.find(x=>x.id==id);if(!d)return;const r={id,n:d.n,t:Date.now()};
 if(db){try{await db.doc('requests/'+id).set(r)}catch(e){banner('Could not send request: '+(e.code||'error'))}}else{rq.push(r);crew()}}
 function refresh(){const a=document.activeElement,ty=a&&/INPUT|SELECT/.test(a.tagName);
-if(role=='c')crew();else if(role=='m')plUpdate();else if(role=='p'){const m=$('msg'),s=$('seat'),v=m?m.value:'',sv=s?s.value:'',id=ty?a.id:'';passenger();if(m&&$('msg')){$('msg').value=v;$('seat').value=sv;if(id&&$(id))$(id).focus()}}}
+if(role=='c')crew();else if(role=='l')lounge();else if(role=='g'){if(!ty)gate()}else if(role=='m')plUpdate();else if(role=='p'){const m=$('msg'),s=$('seat'),v=m?m.value:'',sv=s?s.value:'',id=ty?a.id:'';passenger();if(m&&$('msg')){$('msg').value=v;$('seat').value=sv;if(id&&$(id))$(id).focus()}}}
 function planner(){
 app.innerHTML=head('Menu planner: special meals')+`<div class="g"><div class="c"><h2>Add a special meal</h2>
 <label>Meal name <input type="text" id="mn" maxlength="60"></label>
@@ -192,7 +437,7 @@ app.innerHTML=head('Menu planner: special meals')+`<div class="g"><div class="c"
 <div class="mu" style="margin-top:6px">Suggestions and rule checks rely on the allergens and flags you tick. Copy them from the caterer's recipe sheet.</div></div>
 <div><div class="c"><h2>Live demand and restock</h2><div id="dem">${demHtml()}</div><div class="mu" style="margin-top:6px">Updates as passengers order and crew request more.</div></div><div class="c" style="margin-top:14px"><h2>Meals you added</h2><div id="mlist">${spHtml()}</div></div>
 <div class="c" style="margin-top:14px"><h2>Occasion calendar</h2><div class="mu">Locked: these dates are fixed and cannot be edited here. Festival meals show to passengers from one day before the start date until the end date. Birthday and anniversary meals are always available.</div>${occRows(false)}</div></div></div>`;
-$('sw').onclick=()=>{role=null;render()};
+bindHead();
 document.querySelectorAll('[data-pa],[data-pf]').forEach(b=>b.onclick=()=>b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!='true'));
 $('mlist').onclick=async e=>{const id=e.target.dataset&&e.target.dataset.del;if(!id)return;
 if(db){try{await db.doc('specials/'+id).delete()}catch(x){banner('Could not remove: '+(x.code||'error'))}}else{sp=sp.filter(x=>x.id!=id);setSpecials(sp);$('mlist').innerHTML=spHtml()}};
@@ -206,12 +451,12 @@ planner();banner('Added "'+d.n+'". Passengers can now order it under '+d.occ+'.'
 function crew(){
 const L=live().filter(o=>o.dishes).sort((a,b)=>b.t-a.t),nw=L.filter(o=>o.status=='new').length;
 app.innerHTML=head('Cabin crew: meal orders')+`<div class="g"><div><h2>Orders (${nw} new)</h2>${L.length?L.map(o=>{const rs=o.dishes.map(x=>{const d=C.find(y=>y.id==x.id),w=d?check(o.prof,d):['unknown dish'];return{n:x.n,w,al:d?d.al:[]}}),bad=rs.some(r=>r.w.length);
-return `<div class="o${o.status=='new'?' n':''}"><div class="row"><b>Seat ${esc(o.seat)}</b>${o.date&&o.date!=iso()?` <span class="mu">for ${esc(cl(o.date))}</span>`:''}<span class="tag">${o.status=='new'?'New':o.status=='ack'?'Acknowledged':'Served'}</span></div>
+return `<div class="o${o.status=='new'?' n':''}"><div class="row"><b>Seat ${esc(o.seat)}</b>${o.date&&o.date!=iso()?` <span class="mu">for ${esc(cl(o.date))}</span>`:''}<span><span class="tag">${o.status=='new'?'New':o.status=='ack'?'Acknowledged':o.status=='skipped'?'Skipped (released)':'Served'}</span>${o.route=='lounge'?` <span class="tag">Idea 1: Lounge box (${LS[o.lst]||''})</span>`:''}${o.src=='exchange'?' <span class="tag">Idea 2: From exchange</span>':''}${o.src=='gate'?' <span class="tag">Added at gate</span>':''}</span></div>
 <div class="mu">Needs: ${esc(o.need)}</div>${(o.other||[]).length?`<div class="no">Unverified allergy: ${esc(o.other.join(', '))}. Confirm with passenger.</div>`:''}
 ${rs.map(r=>`<div style="margin-top:4px">${esc(r.n)}<div class="${r.w.length?'no':'ok'}">${r.w.length?'Rule check failed: '+r.w.join(', ')+'. Do not serve.':'Rule check passed'}</div></div>`).join('')}
 <div style="margin-top:8px">${o.status=='new'?`<button class="b" data-a="${o.id}">Acknowledge</button>`:o.status=='ack'?`<button class="b" data-s="${o.id}"${bad?' disabled':''}>Mark served</button>`:''}</div></div>`}).join(''):'<div class="c mu">No orders yet. They appear here as soon as a passenger orders.</div>'}</div>
-<div class="c"><h2>Stock left</h2>${C.filter(d=>avail(d,iso())||live().some(o=>(o.dishes||[]).some(x=>x.id==d.id))).map(d=>{const l=left(d),r=rq.some(x=>x.id==d.id);return `<div class="row" style="padding:3px 0"><span>${d.n}${d.sp?' <span class="tag">New</span>':''}</span><span><b>${l}</b> ${l<=2?`<button class="b s" data-rq="${d.id}"${r?' disabled':''}>${r?'Requested':'Request more'}</button>`:''}</span></div>`}).join('')}<div class="mu" style="margin-top:6px">Requests go straight to the menu planner.</div></div></div>`;
-$('sw').onclick=()=>{role=null;render()};
+<div class="c"><h2>Stock left</h2>${C.filter(d=>avail(d,iso())||live().some(o=>(o.dishes||[]).some(x=>x.id==d.id))).map(d=>{const l=left(d),r=rq.some(x=>x.id==d.id);return `<div class="row" style="padding:3px 0"><span>${d.n}${d.sp?' <span class="tag">New</span>':''}</span><span><b>${l}</b> ${l<=2?`<button class="b s" data-rq="${d.id}"${r?' disabled':''}>${r?'Requested':'Request more'}</button>`:''}</span></div>`}).join('')}<div class="mu" style="margin-top:6px">Released meals open in the exchange: <b>${ex.filter(e=>e.status=='open').length}</b>. Requests go straight to the menu planner.</div></div></div>`;
+bindHead();
 document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>patch(b.dataset.a,{status:'ack'}));
 document.querySelectorAll('[data-rq]').forEach(b=>b.onclick=()=>reqMore(b.dataset.rq));
 document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>patch(b.dataset.s,{status:'served'}))}
@@ -221,6 +466,7 @@ claude.use('db').then(d=>{if(!d){local=true;render();return}db=d;
 db.collection('specials').onSnapshot(s=>{sp=s.docs.map(x=>x.data());setSpecials(sp);const ids=new Set(sp.map(x=>x.id));
 if(seen){const nw=sp.filter(x=>!seen.has(x.id));if(nw.length){note={m:'New special meal added by the airline: '+cl(nw[0].n)+' ('+cl(nw[0].occ)+')'};setTimeout(()=>{note=null},90000)}}seen=ids;refresh()},()=>{});
 db.collection('restock').onSnapshot(s=>{rs={};s.docs.forEach(x=>{const v=x.data();if(v&&v.id)rs[cl(v.id)]=Math.max(0,Math.min(500,+v.add||0))});refresh()},()=>{});
+db.collection('exchange').onSnapshot(s=>{ex=s.docs.map(x=>x.data()).filter(v=>v&&v.id);refresh()},()=>{});
 db.collection('requests').onSnapshot(s=>{rq=s.docs.map(x=>x.data()).filter(v=>v&&v.id);refresh()},()=>{});
 
 db.collection('orders').onSnapshot(s=>{orders=s.docs.map(x=>x.data());const a=document.activeElement,typing=a&&/INPUT|SELECT/.test(a.tagName);
