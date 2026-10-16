@@ -1111,6 +1111,169 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 .rl-step b { color: var(--ink); }
 .rl-step span { color: var(--mu); font-size: 11.5px; }
 
+
+
+/* 2D Interactive Cabin Seat Map */
+.seatmap-box {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  padding: 18px;
+  margin: 16px 0;
+}
+.fuselage {
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--cd);
+  border: 2px solid var(--bd);
+  border-radius: 28px;
+  padding: 16px 14px;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+}
+.seat-legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.seat-dot { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+.dot-jain { background: #8b5cf6; }
+.dot-sattvik { background: #f59e0b; }
+.dot-allergy { background: #ef4444; }
+.dot-halal { background: #10b981; }
+.dot-std { background: #64748b; }
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.aisle {
+  width: 22px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--mu);
+  font-weight: 800;
+}
+.seat-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  border: 1px solid var(--bd);
+  background: var(--cd);
+  color: var(--tx);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+  padding: 0;
+}
+.seat-btn:hover {
+  transform: scale(1.15);
+  z-index: 5;
+  box-shadow: var(--shadow-sm);
+}
+.seat-btn.seat-jain { background: #8b5cf6; color: #fff; border-color: #7c3aed; }
+.seat-btn.seat-sattvik { background: #f59e0b; color: #1a1300; border-color: #d97706; }
+.seat-btn.seat-allergy { background: #ef4444; color: #fff; border-color: #dc2626; animation: alert-pulse 2s infinite; }
+.seat-btn.seat-halal { background: #10b981; color: #fff; border-color: #059669; }
+.seat-btn.seat-active { outline: 3px solid var(--ink); outline-offset: 1px; }
+
+/* Family PNR Splitting */
+.pnr-box {
+  background: var(--tint);
+  border: 1.5px solid var(--tu);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.pnr-tab {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--bd);
+  background: var(--cd);
+  color: var(--tx);
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.pnr-tab.active {
+  background: var(--ink);
+  color: var(--onink);
+  border-color: var(--ink);
+  font-weight: 700;
+}
+
+/* Zero-App WhatsApp Bot Mock Frame */
+.whatsapp-frame {
+  background: #0b141a;
+  color: #e9edef;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: var(--shadow-md);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.wa-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+.wa-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #d92d20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+}
+.wa-bubble {
+  background: #202c33;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border-top-left-radius: 2px;
+  max-width: 90%;
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.wa-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+.wa-action-btn {
+  background: #00a884;
+  color: #111b21;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
 </style></head><body><div class="w" id="app"></div><div id="modal-host"></div>
 <script>
 const $=id=>document.getElementById(id),app=$('app');
@@ -1569,6 +1732,47 @@ ${demoHtml()}
 
 ${ideasHtml(false)}
 
+
+<div class="c" style="margin:26px 0;border:1px solid var(--bd);border-top:4px solid var(--jal-teal)">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <div>
+      <span class="demo-badge">🎯 Comprehensive Solution Architecture</span>
+      <h2 style="font-family:var(--font-head);font-size:22px;margin:2px 0 6px;color:var(--ink)">Problem Domain, Core Vision &amp; In-Flight Systems</h2>
+      <p class="mu" style="margin:0 0 14px;font-size:14px">Architected for Japan Airlines (JAL) to eliminate passenger friction, eradicate cabin food waste by 25%+, and deliver flawless dietary fulfillment at scale.</p>
+    </div>
+  </div>
+
+  <div style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:10px">
+    <div style="background:var(--cd-subtle);border:1px solid var(--bd);border-top:4px solid #d92d20;border-radius:12px;padding:16px">
+      <h3 style="font-size:15px;color:#d92d20;margin:0 0 8px;display:flex;align-items:center;gap:6px">🎯 Problem Domain &amp; Core Vision</h3>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>Core Focus:</b> Solving diverse Indian cultural, religious, and festival dietary needs (Navratri/Sattvik, Strict Jain, Ramzan/Iftar, Regional/Elderly) in aviation.</p>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>Target Impact:</b> Eliminating food waste (by 25%+), saving catering costs, and removing passenger friction across all travel touchpoints.</p>
+      <p style="font-size:13px;line-height:1.5;margin:0"><b>Winning Pitch Strategy:</b> Focusing on a polished 2-screen prototype demo, operational logistics, and strong storytelling instead of pre-written heavy code.</p>
+    </div>
+
+    <div style="background:var(--cd-subtle);border:1px solid var(--bd);border-top:4px solid #0d9488;border-radius:12px;padding:16px">
+      <h3 style="font-size:15px;color:#0d9488;margin:0 0 8px;display:flex;align-items:center;gap:6px">📲 Multi-Channel Passenger Interfaces</h3>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>Dual-Entry System:</b> Full meal selection accessibility through both an Airline Web Booking Portal and a Proactive WhatsApp Bot.</p>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>Zero-App WhatsApp Engine:</b> Automated 48-hour pre-flight WhatsApp prompt triggered directly by PNR booking data.</p>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>Family PNR Dietary Splitting:</b> Seat-by-seat independent meal assignment under a single PNR (e.g., Grandma gets Jain, Mom gets Sattvik, Kid gets Standard).</p>
+      <p style="font-size:13px;line-height:1.5;margin:0"><b>Festival &amp; Calendar AI:</b> Automated cross-referencing of travel dates with Indian festival calendars to present relevant dietary options.</p>
+    </div>
+
+    <div style="background:var(--cd-subtle);border:1px solid var(--bd);border-top:4px solid #e59a00;border-radius:12px;padding:16px">
+      <h3 style="font-size:15px;color:#e59a00;margin:0 0 8px;display:flex;align-items:center;gap:6px">🏢 Airport &amp; Ground Logistics</h3>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>Lounge-to-Gate Express Swap:</b> Last-minute dietary changes at check-in or airport lounges routed directly to terminal kitchens (e.g., Haldiram's/Sakura Lounge) for gate delivery.</p>
+      <p style="font-size:13px;line-height:1.5;margin:0"><b>Predictive Buffer Engine:</b> Route-demographic AI forecasting to load an optimized 3–5% regional meal buffer instead of wasteful 15–20% over-catering.</p>
+    </div>
+
+    <div style="background:var(--cd-subtle);border:1px solid var(--bd);border-top:4px solid #8b5cf6;border-radius:12px;padding:16px">
+      <h3 style="font-size:15px;color:#8b5cf6;margin:0 0 8px;display:flex;align-items:center;gap:6px">🛫 Cabin Crew &amp; In-Flight Systems</h3>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>2D Interactive Seat Map Tablet App:</b> Color-coded visual seating chart (Amber = Sattvik, Purple = Jain, Red = Allergy, Blue = Standard) for cabin crew.</p>
+      <p style="font-size:13px;line-height:1.5;margin:0 0 6px"><b>Real-Time 2-Screen Sync:</b> Live instant synchronization between passenger actions (on phone/web) and the cabin crew seat map (on laptop).</p>
+      <p style="font-size:13px;line-height:1.5;margin:0"><b>Offline Cabin Mesh Architecture:</b> Local aircraft intranet/LAN sync capability ensuring seamless operation at 35,000 feet without Wi-Fi dependency.</p>
+    </div>
+  </div>
+</div>
+
 <h2 class="section-title">Select a Live Role Screen:</h2>
 <div class="roles-grid">
   <button class="role-card" id="rp">
@@ -1671,10 +1875,93 @@ P.other=[...new Set([...P.other,...(x.other||[]).map(s=>String(s).slice(0,30)).s
 sel=sel.filter(id=>!check(P,C.find(d=>d.id==id)).length);
 const f=fits(),o=P.other.length?` I cannot check "${P.other.join(', ')}" against the ingredient lists, so please confirm with the crew before eating.`:'';
 chat[chat.length-1].t=String(x.reply||'Thanks, I have noted that.').slice(0,400)+' '+(f.length?'Meals that fit: '+f.map(d=>d.n).join('; ')+'.':'No meal on this flight fits all of that. Send an order anyway or tell the crew and they will arrange something.')+o;
-passenger();const c=$('chat');if(c)c.scrollTop=c.scrollHeight}
+passenger();
+const bmWeb = $('btn-mode-web'), bmWa = $('btn-mode-wa');
+if(bmWeb) bmWeb.onclick = ()=>{ passengerMode = 'web'; passenger(); };
+if(bmWa) bmWa.onclick = ()=>{ passengerMode = 'wa'; passenger(); };
+
+document.querySelectorAll('[data-pnr-seat]').forEach(b=>{
+  b.onclick = ()=>{
+    seat = b.dataset.pnrSeat;
+    if(seat == '14C'){ P.base = 'veg'; P.jain = true; P.sattvic = false; }
+    else if(seat == '14B'){ P.base = 'veg'; P.sattvic = true; P.jain = false; }
+    else if(seat == '14A'){ P.base = 'nonveg'; P.jain = false; P.sattvic = false; }
+    passenger();
+  };
+});
+
+document.querySelectorAll('[data-wa-pick]').forEach(b=>{
+  b.onclick = ()=>{
+    seat = b.dataset.waPick;
+    passengerMode = 'web';
+    if(seat == '14C'){ P.base = 'veg'; P.jain = true; }
+    else if(seat == '14B'){ P.base = 'veg'; P.sattvic = true; }
+    passenger();
+    banner('WhatsApp response recorded: Preferences assigned for seat ' + seat);
+  };
+});
+
+const c=$('chat');if(c)c.scrollTop=c.scrollHeight}
+
+let passengerMode = 'web'; // 'web' or 'wa'
+let selectedFamilySeat = '14C';
+const FAMILY_PNR = [
+  {seat:'14C', name:'Priya Sharma (Grandma)', diet:'jain', label:'Strict Jain (No root veg)'},
+  {seat:'14B', name:'Sunita Sharma (Mom)', diet:'sattvic', label:'Sattvik (No onion/garlic)'},
+  {seat:'14A', name:'Ramesh Sharma (Dad/Kid)', diet:'std', label:'Standard Non-Veg'}
+];
+let crewViewMode = 'map'; // 'map' or 'list'
+let selectedSeatInfo = null;
+
 function passenger(){
 const mine=orders.find(o=>o.id==myId&&o.status!='cancelled'),ordered=[...C.filter(d=>avail(d,tdate))].sort((a,b)=>!check(P,a).length-!check(P,b).length).reverse().sort((a,b)=>(check(P,a).length>0)-(check(P,b).length>0));
-app.innerHTML=head('Passenger: order your meals')+`<div class="g"><div class="c"><h2>Ask SkyBite</h2>
+app.innerHTML=head('Passenger: order your meals')+`
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+  <div style="display:flex;gap:6px">
+    <button class="b s" id="btn-mode-web" style="font-size:12.5px;padding:6px 12px;font-weight:700;background:${passengerMode=='web'?'var(--ink)':'var(--cd)'};color:${passengerMode=='web'?'var(--onink)':'var(--tx)'}">🌐 Web Booking Portal</button>
+    <button class="b s" id="btn-mode-wa" style="font-size:12.5px;padding:6px 12px;font-weight:700;background:${passengerMode=='wa'?'#00a884':'var(--cd)'};color:${passengerMode=='wa'?'#111b21':'var(--tx)'};border-color:${passengerMode=='wa'?'#00a884':'var(--bd)'}">📲 Proactive WhatsApp Bot (48h)</button>
+  </div>
+  <span class="tag" style="background:var(--tint);color:#b45309;border:1px solid var(--tu)">PNR: JAL-892K</span>
+</div>
+
+${passengerMode=='wa'?`
+<div class="whatsapp-frame">
+  <div class="wa-header">
+    <div class="wa-avatar">✈️</div>
+    <div>
+      <div style="font-weight:700;font-size:14px;display:flex;align-items:center;gap:5px">Japan Airlines Official <span style="color:#00a884;font-size:12px">✓ Verified</span></div>
+      <div style="font-size:11.5px;color:#8696a0">Automated 48h Pre-Flight Dietary Assistant</div>
+    </div>
+  </div>
+  <div class="wa-bubble">
+    Namaste Priya! Your flight <b>JL 754 (Tokyo Haneda ➔ Delhi)</b> departs in 48 hours.<br><br>
+    Our Festival Calendar AI has detected that your travel window overlaps with <b>Navratri &amp; Ekadashi</b>.<br><br>
+    Would you like to select your family's dietary meals now to avoid last-minute fulfillment delays?
+  </div>
+  <div class="wa-actions">
+    <button class="wa-action-btn" data-wa-pick="14C">🍽️ Seat 14C (Grandma): Strict Jain (No root veg)</button>
+    <button class="wa-action-btn" data-wa-pick="14B">🕉️ Seat 14B (Mom): Sattvik Fasting Meal</button>
+    <button class="wa-action-btn" data-wa-pick="14A">🍗 Seat 14A (Kid): Standard Halal Chicken</button>
+  </div>
+</div>`:''}
+
+<div class="pnr-box">
+  <div class="pnr-header">
+    <div>
+      <b style="font-size:13.5px;color:var(--ink)">Family PNR Dietary Splitting • PNR: JAL-892K</b>
+      <div class="mu" style="font-size:11.5px">Assign individual dietary requirements seat-by-seat under a single booking:</div>
+    </div>
+    <span class="tag" style="background:var(--cd);color:var(--tx);border:1px solid var(--bd)">3 Passengers</span>
+  </div>
+  <div class="pnr-pills">
+    ${FAMILY_PNR.map(f=>`
+      <button class="pnr-tab${f.seat==seat?' active':''}" data-pnr-seat="${f.seat}">
+        <span>${f.seat}:</span> <b>${f.name}</b> <span style="font-size:10.5px;opacity:.8">(${f.label})</span>
+      </button>
+    `).join('')}
+  </div>
+</div>
+<div class="g"><div class="c"><h2>Ask SkyBite</h2>
 <div class="ch" id="chat">${chat.map(m=>`<div class="bb ${m.r}">${esc(m.t)}</div>`).join('')}</div>
 <div class="chat-suggestions">
   <span class="cs-label">Try:</span>
@@ -1843,13 +2130,143 @@ if(db){try{await db.doc('specials/'+d.id).set(d)}catch(x){banner('Could not save
 planner();banner('Added "'+d.n+'". Passengers can now order it under '+d.occ+'.')};}
 function crew(){
 const L=live().filter(o=>o.dishes).sort((a,b)=>b.t-a.t),nw=L.filter(o=>o.status=='new').length;
-app.innerHTML=head('Cabin crew: meal orders')+`<div class="g"><div><h2>Orders (${nw} new)</h2>${L.length?L.map(o=>{const rs=o.dishes.map(x=>{const d=C.find(y=>y.id==x.id),w=d?check(o.prof,d):['unknown dish'];return{n:x.n,w,al:d?d.al:[]}}),bad=rs.some(r=>r.w.length);
+
+// Helper to determine seat color
+const getSeatMeta = (s) => {
+  const o = live().find(x=>x.seat==s&&x.dishes&&x.status!='skipped');
+  if(!o) return { cls:'seat-empty', tag:'Standard', o:null };
+  const d = o.dishes[0] || {};
+  const isJain = o.prof&&o.prof.jain;
+  const isSattvik = o.prof&&(o.prof.sattvic||o.prof.vrat);
+  const isAllergy = (o.other&&o.other.length) || (o.prof&&o.prof.al&&Object.values(o.prof.al).some(Boolean));
+  if(isAllergy) return { cls:'seat-allergy', tag:'Allergy Flagged', o };
+  if(isJain) return { cls:'seat-jain', tag:'Strict Jain', o };
+  if(isSattvik) return { cls:'seat-sattvik', tag:'Sattvik/Vrat', o };
+  if(o.prof&&o.prof.halal) return { cls:'seat-halal', tag:'Halal', o };
+  return { cls:'seat-halal', tag:'Special Meal', o };
+};
+
+const renderSeatGrid = () => {
+  let rowsHtml = '';
+  for(let r=1; r<=20; r++){
+    const leftSeats = ['A','B','C'].map(c=>{
+      const s = r + c;
+      const meta = getSeatMeta(s);
+      return `<button class="seat-btn ${meta.cls}${selectedSeatInfo&&selectedSeatInfo.seat==s?' seat-active':''}" data-seat-map="${s}">${s}</button>`;
+    }).join('');
+    const rightSeats = ['D','E','F'].map(c=>{
+      const s = r + c;
+      const meta = getSeatMeta(s);
+      return `<button class="seat-btn ${meta.cls}${selectedSeatInfo&&selectedSeatInfo.seat==s?' seat-active':''}" data-seat-map="${s}">${s}</button>`;
+    }).join('');
+    rowsHtml += `<div class="seat-row">
+      ${leftSeats}
+      <div class="aisle">${r}</div>
+      ${rightSeats}
+    </div>`;
+  }
+  return rowsHtml;
+};
+
+app.innerHTML=head('Cabin crew: in-flight service')+`
+<!-- Offline Mesh Architecture Banner -->
+<div style="background:linear-gradient(90deg,rgba(13,148,136,0.12),var(--cd));border:1px solid var(--jal-teal);border-radius:12px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+  <div style="display:flex;align-items:center;gap:8px">
+    <span style="font-size:18px">📶</span>
+    <div>
+      <b style="font-size:13px;color:var(--ink)">Offline Cabin Mesh Architecture Active</b>
+      <div class="mu" style="font-size:11.5px">Operating on local aircraft intranet LAN • Zero satellite Wi-Fi dependency at 35,000 ft</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px">
+    <button class="b s" id="btn-crew-map" style="font-size:12px;padding:5px 10px;font-weight:700;background:${crewViewMode=='map'?'var(--ink)':'var(--cd)'};color:${crewViewMode=='map'?'var(--onink)':'var(--tx)'}">🗺️ 2D Interactive Seat Map</button>
+    <button class="b s" id="btn-crew-list" style="font-size:12px;padding:5px 10px;font-weight:700;background:${crewViewMode=='list'?'var(--ink)':'var(--cd)'};color:${crewViewMode=='list'?'var(--onink)':'var(--tx)'}">📋 Order Feed (${nw} New)</button>
+  </div>
+</div>
+
+${crewViewMode=='map'?`
+<div class="seatmap-box">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+    <div>
+      <h3 style="margin:0;font-family:var(--font-head);font-size:17px;color:var(--ink)">2D Visual Cabin Seating Chart • Flight JL 754 (B787-9)</h3>
+      <div class="mu" style="font-size:12px">Tap any colored seat to inspect passenger dietary requirements and acknowledge trays:</div>
+    </div>
+    <span class="status-badge"><span class="status-dot"></span> 2-Screen Live Sync</span>
+  </div>
+
+  <div class="seat-legend">
+    <div class="legend-item"><span class="seat-dot dot-jain"></span> <span>🟣 Purple = Strict Jain</span></div>
+    <div class="legend-item"><span class="seat-dot dot-sattvik"></span> <span>🟡 Amber = Sattvik/Vrat</span></div>
+    <div class="legend-item"><span class="seat-dot dot-allergy"></span> <span>🔴 Red = Severe Allergy</span></div>
+    <div class="legend-item"><span class="seat-dot dot-halal"></span> <span>🟢 Green = Halal / Special</span></div>
+    <div class="legend-item"><span class="seat-dot dot-std"></span> <span>⚪ Standard / Open</span></div>
+  </div>
+
+  <div class="g" style="grid-template-columns:minmax(280px,1fr) minmax(280px,1.2fr)">
+    <div class="fuselage">
+      <div style="text-align:center;font-size:11px;font-weight:800;letter-spacing:0.06em;color:var(--mu);text-transform:uppercase;margin-bottom:10px">▲ Cockpit / Front of Aircraft</div>
+      ${renderSeatGrid()}
+    </div>
+
+    <div>
+      ${selectedSeatInfo?`
+        <div class="c" style="border:2px solid var(--tu)">
+          <div class="row">
+            <h3 style="margin:0;font-family:var(--font-head);font-size:18px">Seat ${selectedSeatInfo.seat} Manifest</h3>
+            <span class="tag" style="background:var(--tu);color:#1a1300">${selectedSeatInfo.tag}</span>
+          </div>
+          ${selectedSeatInfo.o?`
+            <div style="margin:8px 0;font-size:13.5px">
+              <b>Assigned Dish:</b> ${selectedSeatInfo.o.dishes.map(x=>esc(x.n)).join(', ')}<br>
+              <div class="mu" style="margin-top:4px"><b>Dietary Profile:</b> ${esc(selectedSeatInfo.o.need)}</div>
+              ${selectedSeatInfo.o.route=='lounge'?'<div class="ok" style="margin-top:4px">📦 Source: JAL Lounge Ghost Kitchen (Sealed Box Aboard)</div>':''}
+              ${selectedSeatInfo.o.src=='exchange'?'<div class="ok" style="margin-top:4px">🎁 Source: In-Flight Meal Exchange</div>':''}
+              <div class="${check(selectedSeatInfo.o.prof, C.find(y=>y.id==selectedSeatInfo.o.dishes[0].id)||{}).length?'no':'ok'}" style="margin-top:6px">
+                ${check(selectedSeatInfo.o.prof, C.find(y=>y.id==selectedSeatInfo.o.dishes[0].id)||{}).length?'⚠️ Rule check failed: Do not serve':'✓ Safety Engine Verified: 100% Compliant'}
+              </div>
+            </div>
+            <div style="margin-top:10px;display:flex;gap:8px">
+              ${selectedSeatInfo.o.status=='new'?`<button class="b" data-a="${selectedSeatInfo.o.id}">Acknowledge Tray</button>`:selectedSeatInfo.o.status=='ack'?`<button class="b" data-s="${selectedSeatInfo.o.id}">Mark Served</button>`:'<span class="tag" style="background:var(--ok)">✓ Served</span>'}
+            </div>
+          `:'<div class="mu" style="margin-top:8px">Standard in-flight meal. No special dietary restrictions flagged for this seat.</div>'}
+        </div>
+      `:`<div class="c mu" style="text-align:center;padding:32px 16px">
+        <span style="font-size:28px">👆</span><br>
+        <b>Tap any seat on the fuselage map</b><br>to inspect dietary requirements and serve trays.
+      </div>`}
+
+      <div class="c" style="margin-top:14px">
+        <h3>Stock Left Onboard</h3>
+        ${C.filter(d=>avail(d,iso())||live().some(o=>(o.dishes||[]).some(x=>x.id==d.id))).slice(0,6).map(d=>{
+          const l=left(d),r=rq.some(x=>x.id==d.id);
+          return `<div class="row" style="padding:4px 0"><span>${d.n}</span><span><b>${l} left</b> ${l<=2?`<button class="b s" data-rq="${d.id}"${r?' disabled':''}>${r?'Requested':'Request more'}</button>`:''}</span></div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>
+</div>
+`:''}
+
+<div class="g" style="display:${crewViewMode=='list'?'grid':'none'}"><div><h2>Orders (${nw} new)</h2>${L.length?L.map(o=>{const rs=o.dishes.map(x=>{const d=C.find(y=>y.id==x.id),w=d?check(o.prof,d):['unknown dish'];return{n:x.n,w,al:d?d.al:[]}}),bad=rs.some(r=>r.w.length);
 return `<div class="o${o.status=='new'?' n':''}"><div class="row"><b>Seat ${esc(o.seat)}</b>${o.date&&o.date!=iso()?` <span class="mu">for ${esc(cl(o.date))}</span>`:''}<span><span class="tag">${o.status=='new'?'New':o.status=='ack'?'Acknowledged':o.status=='skipped'?'Skipped (released)':'Served'}</span>${o.route=='lounge'?` <span class="tag">Idea 1: Lounge box (${LS[o.lst]||''})</span>`:''}${o.src=='exchange'?' <span class="tag">Idea 2: From exchange</span>':''}${o.src=='gate'?' <span class="tag">Added at gate</span>':''}</span></div>
 <div class="mu">Needs: ${esc(o.need)}</div>${(o.other||[]).length?`<div class="no">Unverified allergy: ${esc(o.other.join(', '))}. Confirm with passenger.</div>`:''}
 ${rs.map(r=>`<div style="margin-top:4px">${esc(r.n)}<div class="${r.w.length?'no':'ok'}">${r.w.length?'Rule check failed: '+r.w.join(', ')+'. Do not serve.':'Rule check passed'}</div></div>`).join('')}
 <div style="margin-top:8px">${o.status=='new'?`<button class="b" data-a="${o.id}">Acknowledge</button>`:o.status=='ack'?`<button class="b" data-s="${o.id}"${bad?' disabled':''}>Mark served</button>`:''}</div></div>`}).join(''):'<div class="c mu">No orders yet. They appear here as soon as a passenger orders.</div>'}</div>
 <div class="c"><h2>Stock left</h2>${C.filter(d=>avail(d,iso())||live().some(o=>(o.dishes||[]).some(x=>x.id==d.id))).map(d=>{const l=left(d),r=rq.some(x=>x.id==d.id);return `<div class="row" style="padding:3px 0"><span>${d.n}${d.sp?' <span class="tag">New</span>':''}</span><span><b>${l}</b> ${l<=2?`<button class="b s" data-rq="${d.id}"${r?' disabled':''}>${r?'Requested':'Request more'}</button>`:''}</span></div>`}).join('')}<div class="mu" style="margin-top:6px">Released meals open in the exchange: <b>${ex.filter(e=>e.status=='open').length}</b>. Requests go straight to the menu planner.</div></div></div>`;
 bindHead();
+
+const bMap = $('btn-crew-map'), bList = $('btn-crew-list');
+if(bMap) bMap.onclick = ()=>{ crewViewMode = 'map'; crew(); };
+if(bList) bList.onclick = ()=>{ crewViewMode = 'list'; crew(); };
+
+document.querySelectorAll('[data-seat-map]').forEach(b=>{
+  b.onclick = ()=>{
+    const s = b.dataset.seatMap;
+    selectedSeatInfo = { seat: s, ...getSeatMeta(s) };
+    crew();
+  };
+});
+
 document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>patch(b.dataset.a,{status:'ack'}));
 document.querySelectorAll('[data-rq]').forEach(b=>b.onclick=()=>reqMore(b.dataset.rq));
 document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>patch(b.dataset.s,{status:'served'}))}

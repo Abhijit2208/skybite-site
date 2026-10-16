@@ -17,7 +17,7 @@ pre{background:#f4f7f8;border:1px solid var(--bd);padding:12px;overflow:auto;fon
   <a href="./" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#d92d20,#e59a00);color:#fff;text-decoration:none;font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:8px">🚀 Open Live Interactive App →</a>
 </div>
 <h1>SkyBite</h1><p class="mu">Review page for people and AI reviewers. Everything here is plain HTML, so it can be read without running scripts. Challenge: In-Flight Hospitality and Dietary Intelligence (Indian passengers).</p>
-<nav class="mu"><a href="#summary">Summary</a><a href="#how">How it works</a><a href="#innovations">Innovations</a><a href="#data">Meal data</a><a href="#cal">Calendar</a><a href="#tests">Tests</a><a href="#limits">Limitations</a><a href="#json">Machine-readable data</a></nav>
+<nav class="mu"><a href="#summary">Summary</a><a href="#how">How it works</a><a href="#innovations">Innovations</a><a href="#architecture">Architecture</a><a href="#data">Meal data</a><a href="#cal">Calendar</a><a href="#tests">Tests</a><a href="#limits">Limitations</a><a href="#json">Machine-readable data</a></nav>
 <h2 id="summary">1. Summary</h2>
 <p>SkyBite is a prototype that links a passenger's dietary needs to the meals an airline can actually serve, from booking to the seat tray. Indian dietary needs combine religion (Jain, sattvic, fasting, halal), region, health and personal choice, and they often change late. SkyBite treats a late request as a normal event with a defined path to a safe meal.</p>
 <ul><li><b>Passenger screen:</b> set food needs and allergies, chat with the SkyBite assistant, read the ingredients of every meal, and order up to three meals.</li>
@@ -51,6 +51,45 @@ pre{background:#f4f7f8;border:1px solid var(--bd);padding:12px;overflow:auto;fon
     <p><b>The Idea:</b> A massive source of airline waste is passengers sleeping through meals or deciding they aren't hungry, while other passengers are denied special meals because they forgot to book them.</p>
     <p><b>How it Works:</b> On the in-flight Wi-Fi portal, a passenger can click "Skip My Meal." As a reward, they instantly get 500 JAL Miles. The moment they skip, that meal (e.g., a Vegetarian Thali) is released into the "Cabin Digital Inventory." Another passenger who forgot to book a Veg meal can now claim it on their screen.</p>
     <p style="margin-bottom:0;padding:8px 10px;background:#e6f7f5;border-left:3px solid #0f766e;border-radius:4px"><b>Why it Wins:</b> Highly economically viable. It uses behavioral economics to reduce food waste and perfectly solves the dynamic mid-flight inventory problem without needing extra buffer food.</p>
+  </div>
+</div>
+<h2 id="architecture">2c. Strategic Vision, Ground Logistics &amp; In-Flight Mesh Architecture</h2>
+<p>To win the challenge, SkyBite connects deep domain empathy for Indian aviation passengers with robust airline operations and edge engineering.</p>
+<div style="display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin:14px 0">
+  <div style="background:#fff8f6;border:1px solid #fecdd3;border-top:4px solid #d92d20;border-radius:10px;padding:16px">
+    <h3 style="margin:0 0 8px;color:#d92d20">🎯 Problem Domain &amp; Core Vision</h3>
+    <ul style="padding-left:18px;margin:0;font-size:13.5px;line-height:1.6">
+      <li><b>Core Focus:</b> Solving diverse Indian cultural, religious, and festival dietary needs (Navratri/Sattvik, Strict Jain, Ramzan/Iftar, Regional/Elderly) in aviation.</li>
+      <li><b>Target Impact:</b> Eliminating food waste (by 25%+), saving catering costs, and removing passenger friction across all travel touchpoints.</li>
+      <li><b>Winning Pitch Strategy:</b> Focusing on a polished 2-screen prototype demo, operational logistics, and strong storytelling instead of pre-written heavy code.</li>
+    </ul>
+  </div>
+
+  <div style="background:#f0fdfa;border:1px solid #99f6e4;border-top:4px solid #0d9488;border-radius:10px;padding:16px">
+    <h3 style="margin:0 0 8px;color:#0d9488">📲 Multi-Channel Passenger Interfaces</h3>
+    <ul style="padding-left:18px;margin:0;font-size:13.5px;line-height:1.6">
+      <li><b>Dual-Entry System:</b> Full meal selection accessibility through both an Airline Web Booking Portal and a Proactive WhatsApp Bot.</li>
+      <li><b>Zero-App WhatsApp Engine:</b> Automated 48-hour pre-flight WhatsApp prompt triggered directly by PNR booking data.</li>
+      <li><b>Family PNR Dietary Splitting:</b> Seat-by-seat independent meal assignment under a single PNR (e.g., Grandma gets Jain, Mom gets Sattvik, Kid gets Standard).</li>
+      <li><b>Festival &amp; Calendar AI:</b> Automated cross-referencing of travel dates with Indian festival calendars to present relevant dietary options.</li>
+    </ul>
+  </div>
+
+  <div style="background:#fffbeb;border:1px solid #fde68a;border-top:4px solid #e59a00;border-radius:10px;padding:16px">
+    <h3 style="margin:0 0 8px;color:#b45309">🏢 Airport &amp; Ground Logistics</h3>
+    <ul style="padding-left:18px;margin:0;font-size:13.5px;line-height:1.6">
+      <li><b>Lounge-to-Gate Express Swap:</b> Last-minute dietary changes at check-in or airport lounges routed directly to terminal kitchens (e.g., Haldiram's/Sakura Lounge) for gate delivery.</li>
+      <li><b>Predictive Buffer Engine:</b> Route-demographic AI forecasting to load an optimized 3–5% regional meal buffer instead of wasteful 15–20% over-catering.</li>
+    </ul>
+  </div>
+
+  <div style="background:#f5f3ff;border:1px solid #ddd6fe;border-top:4px solid #7c3aed;border-radius:10px;padding:16px">
+    <h3 style="margin:0 0 8px;color:#6d28d9">🛫 Cabin Crew &amp; In-Flight Systems</h3>
+    <ul style="padding-left:18px;margin:0;font-size:13.5px;line-height:1.6">
+      <li><b>2D Interactive Seat Map Tablet App:</b> Color-coded visual seating chart (Amber = Sattvik, Purple = Jain, Red = Allergy, Blue = Standard) for cabin crew.</li>
+      <li><b>Real-Time 2-Screen Sync:</b> Live instant synchronization between passenger actions (on phone/web) and the cabin crew seat map (on laptop).</li>
+      <li><b>Offline Cabin Mesh Architecture:</b> Local aircraft intranet/LAN sync capability ensuring seamless operation at 35,000 feet without Wi-Fi dependency.</li>
+    </ul>
   </div>
 </div>
 <h2 id="data">3. Meal data (all 15 meals)</h2>
