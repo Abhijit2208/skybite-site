@@ -937,6 +937,162 @@ th { background: var(--cd-subtle); font-weight: 700; color: var(--mu); }
 details { margin-top: 6px; }
 summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; }
 
+
+
+/* Airline Navy & Teal Design System Enhancements */
+:root {
+  --jal-navy: #061325;
+  --jal-navy-light: #0b1a30;
+  --jal-navy-card: #0f2442;
+  --jal-teal: #0d9488;
+  --jal-teal-light: #14b8a6;
+  --jal-teal-dark: #0f766e;
+  --jal-teal-glow: rgba(13, 148, 136, 0.25);
+  --jal-gold: #f59e0b;
+  --jal-gold-dark: #b45309;
+  --jal-red: #d92d20;
+}
+
+/* Guided Demo Stepper Container */
+.demo-stepper-box {
+  background: var(--cd);
+  border: 2px solid var(--jal-teal);
+  border-radius: 18px;
+  padding: 24px;
+  margin: 22px 0 26px;
+  box-shadow: 0 8px 32px rgba(13, 148, 136, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+.demo-stepper-box::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 5px;
+  background: linear-gradient(90deg, #d92d20 0%, #e59a00 35%, #0d9488 70%, #4f46e5 100%);
+}
+.demo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--jal-teal);
+  background: rgba(13, 148, 136, 0.1);
+  border: 1px solid var(--jal-teal);
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+.demo-stepper-nav {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.ds-tab {
+  flex: 1;
+  min-width: 130px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--bd);
+  background: var(--cd-subtle);
+  color: var(--mu);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all .15s ease;
+}
+.ds-tab:hover {
+  border-color: var(--jal-teal);
+  color: var(--tx);
+}
+.ds-tab.active {
+  background: var(--tint);
+  border-color: var(--tu);
+  color: var(--ink);
+  font-weight: 700;
+  box-shadow: 0 2px 10px rgba(229, 154, 0, 0.18);
+}
+.ds-tab b { display: block; font-size: 12.5px; }
+
+.demo-body {
+  background: var(--bg);
+  border: 1px solid var(--bd);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 12px 0 16px;
+}
+.demo-actor {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--jal-teal);
+  background: rgba(13, 148, 136, 0.08);
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+/* Dietary Intelligence 4 Pillars Cards */
+.diet-pillars {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin: 12px 0 18px;
+}
+.diet-pillar-card {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  border-radius: 12px;
+  padding: 14px;
+}
+.pillar-h {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pillar-allergens { color: #dc2626; border-left: 3.5px solid #dc2626; padding-left: 6px; }
+.pillar-faith { color: #b45309; border-left: 3.5px solid #e59a00; padding-left: 6px; }
+.pillar-festive { color: #4f46e5; border-left: 3.5px solid #4f46e5; padding-left: 6px; }
+.pillar-lifestyle { color: #0d9488; border-left: 3.5px solid #0d9488; padding-left: 6px; }
+
+/* 5-Tier Escalation Protocol */
+.recovery-ladder {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+}
+.rl-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  font-size: 12.5px;
+}
+.rl-step.active {
+  border-color: var(--jal-teal);
+  background: linear-gradient(90deg, rgba(13, 148, 136, 0.06), var(--cd));
+}
+.rl-step b { color: var(--ink); }
+.rl-step span { color: var(--mu); font-size: 11.5px; }
+
 </style></head><body><div class="w" id="app"></div><div id="modal-host"></div>
 <script>
 const $=id=>document.getElementById(id),app=$('app');
@@ -1158,6 +1314,175 @@ try {
   if(saved) document.documentElement.setAttribute('data-theme', saved);
 } catch(e){}
 
+
+let demoStep = 0;
+const DEMO_STAGES = [
+  {
+    step: 1,
+    time: "T - 2 Hours",
+    tab: "1. WhatsApp Ingest",
+    phase: "Airport Terminal • WhatsApp AI Ingestion",
+    title: "Passenger Priya Sharma (Seat 14C) requests late Jain meal",
+    desc: "Arriving at Tokyo Haneda for Flight JL 754 to Delhi, Priya realizes her pre-booked chicken meal violates her strict Jain dietary vow (no onion, garlic, or root vegetables). She messages JAL WhatsApp 2 hours before departure.",
+    actor: "Passenger & SkyBite AI Copilot",
+    actionDesc: "SkyBite NLU extracts: Base=Veg, Rule=Jain (strict zero onion/garlic/root veg). The 18h third-party caterer cutoff has passed. Rather than denying the passenger, the system auto-diverts the request to JAL's Haneda Lounge Ghost Kitchen.",
+    actionBtn: "▶ Advance to Step 2: Lounge Ghost Kitchen Preparation",
+    roleLink: "l",
+    roleLinkText: "Open Lounge Kitchen Screen →"
+  },
+  {
+    step: 2,
+    time: "T - 1h 15m",
+    tab: "2. Lounge Ghost Prep",
+    phase: "Haneda JAL Sakura Lounge Kitchen",
+    title: "Sakura Lounge receives Ghost Kitchen dispatch ticket",
+    desc: "The lounge kitchen receives the urgent dispatch order. Chef prepares a fresh, premium sealed box from existing lounge buffet inventory: Jain dal, steamed basmati rice, and fresh cucumber-tomato salad. Zero new food stock required.",
+    actor: "Lounge Kitchen Staff",
+    actionDesc: "Tamper-evident seal applied. Barcoded label generated: JL 754 • SEAT 14C • JAIN DIET (NO ROOT VEG). Ground operations courier notified for aircraft delivery.",
+    actionBtn: "▶ Advance to Step 3: Boarding Gate Hand-Off",
+    roleLink: "l",
+    roleLinkText: "Inspect Lounge Kitchen View →"
+  },
+  {
+    step: 3,
+    time: "T - 35 Mins",
+    tab: "3. Gate Hand-off",
+    phase: "Gate 112 Boarding Bridge",
+    title: "Ground courier hand-delivers sealed box to aircraft lead attendant",
+    desc: "Ground staff courier brings the sealed box from Sakura Lounge to Gate 112. The box is handed directly to Lead Flight Attendant as passenger boarding begins.",
+    actor: "Gate Staff & Ground Operations",
+    actionDesc: "Gate staff confirm delivery on manifest. Status instantly synchronizes across Priya's phone and cabin crew iPads: 'Sealed box aboard aircraft'.",
+    actionBtn: "▶ Advance to Step 4: Cabin Crew Tray Service",
+    roleLink: "g",
+    roleLinkText: "Inspect Gate Staff Screen →"
+  },
+  {
+    step: 4,
+    time: "Cruising (In-Flight)",
+    tab: "4. Cabin Safety Check",
+    phase: "Cabin Service JL 754 (Seat 14C)",
+    title: "Cabin crew runs safety rule checks & serves Seat 14C",
+    desc: "During meal service, flight attendant taps tablet. SkyBite safety engine validates: 0/15 allergen violations, 100% Jain compliant. Attendant delivers the hot sealed box to Seat 14C.",
+    actor: "Cabin Crew Lead Attendant",
+    actionDesc: "Rule Check Passed: Suitable for Jain passenger. Priya receives hot, safe meal on time. Perfect fulfillment achieved without extra buffer food.",
+    actionBtn: "▶ Advance to Step 5: In-Flight Meal Exchange",
+    roleLink: "c",
+    roleLinkText: "Inspect Cabin Crew Orders →"
+  },
+  {
+    step: 5,
+    time: "Mid-Flight Reallocation",
+    tab: "5. Gamified Exchange",
+    phase: "In-Flight Wi-Fi Meal Exchange Portal",
+    title: "Seat 14D skips meal for 500 Miles; Seat 15A claims it instantly!",
+    desc: "Neighbor at Seat 14D goes to sleep and clicks 'Skip My Meal' on Wi-Fi portal. As a reward, 500 JAL Miles are credited immediately. The untouched meal enters the Cabin Digital Inventory.",
+    actor: "Passenger 14D & Seat 15A",
+    actionDesc: "Passenger at Seat 15A forgot to pre-book a vegetarian meal. They open Wi-Fi portal, see the released meal, and claim it on their screen. Zero cabin food waste!",
+    actionBtn: "↺ Restart Live Flight Simulation",
+    roleLink: "p",
+    roleLinkText: "Try In-Flight Wi-Fi Portal →"
+  }
+];
+
+function applyDemoState(sIdx){
+  demoStep = sIdx;
+  const oid = 'o-demo-priya';
+  if(sIdx == 0){
+    // Stage 1: New order placed via WhatsApp to Lounge
+    const d = {id:oid, seat:'14C', date:iso(), dishes:[{id:'jdl', n:'Jain dal + steamed rice'}], need:'Vegetarian, Jain', other:[], prof:{base:'veg', jain:true, al:{}}, status:'new', route:'lounge', hrs:2, lst:'new', t:Date.now()};
+    write(oid, d);
+  } else if(sIdx == 1){
+    // Stage 2: In Prep at Lounge
+    patch(oid, {lst:'prep', status:'new'});
+  } else if(sIdx == 2){
+    // Stage 3: Box Ready & Delivered to aircraft
+    patch(oid, {lst:'del', status:'new', urgent:true});
+  } else if(sIdx == 3){
+    // Stage 4: Served by Crew
+    patch(oid, {lst:'del', status:'served'});
+  } else if(sIdx == 4){
+    // Stage 5: Exchange active
+    patch(oid, {status:'served'});
+    const eid = 'e-demo-14D';
+    ewrite(eid, {id:eid, dishId:'pan', n:'Paneer butter masala + jeera rice', seat:'14D', status:'open', t:Date.now()});
+  }
+}
+
+function demoHtml(){
+  const cur = DEMO_STAGES[demoStep];
+  return `<div class="demo-stepper-box">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="demo-badge">Live End-to-End Flight Journey Simulation • Flight JL 754 (HND ➔ DEL)</div>
+        <h3 style="font-family:var(--font-head);font-size:20px;margin:0 0 4px;color:var(--ink)">Watch a Last-Minute Request Travel Across All 4 Touchpoints</h3>
+        <p class="mu" style="margin:0;font-size:13.5px">Follow passenger Priya Sharma (Seat 14C) as she updates her dietary requirements 2 hours before departure, and see how the airline coordinates fulfillment in real time.</p>
+      </div>
+      <span class="status-badge"><span class="status-dot"></span> Live Cross-Screen Event</span>
+    </div>
+
+    <!-- Stepper Navigation Tabs -->
+    <div class="demo-stepper-nav">
+      ${DEMO_STAGES.map((s, idx)=>`
+        <button class="ds-tab${idx===demoStep?' active':''}" data-step="${idx}">
+          <span style="font-size:10.5px;color:var(--mu)">${s.time}</span>
+          <b>${s.tab}</b>
+        </button>
+      `).join('')}
+    </div>
+
+    <!-- Stage Content Card -->
+    <div class="demo-body">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <span class="demo-actor">👤 ${cur.actor}</span>
+        <span class="tag" style="background:var(--tu);color:#1a1300;font-weight:700">${cur.phase}</span>
+      </div>
+      <h4 style="font-family:var(--font-head);font-size:17px;margin:0 0 6px;color:var(--ink)">${cur.title}</h4>
+      <p style="font-size:13.5px;line-height:1.55;margin:0 0 10px">${cur.desc}</p>
+      
+      <div style="background:var(--cd);border:1px solid var(--bd);border-left:3.5px solid var(--jal-teal);border-radius:8px;padding:9px 12px;font-size:13px;line-height:1.5">
+        <b>⚙️ System Execution:</b> ${cur.actionDesc}
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="b" id="ds-next" style="padding:8px 16px;font-size:13.5px">${cur.actionBtn}</button>
+        <button class="b s" id="ds-role" data-r="${cur.roleLink}" style="padding:7px 13px;font-size:13px;font-weight:700;color:var(--jal-teal);border-color:var(--jal-teal)">👁️ ${cur.roleLinkText}</button>
+      </div>
+      <span class="mu" style="font-size:12.5px">Step <b>${cur.step} of 5</b> in flight scenario</span>
+    </div>
+  </div>`;
+}
+
+function bindDemo(){
+  document.querySelectorAll('[data-step]').forEach(b=>{
+    b.onclick=()=>{
+      const s = +b.dataset.step;
+      applyDemoState(s);
+      render();
+    };
+  });
+  const nxt = $('ds-next');
+  if(nxt){
+    nxt.onclick=()=>{
+      const nextS = (demoStep + 1) % DEMO_STAGES.length;
+      applyDemoState(nextS);
+      render();
+    };
+  }
+  const rBtn = $('ds-role');
+  if(rBtn){
+    rBtn.onclick=()=>{
+      const r = rBtn.dataset.r;
+      role = r;
+      if(r == 'p') { hrs = demoStep == 4 ? -1 : 2; }
+      render();
+      window.scrollTo({top:0, behavior:'smooth'});
+    };
+  }
+}
+
 function bindHead(){
   const sw=$('sw'),bi=$('btn-ideas'),tt=$('theme-toggle');
   if(sw)sw.onclick=()=>{role=null;render();window.scrollTo({top:0,behavior:'smooth'})};
@@ -1221,6 +1546,8 @@ if(!role){app.innerHTML=`<header class="top-nav">
     <button class="qd-chip" data-try="crew">🧑‍✈️ Cabin Crew Safety Check</button>
   </div>
 </div>
+
+${demoHtml()}
 
 ${ideasHtml(false)}
 
@@ -1301,6 +1628,7 @@ $('rp').onclick=()=>{role='p';render()};$('rc').onclick=()=>{role='c';render()};
 const bi=$('btn-ideas');if(bi)bi.onclick=openModal;
 bindTryButtons();
 bindHead();
+bindDemo();
 return}
 role=='p'?passenger():role=='m'?planner():role=='l'?lounge():role=='g'?gate():crew()}
 function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'} • JAL Prototype</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button><button class="b s" id="sw">Switch role</button></div></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
@@ -1339,12 +1667,42 @@ app.innerHTML=head('Passenger: order your meals')+`<div class="g"><div class="c"
 </div>
 <div style="display:flex;gap:6px"><input type="text" id="msg" placeholder="Tell me your allergies or food rules" maxlength="300"><button class="b" id="send">Send</button></div>
 <div class="mu" style="margin-top:6px">SkyBite only understands what you write. The rules below decide which meals are suitable.</div>
-<h2 style="margin-top:12px">Your needs</h2>
-<label>Seat ${seatSel('seat',seat)}</label>
-<label>Diet <select id="base">${Object.keys(BASE).map(k=>`<option value="${k}"${P.base==k?' selected':''}>${BASE[k]}</option>`).join('')}</select></label>
-<div class="mu">Food rules</div>${Object.keys(FL).map(k=>`<button class="chip" data-k="${k}" aria-pressed="${P[k]}">${FL[k].split(' (')[0]}</button>`).join('')}
-<div class="mu" style="margin-top:8px">Allergies</div>${Object.keys(AL).map(a=>`<button class="chip" data-a="${a}" aria-pressed="${!!P.al[a]}">${AL[a]}</button>`).join('')}
-${P.other.length?`<div class="ban">Not covered by the ingredient lists: ${esc(P.other.join(', '))}. Tell the crew.</div>`:''}</div>
+<h2 style="margin-top:16px;font-family:var(--font-head);font-size:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+  <span>Smart Dietary Intelligence Profile</span>
+  <span class="tag" style="background:rgba(13,148,136,0.12);color:var(--jal-teal);border:1px solid var(--jal-teal);font-size:11px">4-Pillar Classification</span>
+</h2>
+<label style="font-weight:700">Passenger Seat Assignment ${seatSel('seat',seat)}</label>
+
+<div class="diet-pillars">
+  <!-- Pillar 1: Medical & Listed Allergens -->
+  <div class="diet-pillar-card">
+    <div class="pillar-h pillar-allergens">🛡️ Medical &amp; Listed Allergens</div>
+    <div class="mu" style="font-size:11px;margin-bottom:6px">Zero-tolerance safety check:</div>
+    <div style="display:flex;flex-wrap:wrap">
+      ${Object.keys(AL).map(a=>`<button class="chip" data-a="${a}" aria-pressed="${!!P.al[a]}">${AL[a]}</button>`).join('')}
+    </div>
+  </div>
+
+  <!-- Pillar 2: Religious & Cultural Observances -->
+  <div class="diet-pillar-card">
+    <div class="pillar-h pillar-faith">🕉️ Religious Observances</div>
+    <div class="mu" style="font-size:11px;margin-bottom:6px">Faith-prescribed cooking rules:</div>
+    <div style="display:flex;flex-wrap:wrap">
+      ${['jain','sattvic','vrat','halal'].map(k=>`<button class="chip" data-k="${k}" aria-pressed="${P[k]}">${FL[k].split(' (')[0]}</button>`).join('')}
+    </div>
+  </div>
+
+  <!-- Pillar 3: Dietary Style & Health Macros -->
+  <div class="diet-pillar-card">
+    <div class="pillar-h pillar-lifestyle">🥗 Dietary Style &amp; Health</div>
+    <label style="margin:0 0 6px"><select id="base" style="padding:6px 10px;font-size:13px">${Object.keys(BASE).map(k=>`<option value="${k}"${P.base==k?' selected':''}>${BASE[k]}</option>`).join('')}</select></label>
+    <div style="display:flex;flex-wrap:wrap">
+      ${['diabetic','low_sodium'].map(k=>`<button class="chip" data-k="${k}" aria-pressed="${P[k]}">${FL[k].split(' (')[0]}</button>`).join('')}
+    </div>
+  </div>
+</div>
+
+${P.other.length?`<div class="ban" style="border-left:3.5px solid var(--bad);background:var(--bad-tint);color:var(--tx)"><b>⚠️ Unverified Custom Condition:</b> "${esc(P.other.join(', '))}". Not verifiable against standard airline vocabulary. Cabin crew iPad has been flagged for in-person tray confirmation.</div>`:''}</div>
 <div><div class="c" style="border:2px solid var(--tu);margin-bottom:12px"><div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap"><h2 style="margin:0">Need a meal at the last minute?</h2><span class="tag" style="background:var(--tint);color:#8a5800;border:1px solid var(--tu)">Idea 1: Lounge Ghost Kitchen</span></div><div class="mu" style="margin:4px 0 6px">Updating via WhatsApp or app within 18h of departure routes here to JAL's lounge kitchen rather than third-party caterers. Prepares a sealed box delivered during boarding.</div><div style="margin-top:6px"><button class="chip" data-lm="3" aria-pressed="${hrs==3}">I am at the airport (3h)</button><button class="chip" data-lm="0.67" aria-pressed="${hrs==0.67}">I am at the gate (40m)</button><button class="chip" data-lm="-1" aria-pressed="${hrs==-1}">I am on board (Wi-Fi)</button></div></div><h2>Choose your meals (up to 3)</h2><label>Travel date <input type="date" id="td" value="${tdate}"></label><label>Time left before departure <select id="hr">${[[24,'More than 18 hours'],[3,'At the airport (about 3 hours)'],[0.67,'At the gate (about 40 minutes)'],[-1,'In the air']].map(x=>`<option value="${x[0]}"${hrs==x[0]?' selected':''}>${x[1]}</option>`).join('')}</select></label><div class="ban" style="margin:0 0 8px">${routeMsg()}</div><div class="mu" style="margin-bottom:8px">${seasonMsg()}</div><div class="bar"><span id="cnt">${sel.length} selected</span><button class="b" id="go"${sel.length?'':' disabled'}>${mine?'Replace my order':'Send order to crew'}</button></div>
 ${ordered.length?'':'<div class="c mu">No special meals for this occasion yet. The airline can add them in the menu planner.</div>'}${ordered.map(d=>{const w=check(P,d),l=left(d),lg=route(hrs)=='lounge',ok=!w.length&&(l>0||lg),on=sel.includes(d.id);
 return `<div class="m${ok?'':' x'}"><label class="row" style="margin:0"><span><input type="checkbox" data-o="${d.id}"${on?' checked':''}${ok&&(on||sel.length<3)?'':' disabled'}> <b>${d.n}</b>${d.occ?` <span class="tag">${d.occ}</span>`:''}</span><span class="mu">${lg?'made in lounge':l+' left'}</span></label>
@@ -1356,7 +1714,21 @@ ${w.length?`<div class="no">Not suitable: ${w.join(', ')}</div>`:l<1&&!lg?'<div 
   ${d.hal?'<span class="nutri-pill" style="border-color:#14b8a6;color:#0d9488">✓ Halal Certified</span>':''}
   <span class="nutri-pill" style="color:var(--mu)">Allergens: ${d.al.length?d.al.map(a=>AL[a].toLowerCase()).join(', '):'None listed'}</span>
 </div>
-<details><summary>Ingredients</summary><div style="font-size:14px">${d.i}</div></details></div>`}).join('')}</div></div><div id="tkbox">${tkHtml()}</div><div class="c" style="margin-top:14px" id="exchange-sec"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><h2 style="margin:0">Idea 2: In-Flight "Meal Exchange" (Gamified Reallocation)</h2><span class="idea-tag" style="background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6">+500 JAL Miles Reward</span></div><div class="idea-sec" style="margin:8px 0 12px"><div class="idea-box"><b>The Idea:</b> A massive source of airline waste is passengers sleeping through meals or deciding they aren't hungry, while other passengers are denied special meals because they forgot to book them.<br><b>How it Works:</b> On the in-flight Wi-Fi portal, a passenger can click <b>"Skip My Meal."</b> As a reward, they instantly get <b>500 JAL Miles</b>. The moment they skip, that meal (e.g., a Vegetarian Thali) is released into the <b>Cabin Digital Inventory</b> below. Another passenger who forgot to book a Veg meal can now claim it on their screen.<br><div class="idea-win" style="margin-top:6px"><b>Why it Wins:</b> Highly economically viable. It uses behavioral economics to reduce food waste and perfectly solves the dynamic mid-flight inventory problem without needing extra buffer food.</div></div></div>${exHtml()}</div><div class="c" style="margin-top:14px"><h2>Occasion meals calendar</h2>${occRows(false)}<div class="mu" style="margin-top:6px">Meals open one day before the start date. Change the travel date above to see which occasions apply.</div></div>`;
+<details><summary>Ingredients</summary><div style="font-size:14px">${d.i}</div></details></div>`}).join('')}</div></div><div class="c" style="margin-top:14px;border-left:4px solid var(--jal-teal)">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+    <h3 style="margin:0;font-family:var(--font-head);font-size:16px;color:var(--ink)">Automated 5-Tier Last-Minute Recovery Protocol</h3>
+    <span class="tag" style="background:rgba(13,148,136,0.12);color:var(--jal-teal);border:1px solid var(--jal-teal)">Zero-Denial Airline Hospitality</span>
+  </div>
+  <p class="mu" style="margin:4px 0 10px;font-size:12.5px">When passenger requirements change at short notice, SkyBite executes this automated resolution ladder to guarantee a safe meal without airline waste:</p>
+  <div class="recovery-ladder">
+    <div class="rl-step ${route(hrs)=='caterer'?'active':''}"><b>Tier 1: Pre-Booked Main Catering</b><span>&gt;18h: Routed to third-party airport flight kitchen</span></div>
+    <div class="rl-step"><b>Tier 2: Onboard Buffer Allocation</b><span>Poisson-modeled dynamic buffer loaded aboard</span></div>
+    <div class="rl-step ${route(hrs)=='lounge'?'active':''}"><b>Tier 3: JAL Lounge Ghost Kitchen (Idea 1)</b><span>1-18h: Sakura Lounge preps fresh sealed box, delivered during boarding</span></div>
+    <div class="rl-step ${hrs<0?'active':''}"><b>Tier 4: In-Flight Meal Exchange (Idea 2)</b><span>In-flight Wi-Fi reallocation: passenger skips for 500 Miles</span></div>
+    <div class="rl-step"><b>Tier 5: Safe-Snack Service Recovery</b><span>Fruit &amp; Roasted Makhana Bowl + 1,000 JAL Miles Credit</span></div>
+  </div>
+</div>
+<div id="tkbox">${tkHtml()}</div><div class="c" style="margin-top:14px" id="exchange-sec"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><h2 style="margin:0">Idea 2: In-Flight "Meal Exchange" (Gamified Reallocation)</h2><span class="idea-tag" style="background:#e6f7f5;color:#0f766e;border:1px solid #14b8a6">+500 JAL Miles Reward</span></div><div class="idea-sec" style="margin:8px 0 12px"><div class="idea-box"><b>The Idea:</b> A massive source of airline waste is passengers sleeping through meals or deciding they aren't hungry, while other passengers are denied special meals because they forgot to book them.<br><b>How it Works:</b> On the in-flight Wi-Fi portal, a passenger can click <b>"Skip My Meal."</b> As a reward, they instantly get <b>500 JAL Miles</b>. The moment they skip, that meal (e.g., a Vegetarian Thali) is released into the <b>Cabin Digital Inventory</b> below. Another passenger who forgot to book a Veg meal can now claim it on their screen.<br><div class="idea-win" style="margin-top:6px"><b>Why it Wins:</b> Highly economically viable. It uses behavioral economics to reduce food waste and perfectly solves the dynamic mid-flight inventory problem without needing extra buffer food.</div></div></div>${exHtml()}</div><div class="c" style="margin-top:14px"><h2>Occasion meals calendar</h2>${occRows(false)}<div class="mu" style="margin-top:6px">Meals open one day before the start date. Change the travel date above to see which occasions apply.</div></div>`;
 bindHead();
 document.querySelectorAll('[data-sg]').forEach(b=>{b.onclick=()=>{const t=b.dataset.sg,inp=$('msg');if(inp){inp.value=t;ask(t)}}});
 $('seat').onchange=e=>{seat=e.target.value.toUpperCase().replace(/[^0-9A-Z]/g,'')||'14C';passenger()};
