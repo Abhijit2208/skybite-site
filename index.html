@@ -1843,6 +1843,51 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   border-color: var(--jal-red);
 }
 
+
+/* Webmail Preview Modal Styles */
+.webmail-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: webmailFadeIn 0.25s ease;
+}
+
+@keyframes webmailFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.webmail-modal-card {
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.45);
+  padding: 1.4rem;
+  position: relative;
+  animation: webmailSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes webmailSlideUp {
+  from { transform: translateY(20px) scale(0.96); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.webmail-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--bd);
+  padding-bottom: 10px;
+}
+
 .lock-screen-wrapper {
   position: fixed;
   inset: 0;
@@ -2532,13 +2577,21 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
     <form class="lock-form" id="form-lock-otp" style="display: none;">
       <div class="otp-live-badge" id="otp-live-badge">
         <div>
-          <div style="font-size: 0.72rem; color: #94a3b8; text-align: left;">Live OTP Sent to <span id="otp-target-email" style="color: #fff; font-weight: 700;"></span></div>
+          <div style="font-size: 0.72rem; color: #94a3b8; text-align: left;">Live OTP Sent to <span id="otp-target-email" style="color: var(--tx); font-weight: 700;"></span></div>
           <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem;">
             <span class="otp-code-highlight" id="otp-display-code">------</span>
           </div>
         </div>
         <button type="button" class="btn-autofill-otp" id="btn-autofill-otp">📋 Auto-Fill</button>
       </div>
+
+      <div id="otp-delivery-status" style="font-size: 0.75rem; padding: 7px 11px; border-radius: 6px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); margin-bottom: 0.75rem; text-align: left; line-height: 1.45; color: var(--tx);">
+        ✉️ Dispatched via SMTP relay to <strong id="status-target-email"></strong> (Check Inbox &amp; Spam)
+      </div>
+
+      <button type="button" id="btn-view-webmail" style="background: var(--jal-red-tint); border: 1px dashed var(--jal-red); color: var(--jal-red); font-size: 0.76rem; font-weight: 700; padding: 6px 10px; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <span>📨</span> Open In-Flight Webmail (View Incoming Email)
+      </button>
 
       <div class="form-group" style="margin-bottom: 0;">
         <label class="form-label" style="text-align: center; display: block;">Enter 6-Digit Live Verification Code</label>
@@ -2559,6 +2612,46 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
         ← Change Email / Seat Number
       </button>
     </form>
+  </div>
+</div>
+
+
+<!-- ======================================================================
+     SKYBITE IN-FLIGHT PASSENGER WEBMAIL PREVIEW MODAL
+     ====================================================================== -->
+<div class="webmail-modal-overlay" id="webmail-modal" style="display:none;">
+  <div class="webmail-modal-card">
+    <div class="webmail-modal-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.3rem;">✉️</span>
+        <div>
+          <b style="font-size:0.94rem; color:var(--tx);">SkyBite In-Flight Passenger Mailbox</b>
+          <div style="font-size:0.75rem; color:var(--mu);">To: <span id="webmail-to-email"></span></div>
+        </div>
+      </div>
+      <button type="button" id="btn-close-webmail" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--mu); padding:2px 8px;">✕</button>
+    </div>
+    <div style="padding:14px; font-size:0.86rem; color:var(--tx); background:var(--cd-subtle); border-radius:10px; margin-top:12px; border:1px solid var(--bd);">
+      <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--bd); padding-bottom:8px; margin-bottom:10px;">
+        <span style="font-size:0.78rem; color:var(--mu);">Sender: <b>security@skybite.jal.co.jp</b></span>
+        <span style="font-size:0.75rem; color:var(--mu);" id="webmail-time">Just now</span>
+      </div>
+      <div style="font-weight:700; font-size:0.95rem; margin-bottom:8px; color:var(--tx);" id="webmail-subject">
+        Your SkyBite 2FA Verification Code
+      </div>
+      <p style="margin:0 0 10px; line-height:1.5; font-size:0.82rem;">Dear Passenger, here is your 2FA verification passcode for Japan Airlines Flight JL-749 (Seat <b id="webmail-seat">12A</b>):</p>
+      <div style="text-align:center; padding:14px; background:var(--cd); border-radius:8px; border:2px dashed var(--jal-red); margin:10px 0;">
+        <span style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--mu); display:block; margin-bottom:4px;">One-Time Passcode</span>
+        <span style="font-family:monospace; font-size:2.2rem; font-weight:800; color:var(--jal-red); letter-spacing:0.2em;" id="webmail-code">------</span>
+        <div style="font-size:0.72rem; color:var(--mu); margin-top:4px;">Valid for 10 minutes • Do not share with anyone</div>
+      </div>
+      <div style="font-size:0.76rem; color:var(--mu); line-height:1.4;">
+        If you did not request this verification code, please inform a Japan Airlines cabin crew member immediately.
+      </div>
+      <button type="button" id="btn-use-code-from-webmail" style="width:100%; margin-top:12px; background:var(--jal-red); color:#fff; border:none; padding:9px; border-radius:7px; font-weight:700; cursor:pointer;">
+        📋 Auto-Fill This Code &amp; Close Mail
+      </button>
+    </div>
   </div>
 </div>
 
@@ -4119,7 +4212,11 @@ start();
     generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
     pendingData = { email, seat: seatNum };
 
-    // Dispatch real email via FormSubmit AJAX service
+    const statusEl = document.getElementById('otp-delivery-status');
+    const statusEmail = document.getElementById('status-target-email');
+    if (statusEmail) statusEmail.textContent = email;
+
+    // Dispatch real email via FormSubmit AJAX service (with _captcha: false for instant delivery)
     fetch('https://formsubmit.co/ajax/' + encodeURIComponent(email), {
       method: 'POST',
       headers: {
@@ -4128,17 +4225,36 @@ start();
       },
       body: JSON.stringify({
         _subject: 'Your SkyBite 2FA Verification Code: ' + generatedOtp,
+        _captcha: 'false',
         _template: 'box',
         'Service': 'SkyBite In-Flight Dietary Intelligence Platform',
         'Flight': 'JAL Flight JL-749 (Delhi -> Tokyo Haneda)',
-        'Passenger Email': email,
-        'Assigned Seat': seatNum,
-        '2FA Security Code': generatedOtp,
-        'Valid For': '10 Minutes',
+        'Passenger_Email': email,
+        'Assigned_Seat': seatNum,
+        'Security_OTP_Code': generatedOtp,
+        'Validity': '10 Minutes',
         'Instructions': 'Enter this 6-digit one-time passcode on the SkyBite screen to unlock in-flight dining.'
       })
-    }).catch(err => {
-      console.log('Mail notification dispatch:', err);
+    })
+    .then(r => r.json())
+    .then(data => {
+      console.log('FormSubmit delivery status:', data);
+      if (statusEl) {
+        if (data && (data.success === 'true' || data.success === true)) {
+          statusEl.innerHTML = `✓ Real email sent to <b>${email}</b>! Check your inbox (or spam).`;
+          statusEl.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+          statusEl.style.background = 'rgba(16, 185, 129, 0.12)';
+          showToast(`✉️ Email delivered to ${email}!`, 'success');
+        } else if (data && data.message && data.message.includes('Activate')) {
+          statusEl.innerHTML = `⚠️ <b>First-time setup:</b> An activation email was sent to <b>${email}</b>. Click <i>"Activate Form"</i> in that email to allow direct deliveries, or use the live code below.`;
+          statusEl.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+          statusEl.style.background = 'rgba(245, 158, 11, 0.12)';
+          showToast(`📧 Click 'Activate Form' link sent to ${email}`, 'info');
+        }
+      }
+    })
+    .catch(err => {
+      console.log('Mail notification dispatch notice:', err);
     });
 
     // Update Step 2 UI
@@ -4147,6 +4263,18 @@ start();
     if (targetEmailEl) targetEmailEl.textContent = email;
     if (displayCodeEl) displayCodeEl.textContent = generatedOtp;
 
+    // Update Webmail Modal data
+    const wmTo = document.getElementById('webmail-to-email');
+    const wmSub = document.getElementById('webmail-subject');
+    const wmSeat = document.getElementById('webmail-seat');
+    const wmCode = document.getElementById('webmail-code');
+    const wmTime = document.getElementById('webmail-time');
+    if (wmTo) wmTo.textContent = email;
+    if (wmSub) wmSub.textContent = `Your SkyBite 2FA Verification Code: ${generatedOtp}`;
+    if (wmSeat) wmSeat.textContent = seatNum;
+    if (wmCode) wmCode.textContent = generatedOtp;
+    if (wmTime) wmTime.textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
     startResendTimer();
     showToast(`📩 Live 2FA code [ ${generatedOtp} ] sent to ${email}`, 'success');
 
@@ -4154,6 +4282,41 @@ start();
       otpInput.value = '';
       setTimeout(() => otpInput.focus(), 250);
     }
+  }
+
+  // Webmail Modal Event Listeners
+  const webmailModal = document.getElementById('webmail-modal');
+  const viewWebmailBtn = document.getElementById('btn-view-webmail');
+  const closeWebmailBtn = document.getElementById('btn-close-webmail');
+  const useWebmailCodeBtn = document.getElementById('btn-use-code-from-webmail');
+
+  if (viewWebmailBtn && webmailModal) {
+    viewWebmailBtn.addEventListener('click', () => {
+      webmailModal.style.display = 'flex';
+    });
+  }
+
+  if (closeWebmailBtn && webmailModal) {
+    closeWebmailBtn.addEventListener('click', () => {
+      webmailModal.style.display = 'none';
+    });
+  }
+
+  if (webmailModal) {
+    webmailModal.addEventListener('click', (e) => {
+      if (e.target === webmailModal) webmailModal.style.display = 'none';
+    });
+  }
+
+  if (useWebmailCodeBtn && otpInput) {
+    useWebmailCodeBtn.addEventListener('click', () => {
+      if (generatedOtp) {
+        otpInput.value = generatedOtp;
+        showToast('✓ Code auto-filled from inbox', 'info');
+      }
+      if (webmailModal) webmailModal.style.display = 'none';
+      otpInput.focus();
+    });
   }
 
   // Step 1: Submit Email & Seat
