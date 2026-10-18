@@ -2086,8 +2086,39 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 
 .lock-form .form-control:focus {
   border-color: #d92d20;
-  box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.25);
-  background: rgba(10, 15, 26, 0.95);
+  box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.18);
+  background: var(--lock-input-bg) !important;
+  color: var(--lock-input-tx) !important;
+}
+
+.lock-form select.form-control option,
+.lock-form select.form-control optgroup {
+  background: var(--cd);
+  color: var(--tx);
+}
+
+.seat-cabin-filter {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  color: var(--mu);
+  font-size: 0.72rem;
+  padding: 3px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.seat-cabin-filter:hover {
+  border-color: var(--jal-red);
+  color: var(--tx);
+}
+
+.seat-cabin-filter.active {
+  background: var(--jal-red-tint) !important;
+  border-color: var(--jal-red) !important;
+  color: var(--jal-red) !important;
+  font-weight: 700 !important;
 }
 
 .lock-hint {
@@ -2290,7 +2321,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
           <label class="form-label" style="margin-bottom: 0;">Flight Seat (All 180 Seats)</label>
           <span style="font-size: 0.72rem; color: #10b981; font-weight: 700;">✈️ Boeing 787-9</span>
         </div>
-        <select id="lock-seat-input" class="form-control" required style="font-weight: 700; letter-spacing: 0.04em; background: rgba(10, 15, 26, 0.95); color: #f8fafc; cursor: pointer;">
+        <select id="lock-seat-input" class="form-control" required style="font-weight: 700; letter-spacing: 0.04em; cursor: pointer;">
         <optgroup label="⭐ Business Class (Rows 1–7 • Flatbed Suites)">
           <option value="1A">Seat 1A • Business Class</option>
           <option value="1B">Seat 1B • Business Class</option>
@@ -2478,11 +2509,11 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
           <option value="30F">Seat 30F • Economy Class</option>
         </optgroup>
         </select>
-        <div style="display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap;" id="seat-cabin-filters">
-          <button type="button" class="seat-cabin-filter" data-cabin="all" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer; font-weight: 600;">All (180)</button>
-          <button type="button" class="seat-cabin-filter" data-cabin="business" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer;">Business (1-7)</button>
-          <button type="button" class="seat-cabin-filter" data-cabin="premium" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer;">Prem Econ (8-14)</button>
-          <button type="button" class="seat-cabin-filter" data-cabin="economy" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer;">Economy (15-30)</button>
+        <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;" id="seat-cabin-filters">
+          <button type="button" class="seat-cabin-filter active" data-cabin="all">All (180)</button>
+          <button type="button" class="seat-cabin-filter" data-cabin="business">Business (1-7)</button>
+          <button type="button" class="seat-cabin-filter" data-cabin="premium">Prem Econ (8-14)</button>
+          <button type="button" class="seat-cabin-filter" data-cabin="economy">Economy (15-30)</button>
         </div>
         <p id="lock-seat-hint" class="lock-hint" style="color: #f59e0b;"></p>
         <p id="lock-match-hint" class="lock-hint" style="font-weight: 700; display: none;"></p>
@@ -4043,16 +4074,8 @@ start();
   const cabinFilters = document.querySelectorAll('.seat-cabin-filter');
   cabinFilters.forEach(btn => {
     btn.addEventListener('click', () => {
-      cabinFilters.forEach(b => {
-        b.style.background = 'rgba(255,255,255,0.04)';
-        b.style.borderColor = 'rgba(255,255,255,0.1)';
-        b.style.color = '#94a3b8';
-        b.style.fontWeight = 'normal';
-      });
-      btn.style.background = 'rgba(255,255,255,0.15)';
-      btn.style.borderColor = 'rgba(255,255,255,0.25)';
-      btn.style.color = '#ffffff';
-      btn.style.fontWeight = '600';
+      cabinFilters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
 
       const cabin = btn.dataset.cabin;
       if (seatInput) {
