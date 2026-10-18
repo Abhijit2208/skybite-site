@@ -2196,12 +2196,205 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
         <p id="lock-email-hint" class="lock-hint" style="color: #10b981; display: none;"></p>
       </div>
 
-      <div class="form-group" style="margin-bottom: 0;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <label class="form-label" style="margin-bottom: 0.25rem;">Flight Seat Number</label>
-          <span id="seat-quick-select" style="font-size: 0.72rem; color: #94a3b8; cursor: pointer; user-select: none;">Presets: 12A • 14C • 10B</span>
+            <div class="form-group" style="margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+          <label class="form-label" style="margin-bottom: 0;">Flight Seat (All 180 Seats)</label>
+          <span style="font-size: 0.72rem; color: #10b981; font-weight: 700;">✈️ Boeing 787-9</span>
         </div>
-        <input type="text" id="lock-seat-input" placeholder="e.g. 12A" maxlength="4" required class="form-control" autocomplete="off" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">
+        <select id="lock-seat-input" class="form-control" required style="font-weight: 700; letter-spacing: 0.04em; background: rgba(10, 15, 26, 0.95); color: #f8fafc; cursor: pointer;">
+        <optgroup label="⭐ Business Class (Rows 1–7 • Flatbed Suites)">
+          <option value="1A">Seat 1A • Business Class</option>
+          <option value="1B">Seat 1B • Business Class</option>
+          <option value="1C">Seat 1C • Business Class</option>
+          <option value="1D">Seat 1D • Business Class</option>
+          <option value="1E">Seat 1E • Business Class</option>
+          <option value="1F">Seat 1F • Business Class</option>
+          <option value="2A">Seat 2A • Business Class</option>
+          <option value="2B">Seat 2B • Business Class</option>
+          <option value="2C">Seat 2C • Business Class</option>
+          <option value="2D">Seat 2D • Business Class</option>
+          <option value="2E">Seat 2E • Business Class</option>
+          <option value="2F">Seat 2F • Business Class</option>
+          <option value="3A">Seat 3A • Business Class</option>
+          <option value="3B">Seat 3B • Business Class</option>
+          <option value="3C">Seat 3C • Business Class</option>
+          <option value="3D">Seat 3D • Business Class</option>
+          <option value="3E">Seat 3E • Business Class</option>
+          <option value="3F">Seat 3F • Business Class</option>
+          <option value="4A">Seat 4A • Business Class</option>
+          <option value="4B">Seat 4B • Business Class</option>
+          <option value="4C">Seat 4C • Business Class</option>
+          <option value="4D">Seat 4D • Business Class</option>
+          <option value="4E">Seat 4E • Business Class</option>
+          <option value="4F">Seat 4F • Business Class</option>
+          <option value="5A">Seat 5A • Business Class</option>
+          <option value="5B">Seat 5B • Business Class</option>
+          <option value="5C">Seat 5C • Business Class</option>
+          <option value="5D">Seat 5D • Business Class</option>
+          <option value="5E">Seat 5E • Business Class</option>
+          <option value="5F">Seat 5F • Business Class</option>
+          <option value="6A">Seat 6A • Business Class</option>
+          <option value="6B">Seat 6B • Business Class</option>
+          <option value="6C">Seat 6C • Business Class</option>
+          <option value="6D">Seat 6D • Business Class</option>
+          <option value="6E">Seat 6E • Business Class</option>
+          <option value="6F">Seat 6F • Business Class</option>
+          <option value="7A">Seat 7A • Business Class</option>
+          <option value="7B">Seat 7B • Business Class</option>
+          <option value="7C">Seat 7C • Business Class</option>
+          <option value="7D">Seat 7D • Business Class</option>
+          <option value="7E">Seat 7E • Business Class</option>
+          <option value="7F">Seat 7F • Business Class</option>
+        </optgroup>
+        <optgroup label="💎 Premium Economy (Rows 8–14 • Extra Legroom)">
+          <option value="8A">Seat 8A • Premium Economy</option>
+          <option value="8B">Seat 8B • Premium Economy</option>
+          <option value="8C">Seat 8C • Premium Economy</option>
+          <option value="8D">Seat 8D • Premium Economy</option>
+          <option value="8E">Seat 8E • Premium Economy</option>
+          <option value="8F">Seat 8F • Premium Economy</option>
+          <option value="9A">Seat 9A • Premium Economy</option>
+          <option value="9B">Seat 9B • Premium Economy</option>
+          <option value="9C">Seat 9C • Premium Economy</option>
+          <option value="9D">Seat 9D • Premium Economy</option>
+          <option value="9E">Seat 9E • Premium Economy</option>
+          <option value="9F">Seat 9F • Premium Economy</option>
+          <option value="10A">Seat 10A • Premium Economy</option>
+          <option value="10B">Seat 10B • Premium Economy</option>
+          <option value="10C">Seat 10C • Premium Economy</option>
+          <option value="10D">Seat 10D • Premium Economy</option>
+          <option value="10E">Seat 10E • Premium Economy</option>
+          <option value="10F">Seat 10F • Premium Economy</option>
+          <option value="11A">Seat 11A • Premium Economy</option>
+          <option value="11B">Seat 11B • Premium Economy</option>
+          <option value="11C">Seat 11C • Premium Economy</option>
+          <option value="11D">Seat 11D • Premium Economy</option>
+          <option value="11E">Seat 11E • Premium Economy</option>
+          <option value="11F">Seat 11F • Premium Economy</option>
+          <option value="12A" selected="selected">Seat 12A • Premium Economy</option>
+          <option value="12B">Seat 12B • Premium Economy</option>
+          <option value="12C">Seat 12C • Premium Economy</option>
+          <option value="12D">Seat 12D • Premium Economy</option>
+          <option value="12E">Seat 12E • Premium Economy</option>
+          <option value="12F">Seat 12F • Premium Economy</option>
+          <option value="13A">Seat 13A • Premium Economy</option>
+          <option value="13B">Seat 13B • Premium Economy</option>
+          <option value="13C">Seat 13C • Premium Economy</option>
+          <option value="13D">Seat 13D • Premium Economy</option>
+          <option value="13E">Seat 13E • Premium Economy</option>
+          <option value="13F">Seat 13F • Premium Economy</option>
+          <option value="14A">Seat 14A • Premium Economy</option>
+          <option value="14B">Seat 14B • Premium Economy</option>
+          <option value="14C">Seat 14C • Premium Economy</option>
+          <option value="14D">Seat 14D • Premium Economy</option>
+          <option value="14E">Seat 14E • Premium Economy</option>
+          <option value="14F">Seat 14F • Premium Economy</option>
+        </optgroup>
+        <optgroup label="💺 Economy Class (Rows 15–30 • Main Fuselage)">
+          <option value="15A">Seat 15A • Economy Class</option>
+          <option value="15B">Seat 15B • Economy Class</option>
+          <option value="15C">Seat 15C • Economy Class</option>
+          <option value="15D">Seat 15D • Economy Class</option>
+          <option value="15E">Seat 15E • Economy Class</option>
+          <option value="15F">Seat 15F • Economy Class</option>
+          <option value="16A">Seat 16A • Economy Class</option>
+          <option value="16B">Seat 16B • Economy Class</option>
+          <option value="16C">Seat 16C • Economy Class</option>
+          <option value="16D">Seat 16D • Economy Class</option>
+          <option value="16E">Seat 16E • Economy Class</option>
+          <option value="16F">Seat 16F • Economy Class</option>
+          <option value="17A">Seat 17A • Economy Class</option>
+          <option value="17B">Seat 17B • Economy Class</option>
+          <option value="17C">Seat 17C • Economy Class</option>
+          <option value="17D">Seat 17D • Economy Class</option>
+          <option value="17E">Seat 17E • Economy Class</option>
+          <option value="17F">Seat 17F • Economy Class</option>
+          <option value="18A">Seat 18A • Economy Class</option>
+          <option value="18B">Seat 18B • Economy Class</option>
+          <option value="18C">Seat 18C • Economy Class</option>
+          <option value="18D">Seat 18D • Economy Class</option>
+          <option value="18E">Seat 18E • Economy Class</option>
+          <option value="18F">Seat 18F • Economy Class</option>
+          <option value="19A">Seat 19A • Economy Class</option>
+          <option value="19B">Seat 19B • Economy Class</option>
+          <option value="19C">Seat 19C • Economy Class</option>
+          <option value="19D">Seat 19D • Economy Class</option>
+          <option value="19E">Seat 19E • Economy Class</option>
+          <option value="19F">Seat 19F • Economy Class</option>
+          <option value="20A">Seat 20A • Economy Class</option>
+          <option value="20B">Seat 20B • Economy Class</option>
+          <option value="20C">Seat 20C • Economy Class</option>
+          <option value="20D">Seat 20D • Economy Class</option>
+          <option value="20E">Seat 20E • Economy Class</option>
+          <option value="20F">Seat 20F • Economy Class</option>
+          <option value="21A">Seat 21A • Economy Class</option>
+          <option value="21B">Seat 21B • Economy Class</option>
+          <option value="21C">Seat 21C • Economy Class</option>
+          <option value="21D">Seat 21D • Economy Class</option>
+          <option value="21E">Seat 21E • Economy Class</option>
+          <option value="21F">Seat 21F • Economy Class</option>
+          <option value="22A">Seat 22A • Economy Class</option>
+          <option value="22B">Seat 22B • Economy Class</option>
+          <option value="22C">Seat 22C • Economy Class</option>
+          <option value="22D">Seat 22D • Economy Class</option>
+          <option value="22E">Seat 22E • Economy Class</option>
+          <option value="22F">Seat 22F • Economy Class</option>
+          <option value="23A">Seat 23A • Economy Class</option>
+          <option value="23B">Seat 23B • Economy Class</option>
+          <option value="23C">Seat 23C • Economy Class</option>
+          <option value="23D">Seat 23D • Economy Class</option>
+          <option value="23E">Seat 23E • Economy Class</option>
+          <option value="23F">Seat 23F • Economy Class</option>
+          <option value="24A">Seat 24A • Economy Class</option>
+          <option value="24B">Seat 24B • Economy Class</option>
+          <option value="24C">Seat 24C • Economy Class</option>
+          <option value="24D">Seat 24D • Economy Class</option>
+          <option value="24E">Seat 24E • Economy Class</option>
+          <option value="24F">Seat 24F • Economy Class</option>
+          <option value="25A">Seat 25A • Economy Class</option>
+          <option value="25B">Seat 25B • Economy Class</option>
+          <option value="25C">Seat 25C • Economy Class</option>
+          <option value="25D">Seat 25D • Economy Class</option>
+          <option value="25E">Seat 25E • Economy Class</option>
+          <option value="25F">Seat 25F • Economy Class</option>
+          <option value="26A">Seat 26A • Economy Class</option>
+          <option value="26B">Seat 26B • Economy Class</option>
+          <option value="26C">Seat 26C • Economy Class</option>
+          <option value="26D">Seat 26D • Economy Class</option>
+          <option value="26E">Seat 26E • Economy Class</option>
+          <option value="26F">Seat 26F • Economy Class</option>
+          <option value="27A">Seat 27A • Economy Class</option>
+          <option value="27B">Seat 27B • Economy Class</option>
+          <option value="27C">Seat 27C • Economy Class</option>
+          <option value="27D">Seat 27D • Economy Class</option>
+          <option value="27E">Seat 27E • Economy Class</option>
+          <option value="27F">Seat 27F • Economy Class</option>
+          <option value="28A">Seat 28A • Economy Class</option>
+          <option value="28B">Seat 28B • Economy Class</option>
+          <option value="28C">Seat 28C • Economy Class</option>
+          <option value="28D">Seat 28D • Economy Class</option>
+          <option value="28E">Seat 28E • Economy Class</option>
+          <option value="28F">Seat 28F • Economy Class</option>
+          <option value="29A">Seat 29A • Economy Class</option>
+          <option value="29B">Seat 29B • Economy Class</option>
+          <option value="29C">Seat 29C • Economy Class</option>
+          <option value="29D">Seat 29D • Economy Class</option>
+          <option value="29E">Seat 29E • Economy Class</option>
+          <option value="29F">Seat 29F • Economy Class</option>
+          <option value="30A">Seat 30A • Economy Class</option>
+          <option value="30B">Seat 30B • Economy Class</option>
+          <option value="30C">Seat 30C • Economy Class</option>
+          <option value="30D">Seat 30D • Economy Class</option>
+          <option value="30E">Seat 30E • Economy Class</option>
+          <option value="30F">Seat 30F • Economy Class</option>
+        </optgroup>
+        </select>
+        <div style="display: flex; gap: 5px; margin-top: 6px; flex-wrap: wrap;" id="seat-cabin-filters">
+          <button type="button" class="seat-cabin-filter" data-cabin="all" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer; font-weight: 600;">All (180)</button>
+          <button type="button" class="seat-cabin-filter" data-cabin="business" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer;">Business (1-7)</button>
+          <button type="button" class="seat-cabin-filter" data-cabin="premium" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer;">Prem Econ (8-14)</button>
+          <button type="button" class="seat-cabin-filter" data-cabin="economy" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; font-size: 0.7rem; padding: 2px 7px; border-radius: 4px; cursor: pointer;">Economy (15-30)</button>
+        </div>
         <p id="lock-seat-hint" class="lock-hint" style="color: #f59e0b;"></p>
         <p id="lock-match-hint" class="lock-hint" style="font-weight: 700; display: none;"></p>
       </div>
@@ -3735,9 +3928,11 @@ start();
     }
 
     if (st && seatHint) {
-      seatHint.textContent = `✓ Seat ${st} • Boeing 787-9 Dreamliner • Del ✈ HND`;
+      const row = parseInt(st, 10);
+      const cabin = row <= 7 ? 'Business Class (Suite)' : row <= 14 ? 'Premium Economy' : 'Economy Class';
+      seatHint.textContent = `✓ Seat ${st} • ${cabin} • Boeing 787-9 Dreamliner • Del ✈ HND`;
     } else if (seatHint) {
-      seatHint.textContent = 'Enter seat (e.g. 12A, 14C, 10B)';
+      seatHint.textContent = 'Select any of 180 flight seats (1A–30F)';
     }
 
     if (em && st && matchHint) {
@@ -3751,21 +3946,41 @@ start();
 
   if (emailInput) emailInput.addEventListener('input', updateHints);
   if (seatInput) {
-    seatInput.addEventListener('input', () => {
-      seatInput.value = seatInput.value.toUpperCase();
-      updateHints();
-    });
+    seatInput.addEventListener('change', updateHints);
+    seatInput.addEventListener('input', updateHints);
   }
 
-  if (seatPresets && seatInput) {
-    seatPresets.addEventListener('click', () => {
-      const presets = ['12A', '14C', '10B', '3A'];
-      const cur = seatInput.value.trim().toUpperCase();
-      const nxt = presets[(presets.indexOf(cur) + 1) % presets.length];
-      seatInput.value = nxt;
-      updateHints();
+  // Cabin filter buttons to quick-jump/filter across all 180 seats
+  const cabinFilters = document.querySelectorAll('.seat-cabin-filter');
+  cabinFilters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      cabinFilters.forEach(b => {
+        b.style.background = 'rgba(255,255,255,0.04)';
+        b.style.borderColor = 'rgba(255,255,255,0.1)';
+        b.style.color = '#94a3b8';
+        b.style.fontWeight = 'normal';
+      });
+      btn.style.background = 'rgba(255,255,255,0.15)';
+      btn.style.borderColor = 'rgba(255,255,255,0.25)';
+      btn.style.color = '#ffffff';
+      btn.style.fontWeight = '600';
+
+      const cabin = btn.dataset.cabin;
+      if (seatInput) {
+        if (cabin === 'business') {
+          seatInput.value = '1A';
+        } else if (cabin === 'premium') {
+          seatInput.value = '12A';
+        } else if (cabin === 'economy') {
+          seatInput.value = '15A';
+        }
+        updateHints();
+      }
     });
-  }
+  });
+
+  // Call updateHints right away so default seat 12A shows verified flight info
+  updateHints();
 
   // Start 60s Resend Timer
   function startResendTimer() {
