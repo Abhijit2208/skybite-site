@@ -1,4 +1,12 @@
 <!doctype html><html lang="en" data-theme="light"><head><meta charset="utf-8">
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('skybite_theme');
+      if (saved) document.documentElement.setAttribute('data-theme', saved);
+    } catch(e) {}
+  })();
+</script>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="logo-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -67,6 +75,35 @@
   --glass-bd: rgba(226, 232, 240, 0.8);
   
   box-sizing: border-box;
+
+  /* Lock Screen & Loader Theme Tokens - Light (Matches Light Mesh Background) */
+  --lock-bg: radial-gradient(120% 120% at 50% -10%, #ffffff 0%, #f1f5f9 60%, #e2e8f0 100%);
+  --lock-card-bg: rgba(255, 255, 255, 0.92);
+  --lock-card-bd: rgba(226, 232, 240, 0.95);
+  --lock-card-shadow: 0 0 0 1px rgba(217, 45, 32, 0.12), 0 25px 70px rgba(15, 23, 42, 0.08), 0 0 40px rgba(217, 45, 32, 0.05);
+  --lock-title-color: #09131f;
+  --lock-sub-color: #64748b;
+  --lock-label-color: #334155;
+  --lock-input-bg: #ffffff;
+  --lock-input-bd: #cbd5e1;
+  --lock-input-tx: #0f172a;
+  --lock-badge-bg: rgba(5, 150, 105, 0.09);
+  --lock-badge-tx: #059669;
+  --lock-badge-bd: rgba(5, 150, 105, 0.25);
+  --lock-otp-badge-bg: rgba(5, 150, 105, 0.08);
+  --lock-otp-code-bg: #f1f5f9;
+  --lock-otp-code-tx: #059669;
+  --lock-demo-btn-bg: rgba(229, 154, 0, 0.08);
+  --lock-demo-btn-bd: rgba(229, 154, 0, 0.3);
+  --lock-demo-btn-tx: #b45309;
+  --lock-grain-opacity: 0.025;
+  --lock-orbs-opacity: 0.22;
+
+  --loader-bg: #f8fafc;
+  --loader-glow: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(217, 45, 32, 0.08) 0%, rgba(248, 250, 252, 0.96) 75%);
+  --loader-tx: #09131f;
+  --loader-sub-tx: #475569;
+  --loader-track: rgba(15, 23, 42, 0.09);
 }
 
 :root[data-theme="dark"] {
@@ -94,6 +131,35 @@
   --shadow-glow: 0 0 28px rgba(245, 158, 11, 0.22);
   --glass-bg: rgba(18, 25, 39, 0.85);
   --glass-bd: rgba(30, 41, 59, 0.8);
+  /* Lock Screen & Loader Theme Tokens - Dark (Matches Obsidian Mesh Background) */
+  --lock-bg: radial-gradient(120% 120% at 50% -10%, #131c2b 0%, #090d16 60%, #04060a 100%);
+  --lock-card-bg: rgba(12, 16, 28, 0.88);
+  --lock-card-bd: rgba(255, 255, 255, 0.09);
+  --lock-card-shadow: 0 0 0 1px rgba(217, 45, 32, 0.18), 0 25px 80px rgba(0, 0, 0, 0.85), 0 0 60px rgba(217, 45, 32, 0.15);
+  --lock-title-color: #ffffff;
+  --lock-sub-color: #94a3b8;
+  --lock-label-color: #cbd5e1;
+  --lock-input-bg: rgba(10, 15, 26, 0.85);
+  --lock-input-bd: rgba(255, 255, 255, 0.12);
+  --lock-input-tx: #f8fafc;
+  --lock-badge-bg: rgba(16, 185, 129, 0.12);
+  --lock-badge-tx: #10b981;
+  --lock-badge-bd: rgba(16, 185, 129, 0.3);
+  --lock-otp-badge-bg: rgba(16, 185, 129, 0.12);
+  --lock-otp-code-bg: rgba(0, 0, 0, 0.35);
+  --lock-otp-code-tx: #10b981;
+  --lock-demo-btn-bg: rgba(255, 255, 255, 0.05);
+  --lock-demo-btn-bd: rgba(245, 158, 11, 0.3);
+  --lock-demo-btn-tx: #f59e0b;
+  --lock-grain-opacity: 0.04;
+  --lock-orbs-opacity: 0.45;
+
+  --loader-bg: #08080a;
+  --loader-glow: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(217, 45, 32, 0.18) 0%, rgba(10, 10, 15, 0.96) 75%);
+  --loader-tx: #ffffff;
+  --loader-sub-tx: rgba(255, 255, 255, 0.7);
+  --loader-track: rgba(255, 255, 255, 0.12);
+
 }
 
 * { box-sizing: border-box; }
@@ -1649,7 +1715,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   position: fixed;
   inset: 0;
   z-index: 999999;
-  background: #08080a;
+  background: var(--loader-bg);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1674,7 +1740,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(217, 45, 32, 0.18) 0%, rgba(10, 10, 15, 0.96) 75%);
+  background: var(--loader-glow);
   opacity: 0.85;
 }
 
@@ -1697,7 +1763,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 /* Giant typographic counter */
 .loading-counter {
   font-family: var(--font-head, 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif);
-  color: #ffffff;
+  color: var(--loader-tx);
   letter-spacing: -0.05em;
   font-size: clamp(72px, 13vw, 140px);
   font-weight: 800;
@@ -1719,7 +1785,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 .loading-brand-text {
   font-family: 'Space Grotesk', var(--font-head, 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif);
   font-size: clamp(11px, 1.4vw, 14px);
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--loader-sub-tx);
   letter-spacing: 0.35em;
   text-transform: uppercase;
   font-weight: 600;
@@ -1728,7 +1794,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 
 /* Razor-thin 2px progress bar track */
 .loading-bar-track {
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--loader-track);
   border-radius: 2px;
   width: min(320px, 70vw);
   height: 2px;
@@ -1752,11 +1818,37 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 /* ==========================================================================
    SKYBITE 2FA GATEWAY & TWO-STEP VERIFICATION SCREEN (THAPARPULSE STYLE)
    ========================================================================== */
+
+.lock-theme-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 10;
+  background: var(--cd);
+  border: 1px solid var(--bd);
+  color: var(--tx);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+.lock-theme-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--jal-red);
+}
+
 .lock-screen-wrapper {
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: #050810;
+  background: var(--lock-bg);
+  background-image: var(--bg-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1856,19 +1948,15 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 }
 
 .lock-card {
-  background: rgba(12, 16, 28, 0.88);
+  background: var(--lock-card-bg);
   backdrop-filter: blur(30px) saturate(1.4);
   -webkit-backdrop-filter: blur(30px) saturate(1.4);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid var(--lock-card-bd);
   border-radius: 20px;
   padding: 2.2rem 2rem;
   width: 100%;
   max-width: 460px;
-  box-shadow:
-    0 0 0 1px rgba(217, 45, 32, 0.18),
-    0 25px 80px rgba(0, 0, 0, 0.85),
-    0 0 60px rgba(217, 45, 32, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: var(--lock-card-shadow);
   text-align: center;
   position: relative;
   z-index: 2;
@@ -1942,7 +2030,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   font-size: 1.65rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #ffffff;
+  color: var(--lock-title-color);
   margin: 0 0 0.3rem;
   position: relative;
   z-index: 1;
@@ -1950,7 +2038,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 
 .lock-subtitle {
   font-size: 0.84rem;
-  color: #94a3b8;
+  color: var(--lock-sub-color);
   margin: 0 0 1rem;
   position: relative;
   z-index: 1;
@@ -1958,14 +2046,14 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 
 .lock-security-badge {
   display: inline-block;
-  background: rgba(16, 185, 129, 0.12);
-  color: #10b981;
+  background: var(--lock-badge-bg);
+  color: var(--lock-badge-tx);
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.35rem 0.75rem;
   border-radius: 6px;
   margin-bottom: 1.2rem;
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid var(--lock-badge-bd);
 }
 
 .lock-form {
@@ -1979,19 +2067,19 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   display: block;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #cbd5e1;
+  color: var(--lock-label-color);
   margin-bottom: 0.35rem;
 }
 
 .lock-form .form-control {
   width: 100%;
   box-sizing: border-box;
-  background: rgba(10, 15, 26, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--lock-input-bg);
+  border: 1px solid var(--lock-input-bd);
   border-radius: 8px;
   padding: 0.75rem 0.9rem;
   font-size: 0.92rem;
-  color: #f8fafc;
+  color: var(--lock-input-tx);
   outline: none;
   transition: all 0.2s ease;
 }
@@ -2033,9 +2121,9 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 }
 
 .btn-quick-demo {
-  background: rgba(255, 255, 255, 0.05);
-  color: #f59e0b;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: var(--lock-demo-btn-bg);
+  color: var(--lock-demo-btn-tx);
+  border: 1px solid var(--lock-demo-btn-bd);
   padding: 0.65rem;
   border-radius: 8px;
   font-size: 0.82rem;
@@ -2050,8 +2138,8 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 }
 
 .otp-live-badge {
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px dashed rgba(16, 185, 129, 0.4);
+  background: var(--lock-otp-badge-bg);
+  border: 1px dashed var(--lock-badge-bd);
   border-radius: 8px;
   padding: 0.7rem 0.9rem;
   display: flex;
@@ -2064,8 +2152,8 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   font-family: monospace;
   font-size: 1.15rem;
   font-weight: 800;
-  color: #10b981;
-  background: rgba(0, 0, 0, 0.35);
+  color: var(--lock-otp-code-tx);
+  background: var(--lock-otp-code-bg);
   padding: 0.2rem 0.55rem;
   border-radius: 4px;
   letter-spacing: 0.15em;
@@ -2179,6 +2267,7 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   <div class="lock-grain-overlay"></div>
   
   <div class="lock-card" id="lock-card">
+    <button type="button" class="lock-theme-btn theme-btn" id="lock-theme-toggle" title="Switch Theme">🌙 Dark</button>
     <div class="lock-logo-badge">
       <span>SB</span>
       <div class="lock-badge-pulse"></div>
@@ -2683,7 +2772,7 @@ function toggleTheme(){
 }
 function updateThemeIcon(){
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  document.querySelectorAll('#theme-toggle, .theme-btn').forEach(b => {
+  document.querySelectorAll('#theme-toggle, #lock-theme-toggle, .theme-btn').forEach(b => {
     b.innerHTML = isDark ? '☀️ Light' : '🌙 Dark';
   });
 }
@@ -3870,7 +3959,7 @@ start();
 
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = (document.documentElement.getAttribute('data-theme') === 'dark') ? '#ffffff' : '#64748b';
       for (let p of particles) {
         p.x += p.vx;
         p.y += p.vy;
@@ -4157,6 +4246,11 @@ start();
   }
 
   // Allow re-locking portal anytime
+    const lockThemeToggle = document.getElementById('lock-theme-toggle');
+  if (lockThemeToggle && typeof toggleTheme === 'function') {
+    lockThemeToggle.addEventListener('click', toggleTheme);
+  }
+
   window.lockSkybitePortal = function() {
     sessionStorage.removeItem('skybite_2fa_auth');
     if (lockScreen) {
