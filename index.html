@@ -2213,26 +2213,317 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   border-color: #f59e0b;
 }
 
-.otp-live-badge {
-  background: var(--lock-otp-badge-bg);
-  border: 1px dashed var(--lock-badge-bd);
-  border-radius: 8px;
-  padding: 0.7rem 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
+/* ======================================================================
+   AUTHENTIC SMS MESSAGE BUBBLE & NOTIFICATION BANNER (USER SPECIFIED)
+   ====================================================================== */
+.incoming-sms-banner {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-140%);
+  z-index: 100001;
+  width: 92%;
+  max-width: 480px;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
-.otp-live-badge .otp-code-highlight {
-  font-family: monospace;
-  font-size: 1.15rem;
+.incoming-sms-banner.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sms-banner-pill {
+  background: rgba(255, 255, 255, 0.98);
+  color: #1e293b;
+  border-radius: 20px;
+  padding: 14px 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+[data-theme="dark"] .sms-banner-pill {
+  background: rgba(30, 41, 59, 0.98);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+}
+
+.sms-banner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.76rem;
+}
+
+.sms-banner-app {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--mu);
+}
+
+.sms-banner-appname {
+  color: #3b82f6;
+  font-size: 0.72rem;
+}
+
+.sms-banner-sender {
+  color: var(--tx);
   font-weight: 800;
-  color: var(--lock-otp-code-tx);
-  background: var(--lock-otp-code-bg);
-  padding: 0.2rem 0.55rem;
+}
+
+.sms-banner-dot {
+  opacity: 0.5;
+}
+
+.sms-banner-time {
+  font-size: 0.72rem;
+  color: var(--mu);
+}
+
+.sms-banner-close {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--mu);
+  padding: 2px 6px;
   border-radius: 4px;
-  letter-spacing: 0.15em;
+  line-height: 1;
+}
+
+.sms-banner-close:hover {
+  color: var(--tx);
+  background: var(--cd-hover);
+}
+
+.sms-banner-body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  color: var(--tx);
+}
+
+.sms-banner-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-banner-action {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-banner-autofill {
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  flex: 1;
+  justify-content: center;
+}
+
+.btn-banner-autofill:hover {
+  background: #059669;
+}
+
+.btn-banner-copy {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  color: var(--tx);
+}
+
+.btn-banner-copy:hover {
+  background: var(--cd-hover);
+}
+
+/* SMS Message Card in Form */
+.sms-message-card {
+  margin-bottom: 0.9rem;
+}
+
+.sms-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+}
+
+.sms-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mu);
+}
+
+.sms-header-sender {
+  font-weight: 700;
+  color: var(--tx);
+}
+
+.sms-header-dot {
+  opacity: 0.5;
+}
+
+.sms-header-time {
+  font-size: 0.72rem;
+  color: var(--mu);
+}
+
+.btn-sms-format-toggle {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  color: var(--tx);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-sms-format-toggle:hover {
+  background: var(--cd-hover);
+  border-color: #3b82f6;
+}
+
+/* The exact SMS Speech Bubble from user's screenshot */
+.sms-speech-bubble {
+  background: #edf0f5;
+  color: #1a1a1e;
+  border-radius: 22px 22px 22px 8px;
+  padding: 18px 22px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+  user-select: text;
+}
+
+[data-theme="dark"] .sms-speech-bubble {
+  background: #1e2433;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.sms-speech-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.12);
+  border-color: #f59e0b;
+}
+
+.sms-bubble-text {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.48;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+}
+
+.sms-otp-code-val {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Authentic soft warm yellow highlight matching user's screenshot */
+.sms-otp-highlight {
+  background-color: #fef08a !important;
+  color: #1c1b1f !important;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 500;
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+[data-theme="dark"] .sms-otp-highlight {
+  background-color: #fde047 !important;
+  color: #0f172a !important;
+}
+
+.sms-sender-sign {
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.sms-bubble-footer-hint {
+  margin-top: 10px;
+  font-size: 0.72rem;
+  color: #64748b;
+  border-top: 1px dashed rgba(100, 116, 139, 0.25);
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+[data-theme="dark"] .sms-bubble-footer-hint {
+  color: #94a3b8;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.sms-action-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.sms-action-row .btn-autofill-otp {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 8px;
+}
+
+.btn-copy-otp-code {
+  background: var(--cd-subtle);
+  border: 1px solid var(--bd);
+  color: var(--tx);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-copy-otp-code:hover {
+  background: var(--cd-hover);
+  border-color: var(--mu);
+}
+
+/* Fallback/Legacy styling */
+.otp-live-badge {
+  display: none;
 }
 
 .btn-autofill-otp {
@@ -2336,6 +2627,34 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 <!-- ======================================================================
      0. SKYBITE GATEWAY / 2-STEP VERIFICATION & 2FA LOCK SCREEN
      ====================================================================== -->
+<!-- Incoming Push SMS Notification Banner (Realistic Smartphone Alert) -->
+<div id="incoming-sms-banner" class="incoming-sms-banner" role="alert">
+  <div class="sms-banner-pill">
+    <div class="sms-banner-header">
+      <div class="sms-banner-app">
+        <span class="sms-banner-icon">💬</span>
+        <span class="sms-banner-appname">MESSAGES</span>
+        <span class="sms-banner-dot">•</span>
+        <span class="sms-banner-sender" id="sms-banner-sender">SBI</span>
+        <span class="sms-banner-dot">•</span>
+        <span class="sms-banner-time">now</span>
+      </div>
+      <button type="button" class="sms-banner-close" id="btn-close-sms-banner" title="Dismiss">✕</button>
+    </div>
+    <div class="sms-banner-body" id="sms-banner-body">
+      <span class="sms-banner-code-bold" id="sms-banner-code" style="font-weight: 700;">367004</span> is your <mark class="sms-otp-highlight">OTP</mark> for setting MPIN to your A/C. Valid for 10 mins. Do not share this <mark class="sms-otp-highlight">OTP</mark> with anyone. -SBI
+    </div>
+    <div class="sms-banner-actions">
+      <button type="button" class="btn-banner-action btn-banner-autofill" id="btn-banner-autofill">
+        <span>📋</span> Auto-Fill (<span id="sms-banner-btn-code">367004</span>)
+      </button>
+      <button type="button" class="btn-banner-action btn-banner-copy" id="btn-banner-copy">
+        <span>📄</span> Copy Code
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="lock-screen-wrapper" id="lock-screen">
   <!-- Immersive Background Effects -->
   <canvas id="lock-particles-canvas"></canvas>
@@ -2575,14 +2894,46 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 
     <!-- Step 2: Live OTP Verification Form (Hidden Initially) -->
     <form class="lock-form" id="form-lock-otp" style="display: none;">
-      <div class="otp-live-badge" id="otp-live-badge">
-        <div>
-          <div style="font-size: 0.72rem; color: #94a3b8; text-align: left;">Live OTP Sent to <span id="otp-target-email" style="color: var(--tx); font-weight: 700;"></span></div>
-          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem;">
-            <span class="otp-code-highlight" id="otp-display-code">------</span>
+      <!-- Real Phone SMS Message Bubble (As Requested by User) -->
+      <div class="sms-message-card" id="sms-message-card">
+        <div class="sms-card-header">
+          <div class="sms-header-left">
+            <span class="sms-app-icon">💬</span>
+            <span class="sms-header-sender" id="sms-header-sender-label">SBI Alerts</span>
+            <span class="sms-header-dot">•</span>
+            <span class="sms-header-time">now</span>
+            <span class="sms-header-dot">•</span>
+            <span style="font-size: 0.7rem; color: var(--mu);">To: <b id="otp-target-email" style="color: var(--tx);"></b></span>
+          </div>
+          <div class="sms-header-right">
+            <button type="button" class="btn-sms-format-toggle" id="btn-toggle-sms-format" title="Toggle between SBI Bank SMS and JAL Flight SMS format">
+              <span id="sms-format-toggle-label">✈️ Flight View</span>
+            </button>
           </div>
         </div>
-        <button type="button" class="btn-autofill-otp" id="btn-autofill-otp">📋 Auto-Fill</button>
+
+        <div class="sms-speech-bubble" id="sms-speech-bubble" role="button" tabindex="0" title="Click to auto-fill verification code">
+          <div class="sms-bubble-text" id="sms-bubble-text">
+            <span class="sms-otp-code-val" id="otp-display-code">367004</span> is your <mark class="sms-otp-highlight">OTP</mark><br>
+            for setting MPIN to<br>
+            your A/C. Valid for 10<br>
+            mins. Do not share<br>
+            this <mark class="sms-otp-highlight">OTP</mark> with anyone.<br>
+            <div class="sms-sender-sign" id="sms-sender-sign">-SBI</div>
+          </div>
+          <div class="sms-bubble-footer-hint">
+            <span>👆 Tap bubble or button below to auto-fill code</span>
+          </div>
+        </div>
+
+        <div class="sms-action-row">
+          <button type="button" class="btn-autofill-otp" id="btn-autofill-otp">
+            <span>📋</span> Auto-Fill Code (<span id="btn-autofill-code-text">367004</span>)
+          </button>
+          <button type="button" class="btn-copy-otp-code" id="btn-copy-otp-code" title="Copy code to clipboard">
+            <span>📄</span> Copy Code
+          </button>
+        </div>
       </div>
 
       <div id="otp-delivery-status" style="font-size: 0.75rem; padding: 7px 11px; border-radius: 6px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); margin-bottom: 0.75rem; text-align: left; line-height: 1.45; color: var(--tx);">
@@ -4206,10 +4557,58 @@ start();
     }, 1000);
   }
 
+  let currentSmsFormat = 'sbi'; // 'sbi' or 'flight'
+
+  // Update SMS bubble text based on current format
+  function updateSmsBubbleText(code, email, seat) {
+    const bubbleTextEl = document.getElementById('sms-bubble-text');
+    const senderLabelEl = document.getElementById('sms-header-sender-label');
+    const bannerBodyEl = document.getElementById('sms-banner-body');
+    const bannerSenderEl = document.getElementById('sms-banner-sender');
+    const autofillTextEl = document.getElementById('btn-autofill-code-text');
+    const bannerBtnCodeEl = document.getElementById('sms-banner-btn-code');
+
+    if (autofillTextEl) autofillTextEl.textContent = code;
+    if (bannerBtnCodeEl) bannerBtnCodeEl.textContent = code;
+
+    if (currentSmsFormat === 'sbi') {
+      if (bubbleTextEl) {
+        bubbleTextEl.innerHTML = `<span class="sms-otp-code-val" id="otp-display-code">${code}</span> is your <mark class="sms-otp-highlight">OTP</mark><br>for setting MPIN to<br>your A/C. Valid for 10<br>mins. Do not share<br>this <mark class="sms-otp-highlight">OTP</mark> with anyone.<br><div class="sms-sender-sign" id="sms-sender-sign">-SBI</div>`;
+      }
+      if (senderLabelEl) senderLabelEl.textContent = 'SBI Alerts';
+      if (bannerSenderEl) bannerSenderEl.textContent = 'SBI';
+      if (bannerBodyEl) {
+        bannerBodyEl.innerHTML = `<span style="font-weight:700;">${code}</span> is your <mark class="sms-otp-highlight">OTP</mark> for setting MPIN to your A/C. Valid for 10 mins. Do not share this <mark class="sms-otp-highlight">OTP</mark> with anyone. -SBI`;
+      }
+    } else {
+      if (bubbleTextEl) {
+        bubbleTextEl.innerHTML = `<span class="sms-otp-code-val" id="otp-display-code">${code}</span> is your <mark class="sms-otp-highlight">OTP</mark><br>for SkyBite dining access<br>at Seat <strong id="sms-seat-label">${seat || '12A'}</strong>. Valid for 10<br>mins. Do not share<br>this <mark class="sms-otp-highlight">OTP</mark> with anyone.<br><div class="sms-sender-sign" id="sms-sender-sign">-JAL SkyBite</div>`;
+      }
+      if (senderLabelEl) senderLabelEl.textContent = 'JAL SkyBite';
+      if (bannerSenderEl) bannerSenderEl.textContent = 'JAL';
+      if (bannerBodyEl) {
+        bannerBodyEl.innerHTML = `<span style="font-weight:700;">${code}</span> is your <mark class="sms-otp-highlight">OTP</mark> for SkyBite dining access at Seat ${seat || '12A'}. Valid for 10 mins. Do not share this <mark class="sms-otp-highlight">OTP</mark> with anyone. -JAL SkyBite`;
+      }
+    }
+  }
+
+  // Show incoming smartphone SMS banner
+  let smsBannerTimer = null;
+  function showIncomingSmsBanner(code, email, seat) {
+    const banner = document.getElementById('incoming-sms-banner');
+    if (!banner) return;
+    updateSmsBubbleText(code, email, seat);
+    banner.classList.add('show');
+    if (smsBannerTimer) clearTimeout(smsBannerTimer);
+    smsBannerTimer = setTimeout(() => {
+      banner.classList.remove('show');
+    }, 12000);
+  }
+
   // Send Live OTP to Passenger Email
-  function sendLiveOtp(email, seatNum) {
-    // 6-digit random code
-    generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
+  function sendLiveOtp(email, seatNum, forceCode = null) {
+    // 6-digit code: forceCode (e.g. '367004') or random
+    generatedOtp = forceCode || String(Math.floor(100000 + Math.random() * 900000));
     pendingData = { email, seat: seatNum };
 
     const statusEl = document.getElementById('otp-delivery-status');
@@ -4262,6 +4661,8 @@ start();
     if (otpForm) otpForm.style.display = 'flex';
     if (targetEmailEl) targetEmailEl.textContent = email;
     if (displayCodeEl) displayCodeEl.textContent = generatedOtp;
+    updateSmsBubbleText(generatedOtp, email, seatNum);
+    showIncomingSmsBanner(generatedOtp, email, seatNum);
 
     // Update Webmail Modal data
     const wmTo = document.getElementById('webmail-to-email');
@@ -4340,7 +4741,8 @@ start();
       if (emailInput) emailInput.value = 'abhijit.tathgir@gmail.com';
       if (seatInput) seatInput.value = '12A';
       updateHints();
-      sendLiveOtp('abhijit.tathgir@gmail.com', '12A');
+      // Preset code 367004 matching the exact user screenshot
+      sendLiveOtp('abhijit.tathgir@gmail.com', '12A', '367004');
 
       // Automatically auto-fill after 400ms for ultra-smooth demoing
       setTimeout(() => {
@@ -4349,6 +4751,79 @@ start();
           showToast('✓ Code auto-filled for instant demo testing', 'info');
         }
       }, 400);
+    });
+  }
+
+  // Click on SMS Chat Bubble to Auto-Fill
+  const smsSpeechBubble = document.getElementById('sms-speech-bubble');
+  if (smsSpeechBubble) {
+    smsSpeechBubble.addEventListener('click', () => {
+      if (generatedOtp && otpInput) {
+        otpInput.value = generatedOtp;
+        showToast(`✓ Auto-filled OTP [ ${generatedOtp} ]`, 'success');
+        otpInput.focus();
+      }
+    });
+  }
+
+  // Copy Code Button
+  const copySmsBtn = document.getElementById('btn-copy-otp-code');
+  if (copySmsBtn) {
+    copySmsBtn.addEventListener('click', () => {
+      if (generatedOtp) {
+        navigator.clipboard.writeText(generatedOtp).then(() => {
+          showToast(`📋 Copied code [ ${generatedOtp} ] to clipboard`, 'info');
+        }).catch(() => {
+          showToast(`OTP Code: ${generatedOtp}`, 'info');
+        });
+      }
+    });
+  }
+
+  // Toggle SMS Format (SBI Bank SMS vs Flight Dining SMS)
+  const formatToggleBtn = document.getElementById('btn-toggle-sms-format');
+  const formatToggleLabel = document.getElementById('sms-format-toggle-label');
+  if (formatToggleBtn) {
+    formatToggleBtn.addEventListener('click', () => {
+      currentSmsFormat = (currentSmsFormat === 'sbi') ? 'flight' : 'sbi';
+      if (formatToggleLabel) {
+        formatToggleLabel.textContent = (currentSmsFormat === 'sbi') ? '✈️ Flight View' : '💬 SBI View';
+      }
+      updateSmsBubbleText(generatedOtp || '367004', pendingData ? pendingData.email : '', pendingData ? pendingData.seat : '12A');
+      showToast(currentSmsFormat === 'sbi' ? 'Switched to SBI Bank SMS Format' : 'Switched to Flight Dining SMS Format', 'info');
+    });
+  }
+
+  // Incoming Banner Actions
+  const bannerCloseBtn = document.getElementById('btn-close-sms-banner');
+  const bannerAutofillBtn = document.getElementById('btn-banner-autofill');
+  const bannerCopyBtn = document.getElementById('btn-banner-copy');
+  const smsBanner = document.getElementById('incoming-sms-banner');
+
+  if (bannerCloseBtn && smsBanner) {
+    bannerCloseBtn.addEventListener('click', () => {
+      smsBanner.classList.remove('show');
+    });
+  }
+
+  if (bannerAutofillBtn && otpInput) {
+    bannerAutofillBtn.addEventListener('click', () => {
+      if (generatedOtp) {
+        otpInput.value = generatedOtp;
+        showToast(`✓ Auto-filled OTP [ ${generatedOtp} ] from notification`, 'success');
+        otpInput.focus();
+      }
+      if (smsBanner) smsBanner.classList.remove('show');
+    });
+  }
+
+  if (bannerCopyBtn) {
+    bannerCopyBtn.addEventListener('click', () => {
+      if (generatedOtp) {
+        navigator.clipboard.writeText(generatedOtp).then(() => {
+          showToast(`📋 Copied code [ ${generatedOtp} ]`, 'info');
+        });
+      }
     });
   }
 
