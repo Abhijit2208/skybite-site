@@ -1897,8 +1897,9 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
-  overflow: hidden;
+  padding: 1rem;
+  overflow-y: auto; /* Allow smooth vertical scrolling if card exceeds viewport */
+  overflow-x: hidden;
   transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease;
   --parallax-x: 0px;
   --parallax-y: 0px;
@@ -1998,14 +1999,16 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   -webkit-backdrop-filter: blur(30px) saturate(1.4);
   border: 1px solid var(--lock-card-bd);
   border-radius: 20px;
-  padding: 2.2rem 2rem;
+  padding: 1.4rem 1.6rem; /* Compact padding so everything fits on any screen */
   width: 100%;
-  max-width: 460px;
+  max-width: 480px;
+  max-height: 94vh;
+  overflow-y: auto; /* Internal scrolling if needed */
   box-shadow: var(--lock-card-shadow);
   text-align: center;
   position: relative;
   z-index: 2;
-  overflow: hidden;
+  margin: auto;
   animation: lockCardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transform-style: preserve-3d;
 }
@@ -2407,8 +2410,8 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 .sms-speech-bubble {
   background: #edf0f5;
   color: #1a1a1e;
-  border-radius: 22px 22px 22px 8px;
-  padding: 18px 22px;
+  border-radius: 20px 20px 20px 8px;
+  padding: 12px 18px; /* Compact padding */
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
   text-align: left;
@@ -2519,6 +2522,61 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
 .btn-copy-otp-code:hover {
   background: var(--cd-hover);
   border-color: var(--mu);
+}
+
+
+.btn-continue-main {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #ffffff !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  padding: 0.9rem 1.2rem !important;
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45) !important;
+  margin-top: 0.75rem !important;
+  width: 100% !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  animation: continuePulse 2.2s infinite ease-in-out;
+}
+
+.btn-continue-main:hover {
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.65) !important;
+  background: linear-gradient(135deg, #059669, #047857) !important;
+}
+
+@keyframes continuePulse {
+  0%, 100% { box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4); transform: scale(1); }
+  50% { box-shadow: 0 4px 26px rgba(16, 185, 129, 0.7); transform: scale(1.012); }
+}
+
+.btn-autofill-continue {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-autofill-continue:hover {
+  background: #059669;
+  transform: translateY(-1px);
 }
 
 /* Fallback/Legacy styling */
@@ -2927,11 +2985,11 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
         </div>
 
         <div class="sms-action-row">
-          <button type="button" class="btn-autofill-otp" id="btn-autofill-otp">
-            <span>📋</span> Auto-Fill Code (<span id="btn-autofill-code-text">367004</span>)
+          <button type="button" class="btn-autofill-continue" id="btn-autofill-continue" title="Auto-fill code and immediately unlock portal">
+            <span>⚡</span> Auto-Fill &amp; Continue →
           </button>
           <button type="button" class="btn-copy-otp-code" id="btn-copy-otp-code" title="Copy code to clipboard">
-            <span>📄</span> Copy Code
+            <span>📄</span> Copy
           </button>
         </div>
       </div>
@@ -2955,8 +3013,9 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
         </div>
       </div>
 
-      <button type="submit" class="btn-unlock-portal" id="btn-verify-otp">
-        <span>🔓</span> Verify OTP & Unlock Portal
+      <!-- Prominent Continue Button -->
+      <button type="submit" class="btn-unlock-portal btn-continue-main" id="btn-verify-otp">
+        <span>🚀</span> Continue to SkyBite (Verify &amp; Unlock) →
       </button>
 
       <button type="button" class="btn-quick-demo" id="btn-back-to-creds" style="color: #94a3b8; border-color: rgba(255,255,255,0.15);">
@@ -4810,10 +4869,10 @@ start();
     bannerAutofillBtn.addEventListener('click', () => {
       if (generatedOtp) {
         otpInput.value = generatedOtp;
-        showToast(`✓ Auto-filled OTP [ ${generatedOtp} ] from notification`, 'success');
-        otpInput.focus();
+        showToast(`✓ Auto-filled OTP [ ${generatedOtp} ]`, 'success');
+        if (smsBanner) smsBanner.classList.remove('show');
+        setTimeout(() => verifyAndProceed(), 200);
       }
-      if (smsBanner) smsBanner.classList.remove('show');
     });
   }
 
@@ -4827,13 +4886,62 @@ start();
     });
   }
 
-  // Auto-Fill Button
+  // Instant Auto-Continue helper function
+  function verifyAndProceed() {
+    const entered = otpInput ? otpInput.value.trim() : '';
+    if (!entered) {
+      showToast('Please enter the 6-digit verification code', 'error');
+      return;
+    }
+    if (entered !== generatedOtp) {
+      showToast('❌ Invalid verification code. Click Auto-Fill or check bubble.', 'error');
+      return;
+    }
+    showToast('✓ Code verified! Unlocking SkyBite Portal...', 'success');
+    unlockPortal();
+  }
+
+  // 1-Click Auto-Fill & Continue Button
+  const autofillContinueBtn = document.getElementById('btn-autofill-continue');
+  if (autofillContinueBtn) {
+    autofillContinueBtn.addEventListener('click', () => {
+      if (generatedOtp && otpInput) {
+        otpInput.value = generatedOtp;
+        showToast(`✓ Auto-filled OTP [ ${generatedOtp} ]`, 'success');
+        setTimeout(() => verifyAndProceed(), 200);
+      }
+    });
+  }
+
+  // Auto-fill on SMS Chat Bubble click with instant continue
+  if (smsSpeechBubble) {
+    smsSpeechBubble.addEventListener('click', () => {
+      if (generatedOtp && otpInput) {
+        otpInput.value = generatedOtp;
+        showToast(`✓ Auto-filled OTP [ ${generatedOtp} ]`, 'success');
+        setTimeout(() => verifyAndProceed(), 200);
+      }
+    });
+  }
+
+  // Instant Auto-Continue when 6 digits are typed into the input
+  if (otpInput) {
+    otpInput.addEventListener('input', () => {
+      const val = otpInput.value.replace(/[^0-9]/g, '');
+      otpInput.value = val;
+      if (val.length === 6) {
+        setTimeout(() => verifyAndProceed(), 200);
+      }
+    });
+  }
+
+  // Auto-Fill Button (legacy/fallback)
   if (autofillBtn) {
     autofillBtn.addEventListener('click', () => {
       if (generatedOtp && otpInput) {
         otpInput.value = generatedOtp;
         showToast('✓ OTP Auto-filled', 'info');
-        otpInput.focus();
+        setTimeout(() => verifyAndProceed(), 200);
       }
     });
   }
@@ -4890,19 +4998,7 @@ start();
   if (otpForm) {
     otpForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const entered = otpInput ? otpInput.value.trim() : '';
-
-      if (!entered) {
-        showToast('Please enter the 6-digit verification code', 'error');
-        return;
-      }
-
-      if (entered !== generatedOtp) {
-        showToast('❌ Invalid verification code. Please check code or click Auto-Fill.', 'error');
-        return;
-      }
-
-      unlockPortal();
+      verifyAndProceed();
     });
   }
 
