@@ -5,7 +5,7 @@
 <title>SkyBite: passenger and crew</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 
 
@@ -1641,7 +1641,131 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   animation: fadeUpIn .75s cubic-bezier(0.16, 1, 0.3, 1) .2s both;
 }
 
-</style></head><body><!-- GDG IIITA Style Ambient Background Layer -->
+
+/* --------------------------------------------------------------------------
+   0.5 LUXURY EDITORIAL MINIMALIST LOADER / COUNTDOWN (THAPAR-PULSE STYLE)
+   -------------------------------------------------------------------------- */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: #08080a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  overflow: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  transform: translateY(0%);
+}
+
+/* Stage curtain lift wipe upwards */
+.loading-screen.curtain-exit {
+  transform: translateY(-100%);
+  transition: transform 1.1s cubic-bezier(0.85, 0, 0.15, 1);
+  pointer-events: none;
+}
+
+/* Subtle atmospheric backdrop glow & grain */
+.loading-grain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(217, 45, 32, 0.18) 0%, rgba(10, 10, 15, 0.96) 75%);
+  opacity: 0.85;
+}
+
+.loading-center-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loading-center-content.fade-out {
+  opacity: 0;
+  transform: translateY(-28px);
+}
+
+/* Giant typographic counter */
+.loading-counter {
+  font-family: var(--font-head, 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif);
+  color: #ffffff;
+  letter-spacing: -0.05em;
+  font-size: clamp(72px, 13vw, 140px);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 45px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  margin: 0;
+  transition: transform 0.12s ease-out;
+}
+
+/* Brand label with wide tracking */
+.loading-brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loading-brand-text {
+  font-family: 'Space Grotesk', var(--font-head, 'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-size: clamp(11px, 1.4vw, 14px);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-weight: 600;
+  user-select: none;
+}
+
+/* Razor-thin 2px progress bar track */
+.loading-bar-track {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  width: min(320px, 70vw);
+  height: 2px;
+  overflow: hidden;
+  position: relative;
+  margin-top: 4px;
+}
+
+/* Progress bar fill with glowing gradient */
+.loading-bar-fill {
+  background: linear-gradient(90deg, #d92d20 0%, #e59a00 55%, #059669 100%);
+  transform-origin: left;
+  border-radius: 2px;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  box-shadow: 0 0 14px rgba(217, 45, 32, 0.8);
+  transition: transform 0.05s linear;
+}
+</style></head><body>
+
+<!-- ======================================================================
+     0.5 COUNTDOWN LAUNCH SEQUENCE OVERLAY (EDITORIAL MINIMALIST LOADER)
+     ====================================================================== -->
+<div class="loading-screen" id="countdown-overlay">
+  <div class="loading-grain-overlay"></div>
+  <div class="loading-center-content" id="loading-center-content">
+    <span class="loading-counter" id="countdown-number">1</span>
+    <div class="loading-brand-wrap" id="loading-brand">
+      <span class="loading-brand-text">SKYBITE &nbsp;//&nbsp; IN-FLIGHT DINING</span>
+    </div>
+    <div class="loading-bar-track" id="loading-bar-track">
+      <div class="loading-bar-fill" id="countdown-bar-fill"></div>
+    </div>
+  </div>
+</div>
+<!-- GDG IIITA Style Ambient Background Layer -->
 <div class="grain-overlay"></div>
 <div class="bg-grid-overlay"></div>
 <div class="ambient-orbs-container">
@@ -2899,6 +3023,74 @@ start();
       ring.classList.remove('cursor-hover');
     }
   });
+})();
+
+
+/* ======================================================================
+   COUNTDOWN LAUNCH SEQUENCE CONTROLLER (THAPAR-PULSE LOADER)
+   ====================================================================== */
+(function initLoadingCountdown() {
+  const overlay = document.getElementById('countdown-overlay');
+  const numberEl = document.getElementById('countdown-number');
+  const fillEl = document.getElementById('countdown-bar-fill');
+  const centerContent = document.getElementById('loading-center-content');
+
+  if (!overlay || !numberEl || !fillEl || !centerContent) return;
+
+  fillEl.style.transform = 'scaleX(0)';
+  numberEl.textContent = '1';
+
+  // Duration 2.4s matching ThaparPulse
+  const duration = 2400;
+  let startTime = null;
+
+  const animate = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(1, elapsed / duration);
+
+    // Smooth cubic easing (power2.inOut)
+    const easedProgress = progress < 0.5
+      ? 2 * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+    const currentNumber = Math.min(100, Math.max(1, Math.round(1 + 99 * easedProgress)));
+
+    if (numberEl) {
+      numberEl.textContent = String(currentNumber);
+    }
+    if (fillEl) {
+      fillEl.style.transform = `scaleX(${easedProgress})`;
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      if (numberEl) numberEl.textContent = '100';
+      if (fillEl) fillEl.style.transform = 'scaleX(1)';
+
+      // 1. Text elements translate slightly up & fade out
+      setTimeout(() => {
+        if (centerContent) centerContent.classList.add('fade-out');
+
+        // 2. Stage curtain wipe lifts upward
+        setTimeout(() => {
+          if (overlay) {
+            overlay.classList.add('curtain-exit');
+          }
+
+          // 3. Reset overlay after curtain exit transition finishes
+          setTimeout(() => {
+            if (overlay) {
+              overlay.style.display = 'none';
+            }
+          }, 1150);
+        }, 300);
+      }, 200);
+    }
+  };
+
+  requestAnimationFrame(animate);
 })();
 
 </script></body></html>
