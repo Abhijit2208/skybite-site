@@ -1748,7 +1748,508 @@ summary { cursor: pointer; color: var(--tu); font-size: 13px; font-weight: 600; 
   box-shadow: 0 0 14px rgba(217, 45, 32, 0.8);
   transition: transform 0.05s linear;
 }
+
+/* ==========================================================================
+   SKYBITE 2FA GATEWAY & TWO-STEP VERIFICATION SCREEN (THAPARPULSE STYLE)
+   ========================================================================== */
+.lock-screen-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: #050810;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow: hidden;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s ease;
+  --parallax-x: 0px;
+  --parallax-y: 0px;
+}
+
+.lock-screen-wrapper.unlocked {
+  opacity: 0;
+  transform: scale(1.15) translateY(-30px);
+  filter: blur(12px);
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.lock-screen-wrapper::before,
+.lock-screen-wrapper::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.lock-screen-wrapper::before {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(217, 45, 32, 0.6), transparent 70%);
+  top: -15%;
+  left: -10%;
+  translate: var(--parallax-x) var(--parallax-y);
+  animation: lockOrbFloat1 9s ease-in-out infinite alternate;
+}
+
+.lock-screen-wrapper::after {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(229, 154, 0, 0.45), transparent 70%);
+  bottom: -15%;
+  right: -10%;
+  translate: calc(var(--parallax-x) * -0.7) calc(var(--parallax-y) * -0.7);
+  animation: lockOrbFloat2 11s ease-in-out infinite alternate;
+}
+
+@keyframes lockOrbFloat1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+  50% { transform: translate(60px, 50px) scale(1.15); opacity: 0.55; }
+  100% { transform: translate(-30px, 80px) scale(0.95); opacity: 0.35; }
+}
+
+@keyframes lockOrbFloat2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+  50% { transform: translate(-60px, -40px) scale(1.2); opacity: 0.5; }
+  100% { transform: translate(40px, -60px) scale(0.9); opacity: 0.3; }
+}
+
+.lock-orb-purple {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.35), transparent 70%);
+  filter: blur(90px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: lockOrbFloat3 12s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes lockOrbFloat3 {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.25; }
+  50% { transform: translate(-40%, -60%) scale(1.25); opacity: 0.45; }
+  100% { transform: translate(-60%, -40%) scale(1); opacity: 0.2; }
+}
+
+#lock-particles-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.lock-grain-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.04;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+.lock-card {
+  background: rgba(12, 16, 28, 0.88);
+  backdrop-filter: blur(30px) saturate(1.4);
+  -webkit-backdrop-filter: blur(30px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 20px;
+  padding: 2.2rem 2rem;
+  width: 100%;
+  max-width: 460px;
+  box-shadow:
+    0 0 0 1px rgba(217, 45, 32, 0.18),
+    0 25px 80px rgba(0, 0, 0, 0.85),
+    0 0 60px rgba(217, 45, 32, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  animation: lockCardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-style: preserve-3d;
+}
+
+@keyframes lockCardEntrance {
+  0% { opacity: 0; transform: scale(0.9) translateY(30px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.lock-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #d92d20, #e59a00, #4f46e5, #d92d20);
+  background-size: 300% 100%;
+  animation: lockGradientSlide 4s linear infinite;
+}
+
+@keyframes lockGradientSlide {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.lock-logo-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #d92d20, #991b1b);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-head, 'Outfit', sans-serif);
+  font-weight: 800;
+  font-size: 1.7rem;
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(217, 45, 32, 0.45), 0 0 20px rgba(217, 45, 32, 0.3);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+  animation: lockLogoBreathe 3s ease-in-out infinite;
+}
+
+@keyframes lockLogoBreathe {
+  0%, 100% { box-shadow: 0 8px 30px rgba(217, 45, 32, 0.35), 0 0 15px rgba(217, 45, 32, 0.2); }
+  50% { box-shadow: 0 8px 40px rgba(217, 45, 32, 0.6), 0 0 30px rgba(217, 45, 32, 0.4); }
+}
+
+.lock-badge-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 20px;
+  border: 2px solid #d92d20;
+  opacity: 0.6;
+  animation: lockPulseRing 2s infinite;
+}
+
+@keyframes lockPulseRing {
+  0% { transform: scale(0.96); opacity: 0.8; }
+  50% { transform: scale(1.14); opacity: 0.15; }
+  100% { transform: scale(0.96); opacity: 0.8; }
+}
+
+.lock-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0 0 0.3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.lock-subtitle {
+  font-size: 0.84rem;
+  color: #94a3b8;
+  margin: 0 0 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.lock-security-badge {
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1.2rem;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.lock-form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.lock-form .form-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  margin-bottom: 0.35rem;
+}
+
+.lock-form .form-control {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(10, 15, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.92rem;
+  color: #f8fafc;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.lock-form .form-control:focus {
+  border-color: #d92d20;
+  box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.25);
+  background: rgba(10, 15, 26, 0.95);
+}
+
+.lock-hint {
+  font-size: 0.74rem;
+  margin: 0.35rem 0 0;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.btn-unlock-portal {
+  background: linear-gradient(135deg, #d92d20, #b42318);
+  color: #fff;
+  border: none;
+  padding: 0.85rem;
+  border-radius: 9px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 18px rgba(217, 45, 32, 0.4);
+  transition: all 0.2s ease;
+  margin-top: 0.4rem;
+}
+
+.btn-unlock-portal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(217, 45, 32, 0.55);
+}
+
+.btn-quick-demo {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 0.65rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-quick-demo:hover {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: #f59e0b;
+}
+
+.otp-live-badge {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px dashed rgba(16, 185, 129, 0.4);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.otp-live-badge .otp-code-highlight {
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #10b981;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  letter-spacing: 0.15em;
+}
+
+.btn-autofill-otp {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+  color: #10b981;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.65rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-autofill-otp:hover {
+  background: #10b981;
+  color: #000;
+}
+
+.otp-input-wrap {
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+.otp-input-field {
+  font-size: 1.6rem !important;
+  letter-spacing: 0.45em !important;
+  text-align: center !important;
+  font-family: monospace !important;
+  font-weight: 700 !important;
+  color: #f59e0b !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.4) !important;
+  padding: 0.75rem !important;
+  border-radius: 8px !important;
+}
+
+.otp-input-field:focus {
+  outline: none;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.3) !important;
+}
+
+/* Cinematic Shockwave on Portal Unlock */
+.unlock-shockwave {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(217, 45, 32, 0.55) 0%, rgba(229, 154, 0, 0.35) 35%, transparent 70%);
+  animation: shockwaveExpand 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes shockwaveExpand {
+  0% { transform: scale(0.15); opacity: 1; filter: blur(4px); }
+  60% { opacity: 0.8; }
+  100% { transform: scale(3); opacity: 0; filter: blur(30px); }
+}
+
+/* Floating Toast notifications */
+.skybite-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.skybite-toast {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 9px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: auto;
+}
+
+.skybite-toast.success { border-color: rgba(16, 185, 129, 0.4); }
+.skybite-toast.error { border-color: rgba(239, 68, 68, 0.4); }
+.skybite-toast.info { border-color: rgba(245, 158, 11, 0.4); }
+
+@keyframes toastSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 </style></head><body>
+
+
+<!-- ======================================================================
+     0. SKYBITE GATEWAY / 2-STEP VERIFICATION & 2FA LOCK SCREEN
+     ====================================================================== -->
+<div class="lock-screen-wrapper" id="lock-screen">
+  <!-- Immersive Background Effects -->
+  <canvas id="lock-particles-canvas"></canvas>
+  <div class="lock-orb-purple"></div>
+  <div class="lock-grain-overlay"></div>
+  
+  <div class="lock-card" id="lock-card">
+    <div class="lock-logo-badge">
+      <span>SB</span>
+      <div class="lock-badge-pulse"></div>
+    </div>
+    
+    <h2 class="lock-title">SkyBite Gateway</h2>
+    <p class="lock-subtitle" id="lock-card-subtitle">Enter your Booking Email & Seat Number</p>
+    <div id="lock-security-badge" class="lock-security-badge">🔒 100% Secure • Live 2FA OTP Protected</div>
+
+    <!-- Step 1: Credentials Form -->
+    <form class="lock-form" id="form-lock-login">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label">Passenger Booking Email</label>
+        <input type="email" id="lock-email-input" placeholder="e.g. abhijit.tathgir@gmail.com" required class="form-control" autocomplete="username">
+        <p id="lock-email-hint" class="lock-hint" style="color: #10b981; display: none;"></p>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="form-label" style="margin-bottom: 0.25rem;">Flight Seat Number</label>
+          <span id="seat-quick-select" style="font-size: 0.72rem; color: #94a3b8; cursor: pointer; user-select: none;">Presets: 12A • 14C • 10B</span>
+        </div>
+        <input type="text" id="lock-seat-input" placeholder="e.g. 12A" maxlength="4" required class="form-control" autocomplete="off" style="text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">
+        <p id="lock-seat-hint" class="lock-hint" style="color: #f59e0b;"></p>
+        <p id="lock-match-hint" class="lock-hint" style="font-weight: 700; display: none;"></p>
+      </div>
+
+      <button type="submit" class="btn-unlock-portal" id="btn-request-otp">
+        <span>📩</span> Send Live OTP
+      </button>
+
+      <button type="button" class="btn-quick-demo" id="btn-quick-demo">
+        ⚡ Quick Demo Login (Seat 12A Preset)
+      </button>
+    </form>
+
+    <!-- Step 2: Live OTP Verification Form (Hidden Initially) -->
+    <form class="lock-form" id="form-lock-otp" style="display: none;">
+      <div class="otp-live-badge" id="otp-live-badge">
+        <div>
+          <div style="font-size: 0.72rem; color: #94a3b8; text-align: left;">Live OTP Sent to <span id="otp-target-email" style="color: #fff; font-weight: 700;"></span></div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem;">
+            <span class="otp-code-highlight" id="otp-display-code">------</span>
+          </div>
+        </div>
+        <button type="button" class="btn-autofill-otp" id="btn-autofill-otp">📋 Auto-Fill</button>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" style="text-align: center; display: block;">Enter 6-Digit Live Verification Code</label>
+        <div class="otp-input-wrap">
+          <input type="text" id="lock-otp-input" maxlength="6" pattern="[0-9]{6}" placeholder="······" required class="form-control otp-input-field" autocomplete="one-time-code">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+          <span style="font-size: 0.75rem; color: #94a3b8;" id="otp-timer-text">Resend in <strong style="color: #f59e0b;" id="otp-timer-count">60s</strong></span>
+          <button type="button" id="btn-resend-otp" style="background: none; border: none; font-size: 0.75rem; color: #d92d20; cursor: pointer; font-weight: 700; display: none;">🔄 Resend OTP</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-unlock-portal" id="btn-verify-otp">
+        <span>🔓</span> Verify OTP & Unlock Portal
+      </button>
+
+      <button type="button" class="btn-quick-demo" id="btn-back-to-creds" style="color: #94a3b8; border-color: rgba(255,255,255,0.15);">
+        ← Change Email / Seat Number
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="skybite-toast-container" id="skybite-toast-container"></div>
 
 <!-- ======================================================================
      0.5 COUNTDOWN LAUNCH SEQUENCE OVERLAY (EDITORIAL MINIMALIST LOADER)
@@ -2190,6 +2691,7 @@ if(!role){app.innerHTML=`<header class="top-nav">
   <div class="nav-actions">
     <button class="nav-btn nav-btn-glow" id="btn-ideas">💡 JAL Innovations</button>
     <a href="docs" class="nav-btn" target="_blank" style="text-decoration:none">📄 Tech Docs</a>
+    <button class="nav-btn" onclick="window.lockSkybitePortal()" title="Lock Portal with 2FA" style="border-color:rgba(217,45,32,0.4);color:#fca5a5">🔒 2FA Lock</button>
     <button class="nav-btn theme-btn" id="theme-toggle">🌙 Dark</button>
   </div>
 </header>
@@ -2352,7 +2854,7 @@ bindHead();
 bindDemo();
 return}
 role=='p'?passenger():role=='m'?planner():role=='l'?lounge():role=='g'?gate():crew()}
-function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'} • JAL Prototype</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button><button class="b s" id="sw">Switch role</button></div></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
+function head(t){return `<div class="top"><div><h1>${t}</h1><div class="mu">${db?'Live sync on':'This device only'} • JAL Prototype</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="b s" id="btn-ideas" style="background:var(--tint);border-color:var(--tu);font-weight:700">💡 JAL Innovation Ideas</button><button class="b s" onclick="window.lockSkybitePortal()" style="border-color:var(--jal-red);color:var(--jal-red)">🔒 2FA Lock</button><button class="b s" id="sw">Switch role</button></div></div>${role!='m'&&note?`<div class="ban">${esc(note.m)}</div>`:''}<div class="ban" id="ban" style="display:none"></div>`}
 const LS={new:'queued for the lounge kitchen',prep:'being prepared',box:'sealed box ready',del:'delivered to the aircraft'};
 const tkHtml=()=>{
   // Collect all active orders placed by this session or under the booking seats
@@ -3029,68 +3531,427 @@ start();
 /* ======================================================================
    COUNTDOWN LAUNCH SEQUENCE CONTROLLER (THAPAR-PULSE LOADER)
    ====================================================================== */
-(function initLoadingCountdown() {
+(function setupSkybiteCountdown() {
   const overlay = document.getElementById('countdown-overlay');
   const numberEl = document.getElementById('countdown-number');
   const fillEl = document.getElementById('countdown-bar-fill');
   const centerContent = document.getElementById('loading-center-content');
 
-  if (!overlay || !numberEl || !fillEl || !centerContent) return;
+  function startCountdown() {
+    if (!overlay || !numberEl || !fillEl || !centerContent) return;
 
-  fillEl.style.transform = 'scaleX(0)';
-  numberEl.textContent = '1';
+    overlay.style.display = 'flex';
+    overlay.classList.remove('curtain-exit');
+    centerContent.classList.remove('fade-out');
 
-  // Duration 2.4s matching ThaparPulse
-  const duration = 2400;
-  let startTime = null;
+    fillEl.style.transform = 'scaleX(0)';
+    numberEl.textContent = '1';
 
-  const animate = (timestamp) => {
-    if (!startTime) startTime = timestamp;
-    const elapsed = timestamp - startTime;
-    const progress = Math.min(1, elapsed / duration);
+    const duration = 2400;
+    let startTime = null;
 
-    // Smooth cubic easing (power2.inOut)
-    const easedProgress = progress < 0.5
-      ? 2 * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(1, elapsed / duration);
 
-    const currentNumber = Math.min(100, Math.max(1, Math.round(1 + 99 * easedProgress)));
+      const easedProgress = progress < 0.5
+        ? 2 * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
-    if (numberEl) {
-      numberEl.textContent = String(currentNumber);
-    }
-    if (fillEl) {
-      fillEl.style.transform = `scaleX(${easedProgress})`;
-    }
+      const currentNumber = Math.min(100, Math.max(1, Math.round(1 + 99 * easedProgress)));
 
-    if (progress < 1) {
-      requestAnimationFrame(animate);
-    } else {
-      if (numberEl) numberEl.textContent = '100';
-      if (fillEl) fillEl.style.transform = 'scaleX(1)';
+      if (numberEl) numberEl.textContent = String(currentNumber);
+      if (fillEl) fillEl.style.transform = `scaleX(${easedProgress})`;
 
-      // 1. Text elements translate slightly up & fade out
-      setTimeout(() => {
-        if (centerContent) centerContent.classList.add('fade-out');
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        if (numberEl) numberEl.textContent = '100';
+        if (fillEl) fillEl.style.transform = 'scaleX(1)';
 
-        // 2. Stage curtain wipe lifts upward
         setTimeout(() => {
-          if (overlay) {
-            overlay.classList.add('curtain-exit');
-          }
+          if (centerContent) centerContent.classList.add('fade-out');
 
-          // 3. Reset overlay after curtain exit transition finishes
           setTimeout(() => {
-            if (overlay) {
-              overlay.style.display = 'none';
-            }
-          }, 1150);
-        }, 300);
-      }, 200);
-    }
-  };
+            if (overlay) overlay.classList.add('curtain-exit');
 
-  requestAnimationFrame(animate);
+            setTimeout(() => {
+              if (overlay) overlay.style.display = 'none';
+            }, 1150);
+          }, 300);
+        }, 200);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
+
+  window.triggerSkybiteCountdown = startCountdown;
+
+  // If already authenticated and page reloads, play countdown once then enter app
+  const isAuth = sessionStorage.getItem('skybite_2fa_auth');
+  if (isAuth === 'true') {
+    startCountdown();
+  } else if (overlay) {
+    overlay.style.display = 'none';
+  }
+})();
+
+
+
+/* ======================================================================
+   SKYBITE 2FA GATEWAY & LIVE EMAIL OTP CONTROLLER
+   ====================================================================== */
+(function initSkybite2FA() {
+  const lockScreen    = document.getElementById('lock-screen');
+  const lockCard      = document.getElementById('lock-card');
+  const lockForm      = document.getElementById('form-lock-login');
+  const otpForm       = document.getElementById('form-lock-otp');
+  const emailInput    = document.getElementById('lock-email-input');
+  const seatInput     = document.getElementById('lock-seat-input');
+  const emailHint     = document.getElementById('lock-email-hint');
+  const seatHint      = document.getElementById('lock-seat-hint');
+  const matchHint     = document.getElementById('lock-match-hint');
+  const otpInput      = document.getElementById('lock-otp-input');
+  const demoBtn       = document.getElementById('btn-quick-demo');
+  const autofillBtn   = document.getElementById('btn-autofill-otp');
+  const resendBtn     = document.getElementById('btn-resend-otp');
+  const backBtn       = document.getElementById('btn-back-to-creds');
+  const timerCount    = document.getElementById('otp-timer-count');
+  const timerText     = document.getElementById('otp-timer-text');
+  const targetEmailEl = document.getElementById('otp-target-email');
+  const displayCodeEl = document.getElementById('otp-display-code');
+  const toastCont     = document.getElementById('skybite-toast-container');
+  const seatPresets   = document.getElementById('seat-quick-select');
+
+  let generatedOtp = null;
+  let otpTimerInterval = null;
+  let pendingData = null;
+
+  function showToast(msg, type = 'info') {
+    if (!toastCont) return;
+    const toast = document.createElement('div');
+    toast.className = 'skybite-toast ' + type;
+    toast.innerHTML = (type === 'success' ? '<span>✓</span> ' : type === 'error' ? '<span>❌</span> ' : '<span>ℹ️</span> ') + msg;
+    toastCont.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      toast.style.transition = 'all 0.3s ease';
+      setTimeout(() => toast.remove(), 320);
+    }, 4500);
+  }
+  window.showSkybiteToast = showToast;
+
+  // Check existing session authentication
+  const isAuth = sessionStorage.getItem('skybite_2fa_auth');
+  if (isAuth === 'true' && lockScreen) {
+    lockScreen.classList.add('unlocked');
+  }
+
+  // Particle Starfield Canvas Animation
+  const canvas = document.getElementById('lock-particles-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const count = 55;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 0.6,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        alpha: Math.random() * 0.6 + 0.2
+      });
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffffff';
+      for (let p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  }
+
+  // Mouse Parallax & 3D Card Tilt
+  if (lockCard && lockScreen) {
+    lockScreen.addEventListener('mousemove', (e) => {
+      const W = window.innerWidth, H = window.innerHeight;
+      const nx = (e.clientX / W) - 0.5;
+      const ny = (e.clientY / H) - 0.5;
+      lockScreen.style.setProperty('--parallax-x', (nx * 30) + 'px');
+      lockScreen.style.setProperty('--parallax-y', (ny * 30) + 'px');
+
+      const rect = lockCard.getBoundingClientRect();
+      const cardNx = (e.clientX - rect.left) / rect.width - 0.5;
+      const cardNy = (e.clientY - rect.top) / rect.height - 0.5;
+      const tiltX = cardNy * -12;
+      const tiltY = cardNx * 12;
+      lockCard.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    });
+
+    lockScreen.addEventListener('mouseleave', () => {
+      lockCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+      lockCard.style.transition = 'transform 0.5s ease';
+    });
+    lockCard.addEventListener('mouseenter', () => {
+      lockCard.style.transition = 'none';
+    });
+  }
+
+  // Real-time Input Validation & Hints
+  function updateHints() {
+    const em = emailInput ? emailInput.value.trim().toLowerCase() : '';
+    const st = seatInput ? seatInput.value.trim().toUpperCase() : '';
+
+    if (em && em.includes('@') && emailHint) {
+      emailHint.style.display = 'block';
+      emailHint.textContent = '✓ Booking Record Located • Japan Airlines Flight JL-749';
+    } else if (emailHint) {
+      emailHint.style.display = 'none';
+    }
+
+    if (st && seatHint) {
+      seatHint.textContent = `✓ Seat ${st} • Boeing 787-9 Dreamliner • Del ✈ HND`;
+    } else if (seatHint) {
+      seatHint.textContent = 'Enter seat (e.g. 12A, 14C, 10B)';
+    }
+
+    if (em && st && matchHint) {
+      matchHint.style.display = 'block';
+      matchHint.style.color = '#10b981';
+      matchHint.textContent = `✓ Verified Match: ${em} assigned to Seat ${st}`;
+    } else if (matchHint) {
+      matchHint.style.display = 'none';
+    }
+  }
+
+  if (emailInput) emailInput.addEventListener('input', updateHints);
+  if (seatInput) {
+    seatInput.addEventListener('input', () => {
+      seatInput.value = seatInput.value.toUpperCase();
+      updateHints();
+    });
+  }
+
+  if (seatPresets && seatInput) {
+    seatPresets.addEventListener('click', () => {
+      const presets = ['12A', '14C', '10B', '3A'];
+      const cur = seatInput.value.trim().toUpperCase();
+      const nxt = presets[(presets.indexOf(cur) + 1) % presets.length];
+      seatInput.value = nxt;
+      updateHints();
+    });
+  }
+
+  // Start 60s Resend Timer
+  function startResendTimer() {
+    let timeLeft = 60;
+    if (timerText) timerText.style.display = 'inline';
+    if (resendBtn) resendBtn.style.display = 'none';
+    if (timerCount) timerCount.textContent = timeLeft + 's';
+
+    if (otpTimerInterval) clearInterval(otpTimerInterval);
+    otpTimerInterval = setInterval(() => {
+      timeLeft--;
+      if (timerCount) timerCount.textContent = timeLeft + 's';
+      if (timeLeft <= 0) {
+        clearInterval(otpTimerInterval);
+        if (timerText) timerText.style.display = 'none';
+        if (resendBtn) resendBtn.style.display = 'inline';
+      }
+    }, 1000);
+  }
+
+  // Send Live OTP to Passenger Email
+  function sendLiveOtp(email, seatNum) {
+    // 6-digit random code
+    generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
+    pendingData = { email, seat: seatNum };
+
+    // Dispatch real email via FormSubmit AJAX service
+    fetch('https://formsubmit.co/ajax/' + encodeURIComponent(email), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        _subject: 'Your SkyBite 2FA Verification Code: ' + generatedOtp,
+        _template: 'box',
+        'Service': 'SkyBite In-Flight Dietary Intelligence Platform',
+        'Flight': 'JAL Flight JL-749 (Delhi -> Tokyo Haneda)',
+        'Passenger Email': email,
+        'Assigned Seat': seatNum,
+        '2FA Security Code': generatedOtp,
+        'Valid For': '10 Minutes',
+        'Instructions': 'Enter this 6-digit one-time passcode on the SkyBite screen to unlock in-flight dining.'
+      })
+    }).catch(err => {
+      console.log('Mail notification dispatch:', err);
+    });
+
+    // Update Step 2 UI
+    if (lockForm) lockForm.style.display = 'none';
+    if (otpForm) otpForm.style.display = 'flex';
+    if (targetEmailEl) targetEmailEl.textContent = email;
+    if (displayCodeEl) displayCodeEl.textContent = generatedOtp;
+
+    startResendTimer();
+    showToast(`📩 Live 2FA code [ ${generatedOtp} ] sent to ${email}`, 'success');
+
+    if (otpInput) {
+      otpInput.value = '';
+      setTimeout(() => otpInput.focus(), 250);
+    }
+  }
+
+  // Step 1: Submit Email & Seat
+  if (lockForm) {
+    lockForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = emailInput ? emailInput.value.trim() : '';
+      const seatNum = seatInput ? seatInput.value.trim().toUpperCase() : '';
+
+      if (!email || !seatNum) {
+        showToast('Please enter both booking email and seat number', 'error');
+        return;
+      }
+      sendLiveOtp(email, seatNum);
+    });
+  }
+
+  // Quick Demo Preset Login
+  if (demoBtn) {
+    demoBtn.addEventListener('click', () => {
+      if (emailInput) emailInput.value = 'abhijit.tathgir@gmail.com';
+      if (seatInput) seatInput.value = '12A';
+      updateHints();
+      sendLiveOtp('abhijit.tathgir@gmail.com', '12A');
+
+      // Automatically auto-fill after 400ms for ultra-smooth demoing
+      setTimeout(() => {
+        if (otpInput && generatedOtp) {
+          otpInput.value = generatedOtp;
+          showToast('✓ Code auto-filled for instant demo testing', 'info');
+        }
+      }, 400);
+    });
+  }
+
+  // Auto-Fill Button
+  if (autofillBtn) {
+    autofillBtn.addEventListener('click', () => {
+      if (generatedOtp && otpInput) {
+        otpInput.value = generatedOtp;
+        showToast('✓ OTP Auto-filled', 'info');
+        otpInput.focus();
+      }
+    });
+  }
+
+  // Resend OTP
+  if (resendBtn) {
+    resendBtn.addEventListener('click', () => {
+      if (pendingData) {
+        sendLiveOtp(pendingData.email, pendingData.seat);
+        showToast('🔄 New verification code generated & emailed', 'info');
+      }
+    });
+  }
+
+  // Back to Credentials Form
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      if (otpTimerInterval) clearInterval(otpTimerInterval);
+      if (otpForm) otpForm.style.display = 'none';
+      if (lockForm) lockForm.style.display = 'flex';
+    });
+  }
+
+  // Trigger Shockwave & Unlock Portal Transition
+  function unlockPortal() {
+    sessionStorage.setItem('skybite_2fa_auth', 'true');
+    if (pendingData) {
+      sessionStorage.setItem('skybite_seat', pendingData.seat);
+      sessionStorage.setItem('skybite_email', pendingData.email);
+      // Synchronize seat with SkyBite app seat variable
+      if (typeof seat !== 'undefined') seat = pendingData.seat;
+    }
+
+    // 1. Shockwave effect
+    const shockwave = document.createElement('div');
+    shockwave.className = 'unlock-shockwave';
+    document.body.appendChild(shockwave);
+    setTimeout(() => shockwave.remove(), 900);
+
+    // 2. Hide lock screen
+    if (lockScreen) {
+      lockScreen.classList.add('unlocked');
+    }
+
+    showToast('✓ 2FA Verified! Launching SkyBite Cabin Portal...', 'success');
+
+    // 3. Trigger Countdown Sequence overlay (1 -> 100 with curtain lift)
+    if (typeof window.triggerSkybiteCountdown === 'function') {
+      window.triggerSkybiteCountdown();
+    }
+  }
+
+  // Step 2: Verify OTP
+  if (otpForm) {
+    otpForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = otpInput ? otpInput.value.trim() : '';
+
+      if (!entered) {
+        showToast('Please enter the 6-digit verification code', 'error');
+        return;
+      }
+
+      if (entered !== generatedOtp) {
+        showToast('❌ Invalid verification code. Please check code or click Auto-Fill.', 'error');
+        return;
+      }
+
+      unlockPortal();
+    });
+  }
+
+  // Allow re-locking portal anytime
+  window.lockSkybitePortal = function() {
+    sessionStorage.removeItem('skybite_2fa_auth');
+    if (lockScreen) {
+      lockScreen.classList.remove('unlocked');
+      if (otpForm) otpForm.style.display = 'none';
+      if (lockForm) lockForm.style.display = 'flex';
+      if (otpTimerInterval) clearInterval(otpTimerInterval);
+    }
+    showToast('🔒 SkyBite Portal Locked with 2FA', 'info');
+  };
 })();
 
 </script></body></html>
